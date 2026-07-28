@@ -6,8 +6,9 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
+  base: '/data-alpha/',
   output: 'static',
-  site: 'https://example.com/',
+  site: 'https://deadhand777.github.io/data-alpha',
   integrations: [
     react(),
     tailwind(),
