@@ -1,0 +1,45 @@
+---
+// JSON-LD structured data for SEO
+const {
+  type = 'WebPage',
+  title = '',
+  description = '',
+  url = '',
+  image = '',
+  datePublished = '',
+  dateModified = '',
+  author = {
+    name: '',
+    url: ''
+  },
+  publisher = {
+    name: 'Personal Website',
+    logo: {
+      url: ''
+    }
+  }
+} = Astro.props;
+---
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "${type}",
+    "@id": "${url}",
+    "name": "${title}",
+    "description": "${description}",
+    "url": "${url}",
+    ${image ? `"image": "${image}",` : ''}
+    ${datePublished ? `"datePublished": "${datePublished}",` : ''}
+    ${dateModified ? `"dateModified": "${dateModified}",` : ''}
+    "author": {
+      "@type": "Person",
+      "name": "${author.name}",
+      ${author.url ? `"url": "${author.url}",` : ''}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "${publisher.name}",
+      ${publisher.logo.url ? `"logo": { "@type": "ImageObject", "url": "${publisher.logo.url}" }` : ''}
+    }
+  }
+</script>

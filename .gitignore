@@ -19,3 +19,8 @@
 
 # Astro
 /.astro
+
+# local
+local
+.superpowers
+docs/superpowers/

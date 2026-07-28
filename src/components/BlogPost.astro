@@ -1,0 +1,40 @@
+---
+import { Content } from 'astro:content';
+
+export const BlogPost = ({ entry }) => {
+  return (
+    <article class="prose prose-lg prose-indigo max-w-none">
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{entry.data.title}</h1>
+        <div class="flex flex-wrap gap-4 mb-6 text-sm text-gray-500">
+          <span>{new Date(entry.data.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          {entry.data.updatedDate && (
+            <>
+              <span class="mx-1">•</span>
+              <span>{new Date(entry.data.updatedDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            </>
+          )}
+          {entry.data.tags.map((tag) => (
+            <span key={tag} class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </header>
+
+      <div class="prose prose-lg prose-indigo max-w-none">
+        <Content {...entry} />
+      </div>
+
+      <div class="mt-8">
+        <p>
+          <strong>Tags:</strong> {entry.data.tags.map(tag => (
+            <span key={tag} class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+              #{tag}
+            </span>
+          ))}
+        </p>
+      </div>
+    </article>
+  );
+};

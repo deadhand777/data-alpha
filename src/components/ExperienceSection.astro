@@ -1,0 +1,42 @@
+---
+const { experience, education } = Astro.props;
+---
+<section>
+  <h2 class="text-2xl font-bold text-gray-900 mb-6">Experience & Education</h2>
+
+  {experience.length > 0 && (
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Professional Experience</h3>
+      <div class="space-y-6">
+        {experience.map((exp, index) => (
+          <div key={index} class="border-l-2 border-indigo-500 pl-4">
+            <h4 class="font-bold text-gray-900">{exp.role}</h4>
+            <p class="text-gray-600 mb-2">{exp.company}</p>
+            <p class="text-sm text-gray-500">{exp.period}</p>
+            {exp.description && (
+              <p class="mt-2 text-gray-700">{exp.description}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {education.length > 0 && (
+    <div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Education</h3>
+      <div class="space-y-4">
+        {education.map((edu, index) => (
+          <div key={index}>
+            <h4 class="font-bold text-gray-900">{edu.degree}</h4>
+            <p class="text-gray-600 mb-2">{edu.institution}</p>
+            <p class="text-sm text-gray-500">{edu.period}</p>
+            {edu.details && (
+              <p class="mt-1 text-gray-700 text-sm">{edu.details}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</section>

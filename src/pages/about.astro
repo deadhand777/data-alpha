@@ -1,0 +1,53 @@
+---
+import Layout from '../components/Layout.astro';
+import SEO from '../components/SEO.astro';
+import { getEntry } from 'astro:content';
+import AboutSection from '../components/AboutSection.astro';
+import SkillsSection from '../components/SkillsSection.astro';
+import ExperienceSection from '../components/ExperienceSection.astro';
+
+const aboutPage = await getEntry('about', 'index');
+---
+
+{!aboutPage ? (
+  <Layout>
+    <SEO title="About | Personal Website" description="Learn more about me and my background" />
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">About Me</h1>
+      <p class="text-gray-600 mb-8">
+        Data, AI, and finance expert sharing insights through blogging and
+        project showcases. Passionate about making complex topics accessible.
+      </p>
+    </article>
+  </Layout>
+) : (
+  <Layout>
+    <SEO
+      title={`About ${aboutPage.data.title} | Personal Website`}
+      description={aboutPage.data.description}
+    />
+
+    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">{aboutPage.data.title}</h1>
+
+      <AboutSection {...aboutPage.data} />
+
+      <SkillsSection
+        skills={aboutPage.data.skills || []}
+        skillLevels={aboutPage.data.skillLevels || {}}
+      />
+
+      <ExperienceSection
+        experience={aboutPage.data.experience || []}
+        education={aboutPage.data.education || []}
+      />
+
+      {/*
+        Render any additional MDX content
+      */}
+      <div class="mt-12">
+        <p set:html={aboutPage.body} />
+      </div>
+    </article>
+  </Layout>
+)}

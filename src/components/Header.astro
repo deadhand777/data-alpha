@@ -1,0 +1,17 @@
+---
+const { title } = Astro.props;
+---
+<header class="bg-white border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+    <a href="/" class="flex space-x-3">
+      <span class="text-xl font-bold text-gray-900">Personal Website</span>
+    </a>
+    <nav class="hidden md:flex space-x-6">
+      <a href="/" class="text-gray-600 hover:text-gray-900 transition-colors">Home</a>
+      <a href="/blog" class="text-gray-600 hover:text-gray-900 transition-colors">Blog</a>
+      <a href="/projects" class="text-gray-600 hover:text-gray-900 transition-colors">Projects</a>
+      <a href="/about" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+      <a href="/contact" class="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,41 @@
+---
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import '../styles/global.css';
+import SchemaOrg from './SchemaOrg.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <slot name="title" />
+    <slot name="description" />
+    <slot name="image" />
+
+    <!-- Website Schema -->
+    <SchemaOrg
+      type="WebSite"
+      title="Personal Website"
+      description="Data, AI, and finance insights from an expert practitioner"
+      url={import.meta.env.SITE}
+      author={{
+        name: 'Your Name',
+        url: 'https://github.com/yourusername'
+      }}
+      publisher={{
+        name: 'Personal Website',
+        logo: {
+          url: `${import.meta.env.SITE}/logo.png`
+        }
+      }}
+    />
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+    <Header />
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

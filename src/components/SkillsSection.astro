@@ -1,0 +1,31 @@
+---
+const { skills, skillLevels } = Astro.props;
+---
+{skills.length > 0 && (
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-4">Skills & Expertise</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {skills.map((skill) => {
+        const level = skillLevels[skill] || 'Intermediate';
+        const levelColors = {
+          'Beginner': 'bg-blue-100 text-blue-800',
+          'Intermediate': 'bg-indigo-100 text-indigo-800',
+          'Advanced': 'bg-purple-100 text-purple-800',
+          'Expert': 'bg-pink-100 text-pink-800'
+        };
+        const levelClass = levelColors[level] || 'bg-gray-100 text-gray-800';
+
+        return (
+          <div key={skill} class={`p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow flex flex-col items-center text-center ${levelClass}`}>
+            <div class="flex h-10 w-10 items-center justify-center mb-3">
+              {/* Skill icons could go here */}
+              <span class="text-2xl">{skill.charAt(0).toUpperCase()}</span>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">{skill}</h3>
+            <p class="text-xs font-medium text-gray-600">{level}</p>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+)}
