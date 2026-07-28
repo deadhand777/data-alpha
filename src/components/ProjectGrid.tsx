@@ -64,7 +64,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                 </div>
                 <div class="flex items-center justify-between text-sm text-gray-500 mt-4">
                   <span>{new Date(project.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                  <a href={`/projects/${project.slug}`} class="font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+                  <a href={`${import.meta.env.BASE_URL}projects/${project.slug}`} class="font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
                     View project →
                   </a>
                 </div>
@@ -73,7 +73,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
           ))}
         </div>
         <div class="mt-8 text-center">
-          <a href="/projects" class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
+          <a href={`${import.meta.env.BASE_URL}projects`} class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
             View All Projects →
           </a>
         </div>

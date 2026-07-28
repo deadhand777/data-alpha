@@ -38,7 +38,7 @@ const sortedPosts = blogPosts
             </div>
             <div class="flex items-center justify-between text-sm text-gray-500">
               <span>{new Date(post.data.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-              <a href={`/blog/${post.slug}`} class="font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+              <a href={`${import.meta.env.BASE_URL}blog/${post.slug}`} class="font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
                 Read more →
               </a>
             </div>
