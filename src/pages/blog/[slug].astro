@@ -1,7 +1,7 @@
 ---
 import Layout from '../../components/Layout.astro';
 import SEO from '../../components/SEO.astro';
-import { getEntry, getCollection } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog');
@@ -11,17 +11,13 @@ export async function getStaticPaths() {
   }));
 }
 
-const { slug } = Astro.props;
-
-if (!slug) {
-  return Astro.redirect('/blog');
-}
-
-const blogPost = await getEntry('blog', slug);
+const { post: blogPost } = Astro.props;
 
 if (!blogPost) {
-  return Astro.redirect('/blog');
+  return Astro.redirect(`${import.meta.env.BASE_URL}blog`);
 }
+
+const { Content } = await blogPost.render();
 ---
 
 <Layout>
@@ -50,8 +46,7 @@ if (!blogPost) {
     </header>
 
     <div class="prose prose-lg prose-indigo max-w-none">
-      {/* Render the MDX content */}
-      <p set:html={blogPost.body} />
+      <Content />
     </div>
 
     <div class="mt-8">

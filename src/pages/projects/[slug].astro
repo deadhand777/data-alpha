@@ -1,7 +1,7 @@
 ---
 import Layout from '../../components/Layout.astro';
 import SEO from '../../components/SEO.astro';
-import { getEntry, getCollection } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -11,17 +11,13 @@ export async function getStaticPaths() {
   }));
 }
 
-const { slug } = Astro.props;
-
-if (!slug) {
-  return Astro.redirect('/projects');
-}
-
-const project = await getEntry('projects', slug);
+const { project } = Astro.props;
 
 if (!project) {
-  return Astro.redirect('/projects');
+  return Astro.redirect(`${import.meta.env.BASE_URL}projects`);
 }
+
+const { Content } = await project.render();
 ---
 
 <Layout>
@@ -123,7 +119,7 @@ if (!project) {
         <section>
           <h2 class="text-2xl font-bold text-gray-900 mb-4">Details</h2>
           <div class="prose prose-lg prose-gray max-w-none">
-            <p set:html={project.body} />
+            <Content />
           </div>
         </section>
       )}
