@@ -11,7 +11,7 @@ const aboutPage = await getEntry('about', 'index');
 
 {!aboutPage ? (
   <Layout>
-    <SEO title="About | Personal Website" description="Learn more about me and my background" path="/about" />
+    <SEO title="About | Data Alpha Portfolio" description="Learn more about me and my background" path="/about" />
     <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h1 class="text-3xl font-bold text-gray-900 mb-8">About Me</h1>
       <p class="text-gray-600 mb-8">
@@ -23,7 +23,7 @@ const aboutPage = await getEntry('about', 'index');
 ) : (
   <Layout>
     <SEO
-      title={`About ${aboutPage.data.title} | Personal Website`}
+      title={`About ${aboutPage.data.title} | Data Alpha Portfolio`}
       description={aboutPage.data.description}
       path="/about"
     />
