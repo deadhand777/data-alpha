@@ -1,29 +1,38 @@
-# Personal Website
+# Data Alpha Portfolio
+
+[![Deploy to GitHub Pages](https://github.com/deadhand777/data-alpha/actions/workflows/deploy.yml/badge.svg)](https://github.com/deadhand777/data-alpha/actions/workflows/deploy.yml)
+![Astro](https://img.shields.io/badge/Astro-4-FF5D01?logo=astro&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
+![MDX](https://img.shields.io/badge/MDX-1C1E21?logo=mdx&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
 
 A personal portfolio website showcasing expertise in data, AI, and finance through blogging and project showcases.
 
 ## Features
 
-- ✅ Blog with MDX support for rich content
-- ✅ Project showcases with live demo/source links
-- ✅ About page with bio, skills, and experience
-- ✅ Contact form (via third-party service)
-- ✅ Responsive design with Tailwind CSS
-- ✅ SEO optimized (meta tags, schema, sitemap)
-- ✅ Fast static site generation with Astro 4.0
-- ✅ GitHub Pages deployment via GitHub Actions
-- ✅ TypeScript for type safety
-- ✅ Content collections for type-safe blog/projects
+- Blog and project content authored in MDX
+- Astro Content Collections for type-safe content
+- Interactive React components
+- Responsive design with Tailwind CSS
+- SEO metadata and Schema.org structured data
+- Syntax highlighting with Shiki's `dark-plus` theme
+- Static site generation with Astro 4
+- Automated GitHub Pages deployment with GitHub Actions
+- TypeScript for type safety
 
 ## Tech Stack
 
-- **Framework**: [Astro 4.0](https://astro.build)
-- **UI Library**: [React 18](https://reactjs.org)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com)
-- **Language**: [TypeScript](https://www.typescriptlang.org)
-- **Content**: MDX with Astro Content Collections
-- **Hosting**: GitHub Pages
-- **Deployment**: GitHub Actions
+- **Framework**: [Astro 4](https://astro.build) with static output
+- **UI**: [React 18](https://react.dev) through `@astrojs/react`
+- **Styling**: [Tailwind CSS](https://tailwindcss.com) through `@astrojs/tailwind`
+- **Language**: [TypeScript 5.9](https://www.typescriptlang.org)
+- **Content**: [MDX](https://mdxjs.com) through `@astrojs/mdx` and Astro Content Collections
+- **Syntax highlighting**: [Shiki](https://shiki.style) using the `dark-plus` theme
+- **Build tooling**: [Vite](https://vite.dev) (provided by Astro) and npm
+- **Hosting**: GitHub Pages at the `/data-alpha/` base path
+- **CI/CD**: GitHub Actions using Node.js 24 and the official GitHub Pages actions
 
 ## Local Development
 
@@ -51,14 +60,14 @@ A personal portfolio website showcasing expertise in data, AI, and finance throu
 
 This site is configured to automatically deploy to GitHub Pages via GitHub Actions:
 - Pushes to `main` branch trigger build and deploy
-- Built site is published to `gh-pages` branch
-- GitHub Pages serves from `gh-pages` branch
+- The workflow installs dependencies with `npm ci` and builds the static site
+- The generated `dist/` directory is uploaded as a GitHub Pages artifact
+- GitHub's official Pages deployment action publishes the artifact
 
-To manually deploy:
+To create and preview the production build locally:
 ```bash
 npm run build
-# Then manually push dist contents to gh-pages branch
-# Or use: npx third-party-deploy-tool
+npm run preview
 ```
 
 ## Content Structure
@@ -94,3 +103,14 @@ src/
 ## License
 
 MIT License - feel free to use this as a template for your own portfolio!
+
+## Support
+
+- 📖 **Documentation**: <https://deadhand777.github.io/data-alpha>
+- 🐛 **Issues**: [GitHub Issues](https://github.com/deadhand777/data-alpha/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/deadhand777/data-alpha/discussions)
+
+
+---
+
+**Made with ❤️ by [@deadhand777](https://github.com/deadhand777)**
