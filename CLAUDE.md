@@ -92,7 +92,7 @@ npm run typecheck # Alternative: tsc --noEmit
 ## Detailed Guidelines
 
 For domain-specific guidance, refer to the specialized CLAUDE.md files:
-- `@src/content/CLAUDE.md` - Content creation, frontmatter standards, collections
+- `@docs/content-guidelines.md` - Content creation, frontmatter standards, collections
 - `@src/components/CLAUDE.md` - Component patterns, props, styling conventions
 - `@src/layouts/CLAUDE.md` - Layout structure, slots, responsive patterns
 - `@src/lib/CLAUDE.md` - TypeScript guidelines, utility functions, shared code
