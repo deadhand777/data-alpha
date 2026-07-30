@@ -36,7 +36,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           # If using a project site (not username.github.io):
-          # publish_dir: ./dist
-          # destination_dir: your-repo-name
+          destination_dir: data-alpha
+          # Prevent Jekyll from processing the static site
+          enable_jekyll: false
           # Or if you need to keep the GitHub history:
           # keep_files: true
