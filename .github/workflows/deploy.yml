@@ -28,16 +28,12 @@ jobs:
 
       - name: Build Website
         run: npm run build
-        # Astro will output to ./dist when output: 'static' is set
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          # If using a project site (not username.github.io):
           destination_dir: data-alpha
-          # Prevent Jekyll from processing the static site
           enable_jekyll: false
-          # Or if you need to keep the GitHub history:
-          # keep_files: true
+          force_orphan: true
