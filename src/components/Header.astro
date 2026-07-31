@@ -3,16 +3,16 @@ const { title } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const pathname = new URL(Astro.url).pathname;
 ---
-<header class="bg-white/90 backdrop-blur-sm border-b border-gray-100/50">
+<header class="bg-bg-primary/90 backdrop-blur-sm border-b border-gray-100/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-20 items-center justify-between border-b border-gray-100/25">
     {/* Brand Logo with Data Accent */}
     <a href={base} class="flex items-center space-x-3">
-      <span class="text-2xl font-semibold text-gray-900 tracking-tighter">
+      <span class="text-2xl font-semibold text-text-primary tracking-tighter">
         Data Alpha
       </span>
-      <span class="text-ai-indigo-600">Portfolio</span>
+      <span class="text-accent-tech">Portfolio</span>
       <span class="flex h-4 w-4 items-center justify-center">
-        <div class="w-1.5 h-1.5 bg-ai-cyan-500 rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-accent-success rounded-full"></div>
       </span>
     </a>
 
@@ -23,7 +23,7 @@ const pathname = new URL(Astro.url).pathname;
         class={`
           flex-1 text-center text-sm font-medium
           transition-all duration-200
-          ${pathname === '/' ? 'text-ai-indigo-600 border-b-2 border-ai-indigo-600' : 'text-gray-500 hover:text-ai-indigo-600 hover:border-b-2 border-gray-100/50'}
+          ${pathname === '/' ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
         `}
       >
         Home
@@ -33,7 +33,7 @@ const pathname = new URL(Astro.url).pathname;
         class={`
           flex-1 text-center text-sm font-medium
           transition-all duration-200
-          ${pathname.startsWith('/blog') ? 'text-ai-indigo-600 border-b-2 border-ai-indigo-600' : 'text-gray-500 hover:text-ai-indigo-600 hover:border-b-2 border-gray-100/50'}
+          ${pathname.startsWith('/blog') ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
         `}
       >
         Blog
@@ -43,7 +43,7 @@ const pathname = new URL(Astro.url).pathname;
         class={`
           flex-1 text-center text-sm font-medium
           transition-all duration-200
-          ${pathname.startsWith('/projects') ? 'text-ai-indigo-600 border-b-2 border-ai-indigo-600' : 'text-gray-500 hover:text-ai-indigo-600 hover:border-b-2 border-gray-100/50'}
+          ${pathname.startsWith('/projects') ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
         `}
       >
         Projects
@@ -53,7 +53,7 @@ const pathname = new URL(Astro.url).pathname;
         class={`
           flex-1 text-center text-sm font-medium
           transition-all duration-200
-          ${pathname === '/about' ? 'text-ai-indigo-600 border-b-2 border-ai-indigo-600' : 'text-gray-500 hover:text-ai-indigo-600 hover:border-b-2 border-gray-100/50'}
+          ${pathname === '/about' ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
         `}
       >
         About
@@ -63,7 +63,7 @@ const pathname = new URL(Astro.url).pathname;
         class={`
           flex-1 text-center text-sm font-medium
           transition-all duration-200
-          ${pathname === '/contact' ? 'text-ai-indigo-600 border-b-2 border-ai-indigo-600' : 'text-gray-500 hover:text-ai-indigo-600 hover:border-b-2 border-gray-100/50'}
+          ${pathname === '/contact' ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
         `}
       >
         Contact
@@ -72,7 +72,7 @@ const pathname = new URL(Astro.url).pathname;
 
     {/* Mobile Menu Button */}
     <button id="mobile-menu-button"
-            class="md:hidden p-2 rounded-md text-gray-500 hover:text-ai-indigo-600 hover:bg-ai-indigo-50 focus:outline-none focus:ring-2 focus:ring-ai-indigo-500"
+            class="md:hidden p-2 rounded-md text-text-secondary hover:text-accent-success hover:bg-accent-success/10 focus:outline-none focus:ring-2 focus:ring-accent-success"
             aria-label="Open main menu"
             aria-expanded="false">
       <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,35 +88,35 @@ const pathname = new URL(Astro.url).pathname;
     <a
       href={base}
       class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname === '/' ? 'text-ai-indigo-600 bg-ai-indigo-50' : 'text-gray-500 hover:text-ai-indigo-600'}"
+             {pathname === '/' ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
     >
       Home
     </a>
     <a
       href={`${base}blog`}
       class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname.startsWith('/blog') ? 'text-ai-indigo-600 bg-ai-indigo-50' : 'text-gray-500 hover:text-ai-indigo-600'}"
+             {pathname.startsWith('/blog') ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
     >
       Blog
     </a>
     <a
       href={`${base}projects`}
       class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname.startsWith('/projects') ? 'text-ai-indigo-600 bg-ai-indigo-50' : 'text-gray-500 hover:text-ai-indigo-600'}"
+             {pathname.startsWith('/projects') ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
     >
       Projects
     </a>
     <a
       href={`${base}about`}
       class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname === '/about' ? 'text-ai-indigo-600 bg-ai-indigo-50' : 'text-gray-500 hover:text-ai-indigo-600'}"
+             {pathname === '/about' ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
     >
       About
     </a>
     <a
       href={`${base}contact`}
       class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname === '/contact' ? 'text-ai-indigo-600 bg-ai-indigo-50' : 'text-gray-500 hover:text-ai-indigo-600'}"
+             {pathname === '/contact' ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
     >
       Contact
     </a>
