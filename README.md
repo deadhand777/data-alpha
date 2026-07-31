@@ -7,6 +7,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
 ![MDX](https://img.shields.io/badge/MDX-1C1E21?logo=mdx&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+[![Zensical](https://img.shields.io/badge/Docs-Zensical-526CFE)](https://zensical.org/)
 
 A personal portfolio website showcasing expertise in data, AI, and finance through blogging and project showcases.
 
@@ -34,9 +35,56 @@ A personal portfolio website showcasing expertise in data, AI, and finance throu
 - **Hosting**: GitHub Pages at the `/data-alpha/` base path
 - **CI/CD**: GitHub Actions using Node.js 24 and the official GitHub Pages actions
 
+## Documentation
+
+This project includes contributor documentation powered by [Zensical](https://github.com/zensical/zensical) in the `/docs/` directory. The documentation is not automatically deployed but can be viewed locally for development and contribution purposes.
+
+### Viewing Documentation Locally
+
+To preview the documentation:
+
+1. **Install Zensical** (choose one method):
+   ```bash
+   # Using pip and virtualenv
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install zensical
+
+   # OR using uv (faster alternative)
+   uv init
+   uv add --dev zensical
+   ```
+
+2. **Start the preview server**:
+   ```bash
+   # If using pip/virtualenv:
+   zensical serve
+
+   # If using uv:
+   uv run zensical serve
+   ```
+
+3. **View in browser**: Open <http://127.0.0.1:8000> to see the documentation
+
+### Documentation Structure
+
+The documentation is organized into the following sections:
+- **Getting Started** - Introduction to the project
+- **User Guide** - How to use and customize the project
+- **API Reference** - Technical reference (if applicable)
+- **Contributing** - Guidelines for contributing to the project
+
+### Documentation Development
+
+- Edit Markdown files directly in the `/docs/` directory and subdirectories
+- Changes are automatically reflected when using `zensical serve` (with live reload)
+- The `docs/assets/` directory can be used for storing images and other static assets
+- Generated site files (in `docs/site/` by default) are ignored by Git to avoid committing build artifacts
+
 ## Local Development
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -109,7 +157,6 @@ MIT License - feel free to use this as a template for your own portfolio!
 - 📖 **Documentation**: <https://deadhand777.github.io/data-alpha>
 - 🐛 **Issues**: [GitHub Issues](https://github.com/deadhand777/data-alpha/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/deadhand777/data-alpha/discussions)
-
 
 ---
 

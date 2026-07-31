@@ -21,6 +21,10 @@
 /.astro
 
 # local
-local
+.local
+/local/
 .superpowers
 docs/superpowers/
+
+# Documentation site output
+docs/site/
