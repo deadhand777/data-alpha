@@ -32,7 +32,7 @@ export const BlogPreview = ({ posts }: BlogPreviewProps) => {
                 </p>
                 <div className="flex flex-wrap gap-2 mb-5 text-xs">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="bg-blue-50 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
+                    <span key={tag} className="bg-ai-cyan-50 text-ai-cyan-800 text-xs font-medium px-2 py-0.5 rounded">
                       #{tag}
                     </span>
                   ))}
@@ -47,7 +47,7 @@ export const BlogPreview = ({ posts }: BlogPreviewProps) => {
                   </span>
                   <a
                     href={`${import.meta.env.BASE_URL}blog/${post.slug}`}
-                    className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors hover:underline"
+                    className="font-medium text-ai-indigo-600 hover:text-ai-indigo-800 transition-colors hover:underline"
                   >
                     Read more →
                   </a>
@@ -59,7 +59,7 @@ export const BlogPreview = ({ posts }: BlogPreviewProps) => {
         <div className="mt-8 text-center">
           <a
             href={`${import.meta.env.BASE_URL}blog`}
-            className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+            className="text-ai-indigo-600 hover:text-ai-indigo-800 font-medium transition-colors"
           >
             View All Blog Posts →
           </a>

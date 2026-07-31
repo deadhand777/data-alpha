@@ -36,7 +36,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                 {project.techStack.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4 text-xs">
                     {project.techStack.map((tech) => (
-                      <span key={tech} className="bg-gray-50 text-gray-700 text-xs font-medium px-2 py-0.5 rounded">
+                      <span key={tech} className="bg-ai-gray-50 text-ai-gray-700 text-xs font-medium px-2 py-0.5 rounded">
                         {tech}
                       </span>
                     ))}
@@ -44,7 +44,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                 )}
                 <div className="flex flex-wrap gap-2 mb-4 text-xs">
                   {project.tags.map((tag) => (
-                    <span key={tag} className="bg-blue-50 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
+                    <span key={tag} className="bg-ai-cyan-50 text-ai-cyan-800 text-xs font-medium px-2 py-0.5 rounded">
                       #{tag}
                     </span>
                   ))}
@@ -55,7 +55,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors flex-1"
+                      className="bg-ai-indigo-600 hover:bg-ai-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors flex-1"
                     >
                       Demo
                     </a>
@@ -65,7 +65,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                       href={project.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="border border-indigo-600 hover:bg-indigo-50 text-indigo-600 font-medium py-2 px-4 rounded-md transition-colors flex-1"
+                      className="border border-ai-indigo-600 hover:bg-ai-indigo-50 text-ai-indigo-600 font-medium py-2 px-4 rounded-md transition-colors flex-1"
                     >
                       Source
                     </a>
@@ -77,7 +77,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                   })}</span>
                   <a
                     href={`${import.meta.env.BASE_URL}projects/${project.slug}`}
-                    className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors hover:underline"
+                    className="font-medium text-ai-indigo-600 hover:text-ai-indigo-800 transition-colors hover:underline"
                   >
                     View project →
                   </a>
@@ -89,7 +89,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
         <div className="mt-8 text-center">
           <a
             href={`${import.meta.env.BASE_URL}projects`}
-            className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+            className="text-ai-indigo-600 hover:text-ai-indigo-800 font-medium transition-colors"
           >
             View All Projects →
           </a>
