@@ -5,11 +5,7 @@
 - [ ] I used AI and thoroughly reviewed every code/docs change
 
 ### Description of the change
-<!-- Quick sentence for small changes, longer description for more impacting changes. -->
+<!-- Quick sentence for small changes, longer description for more impactful changes. -->
 
 ### Relevant resources
 <!-- Link to any relevant GitHub issue, PR or discussion, section in online docs, etc. -->
-
--
--
--
