@@ -1,0 +1,23 @@
+site_name: "Data Alpha Portfolio Documentation"
+validation:
+  invalid_links: true
+  invalid_link_anchors: true
+nav:
+  - Home: index.md
+  - Getting Started: getting-started/index.md
+  - User Guide:
+    - Overview: user-guide/index.md
+    - Authoring Content: user-guide/authoring.md
+    - Configuration: user-guide/configuration.md
+    - Customization: user-guide/customization.md
+  - API Reference:
+    - Overview: api-reference/index.md
+    - Zensical CLI: api-reference/zensical-cli.md
+    - Components: api-reference/components.md
+    - Configuration: api-reference/configuration.md
+  - Contributing:
+    - Overview: contributing/index.md
+    - Getting Started: contributing/getting-started-contributing.md
+    - Code Style: contributing/code-style.md
+    - Pull Request Process: contributing/pull-request-process.md
+    - Code of Conduct: contributing/code-of-conduct.md
