@@ -16,37 +16,46 @@ interface ProjectGridProps {
 export const ProjectGrid = ({ projects }: ProjectGridProps) => {
   return (
     <section>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Featured Projects</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          Featured Projects
+        </h2>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
-            <div key={project.slug} class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-              <div class="p-6">
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{project.title}</h3>
-                <p class="text-gray-600 mb-4 line-clamp-3">{project.description}</p>
+            <div
+              key={project.slug}
+              className="bg-white/90 backdrop-blur-sm border border-gray-100/50 rounded-lg overflow-hidden hover:border-gray-200/70 hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="p-8">
+                <h3 className="text-xl font-semibold text-gray-900 tracking-tighter mb-3">
+                  {project.title}
+                </h3>
+                <p className="text-gray-500 text-sm line-clamp-3 mb-4 leading-relaxed">
+                  {project.description}
+                </p>
                 {project.techStack.length > 0 && (
-                  <div class="flex flex-wrap gap-2 mb-4 text-xs">
+                  <div className="flex flex-wrap gap-2 mb-4 text-xs">
                     {project.techStack.map((tech) => (
-                      <span key={tech} class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                      <span key={tech} className="bg-gray-50 text-gray-700 text-xs font-medium px-2 py-0.5 rounded">
                         {tech}
                       </span>
                     ))}
                   </div>
                 )}
-                <div class="flex flex-wrap gap-2 mb-4 text-xs">
+                <div className="flex flex-wrap gap-2 mb-4 text-xs">
                   {project.tags.map((tag) => (
-                    <span key={tag} class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                    <span key={tag} className="bg-blue-50 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
                       #{tag}
                     </span>
                   ))}
                 </div>
-                <div class="mt-4 space-x-3">
+                <div className="mt-4 space-x-3">
                   {project.demoUrl && (
                     <a
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors flex-1"
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors flex-1"
                     >
                       Demo
                     </a>
@@ -56,15 +65,20 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                       href={project.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="border border-indigo-600 hover:bg-indigo-50 text-indigo-600 font-medium py-2 px-4 rounded-md transition-colors flex-1"
+                      className="border border-indigo-600 hover:bg-indigo-50 text-indigo-600 font-medium py-2 px-4 rounded-md transition-colors flex-1"
                     >
                       Source
                     </a>
                   )}
                 </div>
-                <div class="flex items-center justify-between text-sm text-gray-500 mt-4">
-                  <span>{new Date(project.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                  <a href={`${import.meta.env.BASE_URL}projects/${project.slug}`} class="font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+                <div className="flex items-center justify-between text-xs text-gray-500 mt-4">
+                  <span>{new Date(project.pubDate).toLocaleDateString(undefined, {
+                    year: 'numeric', month: 'short', day: 'numeric'
+                  })}</span>
+                  <a
+                    href={`${import.meta.env.BASE_URL}projects/${project.slug}`}
+                    className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors hover:underline"
+                  >
                     View project →
                   </a>
                 </div>
@@ -72,8 +86,11 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
             </div>
           ))}
         </div>
-        <div class="mt-8 text-center">
-          <a href={`${import.meta.env.BASE_URL}projects`} class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
+        <div className="mt-8 text-center">
+          <a
+            href={`${import.meta.env.BASE_URL}projects`}
+            className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+          >
             View All Projects →
           </a>
         </div>
