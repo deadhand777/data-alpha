@@ -47,7 +47,7 @@ tailwind.config.cjs # Tailwind configuration (if customized)
 - `astro.config.mjs` - Astro setup (integrations, build options, server settings)
 - `tailwind.config.cjs` - Tailwind configuration (if customized)
 - `tsconfig.json` - TypeScript compiler options
-- `package.json` - Dependencies and npm scripts and npm scripts
+- `package.json` - Dependencies and npm scripts
 
 ## Essential Development Commands
 
@@ -101,3 +101,13 @@ For domain-specific guidance, refer to the specialized CLAUDE.md files:
 - `@src/utils/CLAUDE.md` - Utility functions helpers (if applicable)
 
 Each sub-file contains focused, actionable guidance specific to that domain, keeping this root file concise while preserving all essential information.
+
+## Quick Reference
+
+- **Content Collection**: Uses Astro Content Collections with MDX support in `src/content/`
+- **Styling**: Tailwind CSS 4 with custom configuration in `tailwind.config.cjs`
+- **Components**: Located in `src/components/` following Atomic Design principles
+- **Layouts**: Found in `src/layouts/` with slot-based composition
+- **Routing**: File-based routing in `src/pages/` with support for dynamic routes
+- **Data Fetching**: Uses Astro's `getCollection` and `getEntry` for content, standard fetch for APIs
+- **State Management**: Primarily uses Astro's island architecture with `.client.*` files for interactive components
