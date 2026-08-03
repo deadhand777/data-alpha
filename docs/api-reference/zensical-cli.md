@@ -16,7 +16,7 @@ Start the local development server with live reload.
 
 Build the static site for production deployment.
 
-### `zensical -h, --help`
+### `zensical --help`
 
 Show help information for any command.
 
@@ -30,4 +30,4 @@ uv run zensical serve
 uv run zensical build
 ```
 
-The generated site is written to `site/` and should not be committed. See the [official Zensical documentation](https://zensical.org/docs/) for all supported options.
+The generated site is written to the root `site/` directory. It is ignored by Git and should not be committed. See the [official Zensical documentation](https://zensical.org/docs/) for all supported options.

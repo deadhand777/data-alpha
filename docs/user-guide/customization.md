@@ -10,6 +10,8 @@ The project uses Tailwind CSS utility classes. The main styling files are:
 - `src/styles/global.css` for Tailwind's base, component, and utility layers
 - Component files under `src/components/` for page-level utility classes
 
+The `@tailwindcss/typography` plugin supplies the `prose` classes used by blog and project detail pages. Configure it through `tailwind.config.cjs` when changing rendered MDX typography.
+
 ## Color Palette
 
 The Tailwind configuration defines semantic colors instead of a switchable theme:

@@ -4,8 +4,8 @@ Setting up your development environment to contribute to the Data Alpha Portfoli
 
 ## Prerequisites
 
-- Node.js (v18 or later)
-- npm
+- Node.js 20 LTS
+- npm 9.6.5 or later
 - Python 3.14 or later and [uv](https://docs.astral.sh/uv/) for documentation changes
 - Git
 
