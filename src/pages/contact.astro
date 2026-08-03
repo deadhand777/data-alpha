@@ -1,23 +1,62 @@
 ---
 import Layout from '../components/Layout.astro';
 import SEO from '../components/SEO.astro';
-import { ContactForm } from '../components/ContactForm.tsx';
 ---
 <Layout>
   <SEO
-    title="Contact | Data Alpha Portfolio"
-    description="Get in touch with questions, collaboration inquiries, or feedback"
+    title="Contact Chris Schulz | Data Alpha Portfolio"
+    description="Start a professional conversation with Chris Schulz on LinkedIn or explore his technical work on GitHub."
   />
 
-  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Contact Me</h1>
-    <p class="text-gray-600 mb-8">
-      Have a question, collaboration idea, or just want to say hello?
-      I'd love to hear from you!
-    </p>
-
-    <div class="bg-white rounded-lg border border-gray-200 p-8 shadow-sm">
-      <ContactForm />
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold uppercase tracking-wider text-accent-tech mb-3">Contact</p>
+      <h1 class="text-4xl font-bold text-gray-900 mb-5">Start a conversation</h1>
+      <p class="text-lg leading-relaxed text-gray-600">
+        For collaboration ideas, speaking opportunities, or conversations about data and AI,
+        connect with me through the channel that best fits your message.
+      </p>
     </div>
+
+    <section aria-labelledby="contact-options" class="mt-12">
+      <h2 id="contact-options" class="sr-only">Contact options</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <article class="flex flex-col border-t-4 border-accent-tech bg-white p-6 shadow-sm">
+          <p class="text-sm font-semibold uppercase tracking-wider text-accent-tech">Recommended</p>
+          <h3 class="mt-3 text-2xl font-bold text-gray-900">LinkedIn</h3>
+          <p class="mt-3 flex-1 leading-relaxed text-gray-600">
+            Send a private message for professional introductions, collaboration proposals,
+            speaking requests, or a focused conversation.
+          </p>
+          <a
+            href="https://www.linkedin.com/in/chris-schulz-ai-first/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-6 inline-flex w-fit items-center justify-center rounded-md bg-accent-tech px-5 py-3 font-semibold text-white transition-colors hover:bg-accent-tech-dark focus:outline-none focus:ring-2 focus:ring-accent-tech focus:ring-offset-2"
+          >
+            Message me on LinkedIn
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </article>
+
+        <article class="flex flex-col border-t-4 border-gray-700 bg-white p-6 shadow-sm">
+          <p class="text-sm font-semibold uppercase tracking-wider text-gray-500">Technical work</p>
+          <h3 class="mt-3 text-2xl font-bold text-gray-900">GitHub</h3>
+          <p class="mt-3 flex-1 leading-relaxed text-gray-600">
+            Explore my repositories and use the relevant project's public discussion tools
+            for technical questions, feedback, or open-source topics.
+          </p>
+          <a
+            href="https://github.com/deadhand777"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-6 inline-flex w-fit items-center justify-center rounded-md border border-gray-700 px-5 py-3 font-semibold text-gray-800 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2"
+          >
+            View my GitHub profile
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </article>
+      </div>
+    </section>
   </section>
 </Layout>
