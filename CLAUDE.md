@@ -26,26 +26,26 @@ Personal portfolio website for data/AI/finance blogging built with:
 
 ```bash
 /src
-  /components     # React components
-  /content        # Content collections (blog, projects, etc.)
+  /components     # Astro + React components, incl. Layout.astro (base layout lives here, not /layouts)
+  /content        # Content collections (blog, projects, about)
   /content/blog   # Blog posts in MDX format
-  /layouts        # Layout components
-  /lib            # Utility functions and types
-  /pages          # Pages (.astro, .md, or .mdx files become routes)
+  /layouts        # Empty currently
+  /lib            # Empty currently
+  /pages          # Pages (.astro files become routes)
   /public         # Static assets (favicon, robots.txt, etc.)
-  /styles         # Global CSS (global.css)
-  /utils          # Utility functions
+  /styles         # Global CSS (global.css — currently just Tailwind directives)
+  /utils          # Empty currently
 /dist             # Built output (generated)
 astro.config.mjs  # Astro configuration
 tsconfig.json     # TypeScript configuration
 package.json      # Dependencies and scripts
-tailwind.config.cjs # Tailwind configuration (if customized)
+tailwind.config.cjs # Tailwind configuration
 ```
 
 ## Key Configuration Files
 
-- `astro.config.mjs` - Astro setup (integrations, build options, server settings)
-- `tailwind.config.cjs` - Tailwind configuration (if customized)
+- `astro.config.mjs` - Astro setup (integrations: react, tailwind, mdx; `base: '/data-alpha/'` for GitHub Pages)
+- `tailwind.config.cjs` - Tailwind configuration
 - `tsconfig.json` - TypeScript compiler options
 - `package.json` - Dependencies and npm scripts
 
@@ -68,39 +68,24 @@ npm run build  # Creates production build in ./dist
 npm run preview # Preview production build locally
 ```
 
-### Testing
-```bash
-npm test       # Run Vitest tests
-npm run test:watch  # Watch mode for tests
-npm run test:coverage # Run tests with coverage report
-```
-
-### Linting & Formatting
-```bash
-npm run lint   # Run ESLint
-npm run lint:fix # Run ESLint with auto-fix
-npm run format # Format code with Prettier
-npm run format:check # Check formatting with Prettier
-```
-
 ### Type Checking
 ```bash
-npx astro check  # Type-check TypeScript files
-npm run typecheck # Alternative: tsc --noEmit
+npx astro check  # Type-check TypeScript/Astro files
 ```
+
+No test runner, linter, or formatter configured yet (no vitest/eslint/prettier in package.json).
 
 ## Detailed Guidelines
 
 For domain-specific guidance, refer to the specialized CLAUDE.md files:
-- `@docs/content-guidelines.md` - Content creation, frontmatter standards, collections
 - `@src/components/CLAUDE.md` - Component patterns, props, styling conventions
-- `@src/layouts/CLAUDE.md` - Layout structure, slots, responsive patterns
-- `@src/lib/CLAUDE.md` - TypeScript guidelines, utility functions, shared code
+- `@src/layouts/CLAUDE.md` - Layout structure (currently empty, see file)
+- `@src/lib/CLAUDE.md` - Shared domain code (currently empty, see file)
 - `@src/pages/CLAUDE.md` - Page structure, routing, data fetching patterns
 - `@src/styles/CLAUDE.md` - Styling methodology, tokens, responsive design
-- `@src/utils/CLAUDE.md` - Utility functions helpers (if applicable)
+- `@src/utils/CLAUDE.md` - Generic utility helpers (currently empty, see file)
 
-Each sub-file contains focused, actionable guidance specific to that domain, keeping this root file concise while preserving all essential information.
+`docs/content-guidelines.md` referenced previously here does not exist — content collection schema lives in `src/content/config.ts`.
 
 ## Quick Reference
 
