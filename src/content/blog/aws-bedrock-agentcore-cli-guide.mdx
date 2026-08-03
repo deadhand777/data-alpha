@@ -13,9 +13,9 @@ draft: false
 
 ## Introduction
 
-Building AI agents with open-source frameworks like LangGraph, CrewAI, or LlamaIndex is straightforward for local development and experimentation. However, transitioning these agents to production-grade AWS environments often introduces significant complexity—boilerplate code for orchestration, complex IAM configurations, and infrastructure management overhead.
+Building AI agents with open-source frameworks like **LangGraph**, **CrewAI**, or **LlamaIndex** is straightforward for local development and experimentation. However, transitioning these agents to production-grade AWS environments often introduces significant complexity—boilerplate code for orchestration, complex IAM configurations, and infrastructure management overhead.
 
-The AWS Bedrock AgentCore CLI addresses this gap by providing a unified command-line tool that handles project scaffolding, local development servers, and seamless AWS deployments—all while maintaining framework agnosticism. This means you can continue using your preferred AI development framework while leveraging AWS's managed infrastructure for production deployment.
+The **AWS Bedrock AgentCore CLI** addresses this gap by providing a unified command-line tool that handles project scaffolding, local development servers, and seamless AWS deployments—all while maintaining framework agnosticism. This means you can continue using your preferred AI development framework while leveraging AWS's managed infrastructure for production deployment.
 
 ## Main Body
 
@@ -39,11 +39,11 @@ agentcore --version
 
 The `agentcore create` command launches an interactive wizard that guides you through:
 
-1. **Agent type selection**: Choose between Harness (configuration-based) or Agent (code-based) approaches
-2. **Framework selection**: Options include Strands (recommended), LangChain/LangGraph, Google ADK, or OpenAI Agents SDK
-3. **Model provider**: Select from Amazon Bedrock, Anthropic, OpenAI, or Google Gemini
-4. **Memory configuration**: Choose between none, short-term only, or both short-term and long-term memory
-5. **Build type**: Select CodeZip (default) or Container deployment
+- **Agent type selection**: Choose between **Harness** (configuration-based) or **Agent** (code-based) approaches
+- **Framework selection**: Options include **Strands** (recommended), **LangChain/LangGraph**, **Google ADK**, or **OpenAI Agents SDK**
+- **Model provider**: Select from **Amazon Bedrock**, **Anthropic**, **OpenAI**, or **Google Gemini**
+- **Memory configuration**: Choose between **none**, **short-term only**, or **both short-term and long-term memory**
+- **Build type**: Select **CodeZip** (default) or **Container** deployment
 
 For a quick start with recommended defaults:
 ```bash
@@ -79,11 +79,11 @@ agentcore dev
 ```
 
 This command:
-- Creates a Python virtual environment
-- Installs all dependencies
-- Starts a local development server with hot reload
-- Opens the agent inspector in your browser (default port 8080)
-- Automatically reloads when you make code changes
+- 🔧 Creates a Python virtual environment
+- 📦 Installs all dependencies
+- 🌐 Starts a local development server with hot reload
+- 👁️ Opens the agent inspector in your browser (default port 8080)
+- 🔄 Automatically reloads when you make code changes
 
 Useful development flags include:
 - `--no-browser`: Use terminal-based TUI instead of browser inspector
@@ -102,12 +102,12 @@ agentcore deploy
 ```
 
 The deployment process involves:
-1. Packaging your code into a zip artifact (or building a container if using `--build Container`)
-2. Using AWS CDK to synthesize and provision required resources
-3. Creating an AgentCore Runtime endpoint for your agent
-4. Configuring CloudWatch logging and observability features
+1. 📦 Packaging your code into a zip artifact (or building a container if using `--build Container`)
+2. ⚙️ Using AWS CDK to synthesize and provision required resources
+3. 🚀 Creating an AgentCore Runtime endpoint for your agent
+4. 📊 Configuring CloudWatch logging and observability features
 
-Initial deployments take longer due to CDK bootstrapping, but subsequent deployments are significantly faster as the infrastructure is already in place.
+> ⏱️ **Note**: Initial deployments take longer due to CDK bootstrapping, but subsequent deployments are significantly faster as the infrastructure is already in place.
 
 You can preview changes before deploying:
 ```bash
@@ -220,33 +220,33 @@ The AgentCore CLI provides flexible memory options:
 
 #### AgentCore Gateway
 Securely connect to external services with:
-- Unified authentication for API keys, OAuth, AWS IAM roles
-- Request/response transformation using JMESPath or JavaScript
-- Rate limiting and quota protection
-- Comprehensive observability (logging, metrics, tracing)
-- MCP server integration for tool discovery and execution
+- **Unified authentication** for API keys, OAuth, AWS IAM roles
+- **Request/response transformation** using JMESPath or JavaScript
+- **Rate limiting and quota protection**
+- **Comprehensive observability** (logging, metrics, tracing)
+- **MCP server integration** for tool discovery and execution
 
 #### AgentCore Observability
 Gain deep insights into agent behavior:
-- Distributed tracing of agent reasoning steps
-- Tool invocation tracking and performance metrics
-- Integration with CloudWatch for centralized logging and monitoring
-- Custom metrics for business-specific KPIs
+- **Distributed tracing** of agent reasoning steps
+- **Tool invocation tracking** and performance metrics
+- **Integration with CloudWatch** for centralized logging and monitoring
+- **Custom metrics** for business-specific KPIs
 
 ### Conclusion & Call to Action
 
 #### Key Summary
 The AWS Bedrock AgentCore CLI successfully bridges the gap between rapid local prototyping and production-grade AWS deployments. By abstracting away infrastructure complexity while maintaining framework flexibility, it allows AI/ML engineers to:
-- Focus on agent logic rather than orchestration boilerplate
-- Seamlessly transition from local development to AWS deployment
-- Leverage enterprise-grade security, observability, and scalability
-- Maintain freedom to choose their preferred AI frameworks
+- 🎯 Focus on agent logic rather than orchestration boilerplate
+- 🔄 Seamlessly transition from local development to AWS deployment
+- 🔐 Leverage enterprise-grade security, observability, and scalability
+- 🆓 Maintain freedom to choose their preferred AI frameworks
 
 #### Call to Action
 Have you experimented with deploying AI agents using AWS Bedrock AgentCore? Share your experiences in the comments below! Be sure to:
-- ⭐ Star the [AgentCore CLI GitHub repository](https://github.com/aws/agentcore-cli)
-- Explore the [AgentCore samples repository](https://github.com/awslabs/amazon-bedrock-agentcore-samples)
-- Try building your own agent with frameworks like Strands or LangGraph
-- Join the [AgentCore community forum](https://community.aws/tags/agentcore) to connect with other developers
+- ⭐ **Star** the [AgentCore CLI GitHub repository](https://github.com/aws/agentcore-cli)
+- 📚 **Explore** the [AgentCore samples repository](https://github.com/awslabs/amazon-bedrock-agentcore-samples)
+- 💻 **Try building** your own agent with frameworks like Strands or LangGraph
+- 💬 **Join** the [AgentCore community forum](https://community.aws/tags/agentcore) to connect with other developers
 
 The future of AI agent development is here—where local productivity meets cloud-scale deployment without compromising on flexibility or innovation.
