@@ -10,7 +10,21 @@ Portfolio entries are MDX files in `src/content/`:
 - `src/content/projects/` contains project pages.
 - `src/content/about/index.mdx` contains the About page content.
 
-The collection schemas in `src/content/config.ts` validate frontmatter during the Astro build. Blog posts require `title`, `description`, and `pubDate`. Project entries require the same fields and may also provide `demoUrl`, `sourceUrl`, and `techStack`.
+The collection schemas in `src/content/config.ts` validate frontmatter during the Astro build.
+
+### Blog posts
+
+| Field | Required | Type or default |
+| --- | --- | --- |
+| `title` | Yes | String |
+| `description` | Yes | String |
+| `pubDate` | Yes | Date |
+| `updatedDate` | No | Date |
+| `heroImage` | No | String |
+| `tags` | No | String array; defaults to `[]` |
+| `draft` | No | Boolean; defaults to `false` |
+
+Draft posts are excluded from both the blog index and generated post routes. Set `draft: false` or remove the field to publish a post.
 
 Example blog frontmatter:
 
@@ -25,6 +39,41 @@ draft: false
 ```
 
 Dates must be valid YAML dates. URLs in project frontmatter must be absolute URLs.
+
+### Projects
+
+Project entries require `title`, `description`, and `pubDate`. They also support `updatedDate`, `heroImage`, and these project-specific fields:
+
+| Field | Required | Type or default |
+| --- | --- | --- |
+| `tags` | No | String array; defaults to `[]` |
+| `demoUrl` | No | Absolute URL |
+| `sourceUrl` | No | Absolute URL |
+| `techStack` | No | String array; defaults to `[]` |
+
+```yaml
+---
+title: "Forecasting Pipeline"
+description: "A production forecasting workflow"
+pubDate: 2026-07-31
+tags: ["forecasting"]
+techStack: ["Python", "DuckDB"]
+sourceUrl: "https://github.com/example/forecasting-pipeline"
+---
+```
+
+### About page
+
+`src/content/about/index.mdx` is a singleton entry. Its frontmatter requires:
+
+- `title`, `seoTitle`, `description`, `role`, and `introduction`
+- `highlights`, containing objects with `value` and `label`
+- `expertise`, containing objects with `title`, `description`, and an optional `tools` array
+- `experience`, containing `summary` and an optional `focus` array
+- `education`, containing `summary` and an optional `foundation` array
+- Absolute `cvUrl`, `githubUrl`, and `linkedinUrl` values
+
+Run `npx astro check` after changing frontmatter to catch missing fields and invalid values.
 
 ## Documentation Content
 

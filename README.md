@@ -43,24 +43,13 @@ This project includes contributor documentation powered by [Zensical](https://gi
 
 To preview the documentation:
 
-1. **Install Zensical** (choose one method):
+1. **Install the locked documentation environment**:
    ```bash
-   # Using pip and virtualenv
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install zensical
-
-   # OR using uv (faster alternative)
-   uv init
-   uv add --dev zensical
+   uv sync
    ```
 
 2. **Start the preview server**:
    ```bash
-   # If using pip/virtualenv:
-   zensical serve
-
-   # If using uv:
    uv run zensical serve
    ```
 
@@ -79,7 +68,7 @@ The documentation is organized into the following sections:
 - Edit Markdown files directly in the `/docs/` directory and subdirectories
 - Changes are automatically reflected when using `zensical serve` (with live reload)
 - The `docs/assets/` directory can be used for storing images and other static assets
-- Generated site files (in `docs/site/` by default) are ignored by Git to avoid committing build artifacts
+- Generated documentation files in the root `/site/` directory are ignored by Git to avoid committing build artifacts
 
 ## Local Development
 

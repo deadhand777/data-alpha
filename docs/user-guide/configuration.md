@@ -24,7 +24,7 @@ Use `import.meta.env.BASE_URL` when building internal links in components so the
 
 ## Content Collections
 
-`src/content/config.ts` defines the `blog` and `projects` schemas. Astro validates content against these schemas during `npm run build`.
+`src/content/config.ts` defines the `blog`, `projects`, and singleton `about` schemas. Astro validates content against these schemas during `npm run build` and `npx astro check`.
 
 ## Zensical
 

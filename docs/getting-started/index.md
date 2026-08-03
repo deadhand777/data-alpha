@@ -8,7 +8,7 @@ Data Alpha is a statically generated portfolio for writing about data, AI, and f
 
 ## Prerequisites
 
-- Node.js 18 or later and npm for the portfolio
+- Node.js 20 LTS and npm 9.6.5 or later for the portfolio
 - Python 3.14 and [uv](https://docs.astral.sh/uv/) for the documentation site
 
 ## Run Locally

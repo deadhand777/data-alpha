@@ -16,11 +16,13 @@ The sitemap package is installed, but its integration is currently disabled.
 
 ## Tailwind Configuration
 
-`tailwind.config.cjs` scans `./src/**/*.{astro,js,jsx,ts,tsx,mdx}` and extends the default theme with semantic background, text, success, and technology colors. No Tailwind plugins are configured.
+`tailwind.config.cjs` scans `./src/**/*.{astro,js,jsx,ts,tsx,mdx}` and extends the default theme with semantic background, text, success, and technology colors. The `@tailwindcss/typography` plugin provides `prose` styles for rendered MDX content.
+
+The active styling pipeline is the `@astrojs/tailwind` integration in `astro.config.mjs`. The `@tailwindcss/vite` package is installed but is not configured as a Vite plugin.
 
 - Color palette customization
 - Content paths
-- Plugin configuration
+- Typography plugin configuration
 
 ## TypeScript Configuration
 
