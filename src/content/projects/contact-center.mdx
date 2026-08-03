@@ -1,0 +1,88 @@
+---
+title: "contact-center"
+description: "An agentic contact-center proof of concept for a regulated German bank—autonomous assistant answers product questions with citations, looks up authenticated account balances, and escalates to human agents inside EU data residency under BaFin/DORA constraints."
+pubDate: 2026-08-03
+updatedDate: 2026-08-03
+heroImage: "/images/projects/contact-center.jpg"
+tags: ["ai", "aws", "bedrock", "cdk", "agentcore"]
+demoUrl: "https://github.com/deadhand777/contact-center#readme"
+sourceUrl: "https://github.com/deadhand777/contact-center"
+techStack: ["AWS Bedrock AgentCore", "Amazon Connect", "AWS CDK", "Python"]
+---
+
+# contact-center
+
+An agentic contact-center proof of concept for a regulated German bank, enabling autonomous customer support with citations, secure balance lookup, and human escalation under BaFin/DORA compliance in AWS eu-central-1.
+
+## Overview
+
+This project transforms traditional human-heavy customer service into an autonomous assistant that can:
+- Answer product questions with citations from verified sources
+- Look up authenticated account balances securely
+- Escalate to human agents when necessary, all while maintaining compliance with banking regulations
+
+## Features
+
+- **Autonomous Agent**: AI-powered assistant that handles customer inquiries independently
+- **Citation System**: Provides verifiable sources for all information given to customers
+- **Secure Balance Lookup**: Authenticated access to account information with proper authorization
+- **Human Escalation**: Seamless transfer to human agents for complex situations
+- **Regulatory Compliance**: Built to meet BaFin/DORA requirements for German financial institutions
+- **EU Data Residency**: All data processing and storage occurs within EU boundaries
+- **Golden Test Set**: Evaluated against a comprehensive test suite for reliability
+
+## Technical Architecture
+
+### Core Components
+
+- **AWS Bedrock AgentCore**: Orchestrates the autonomous agent behavior and decision-making
+- **Amazon Connect**: Provides the telephony infrastructure for customer interactions
+- **AWS CDK**: Infrastructure as Code for reproducible deployment
+- **Python**: Primary language for business logic and integrations
+
+### Data Flow
+
+1. Customer initiates contact via phone or chat
+2. AWS Bedrock AgentCore processes the inquiry and determines intent
+3. For product questions: searches knowledge base and provides answers with citations
+4. For account inquiries: authenticates user and retrieves balance information securely
+5. For complex issues: initiates seamless transfer to human agent with context preservation
+6. All interactions logged and monitored for compliance and quality assurance
+
+### Security & Compliance
+
+- Deployed in AWS eu-central-1 (Frankfurt) region for EU data residency
+- End-to-end encryption for data in transit and at rest
+- IAM roles and policies following least privilege principle
+- Audit logging for all agent actions and data access
+- Regular security assessments and penetration testing
+
+## Key Learnings
+
+Building this proof of concept highlighted several important aspects of regulated AI systems:
+
+1. **Balancing Automation with Compliance**: Ensuring AI agents operate within strict regulatory boundaries
+2. **Secure Authentication in AI Systems**: Implementing robust identity verification for financial data access
+3. **Escalation Protocols**: Designing smooth transitions between AI and human agents
+4. **Observability in AI Systems**: Monitoring agent behavior for both performance and compliance
+5. **Infrastructure as Code**: Using CDK for reproducible, auditable infrastructure deployments
+
+## Future Enhancements
+
+- Multi-language support for diverse customer bases
+- Advanced sentiment analysis for customer satisfaction monitoring
+- Integration with additional banking systems (loan applications, transaction history)
+- Machine learning model continuous improvement pipeline
+- Enhanced analytics dashboard for supervisor insights
+- Mobile app integration for agent accessibility
+
+## Getting Started
+
+To explore this project further:
+
+1. Review the source code on GitHub
+2. Examine the infrastructure as code definitions
+3. Review the agent configuration and prompt engineering
+4. Check the test suites for validation approaches
+
+*Note: This is a proof of concept implementation. For production use, additional security measures, scalability considerations, and regulatory approvals would be required.*
