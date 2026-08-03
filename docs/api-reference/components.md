@@ -24,7 +24,6 @@ Accepts standard React `div` attributes plus `variant`: `default`, `elevated`, o
 - `BlogPreview` renders a collection of blog summaries.
 - `ProjectGrid` renders project summaries, technology tags, and optional demo/source links.
 - `TagList` accepts a `tags: string[]` prop and renders nothing for an empty list.
-- `ContactForm` provides client-side validation and currently simulates submission; it is not connected to a form service.
 
 ## Astro Components
 
