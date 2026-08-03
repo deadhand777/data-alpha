@@ -25,14 +25,14 @@ const sortedProjects = projects
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {sortedProjects.map((project) => (
-        <article key={project.slug} class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
           <div class="p-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-3">{project.data.title}</h2>
             <p class="text-gray-600 mb-4 line-clamp-3">{project.data.description}</p>
             {project.data.techStack.length > 0 && (
               <div class="flex flex-wrap gap-2 mb-4 text-xs">
                 {project.data.techStack.map((tech) => (
-                  <span key={tech} class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                  <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
                     {tech}
                   </span>
                 ))}
@@ -40,7 +40,7 @@ const sortedProjects = projects
             )}
             <div class="flex flex-wrap gap-2 mb-4 text-xs">
               {project.data.tags.map((tag) => (
-                <span key={tag} class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
                   #{tag}
                 </span>
               ))}

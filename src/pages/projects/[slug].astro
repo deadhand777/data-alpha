@@ -36,7 +36,7 @@ const { Content } = await project.render();
           <span>{new Date(project.data.updatedDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
         )}
         {project.data.tags.map((tag) => (
-          <span key={tag} class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+          <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
             #{tag}
           </span>
         ))}
@@ -56,7 +56,7 @@ const { Content } = await project.render();
           <h2 class="text-2xl font-bold text-gray-900 mb-4">Technical Stack</h2>
           <div class="flex flex-wrap gap-4 mb-6">
             {project.data.techStack.map((tech) => (
-              <div key={tech} class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-md text-sm font-medium">
+              <div class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-md text-sm font-medium">
                 <span class="block w-3 h-3 bg-indigo-600 rounded"></span>
                 <span>{tech}</span>
               </div>
@@ -71,7 +71,7 @@ const { Content } = await project.render();
           <h2 class="text-2xl font-bold text-gray-900 mb-4">Tags</h2>
           <div class="flex flex-wrap gap-2 mb-6">
             {project.data.tags.map((tag) => (
-              <span key={tag} class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+              <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
                 #{tag}
               </span>
             ))}
