@@ -1,0 +1,170 @@
+---
+title: "Fix Your Backtest Before You Tune Your Forecasting Model"
+description: "Build forecasting evaluations that respect time, prevent preprocessing leakage, quantify uncertainty, and preserve hierarchical coherence."
+pubDate: 2026-07-26
+heroImage: "/data-alpha/images/blog/time-series-backtesting-production.svg"
+tags: ["time-series", "backtesting", "forecasting", "production", "uncertainty"]
+slug: "time-series-backtesting-production"
+draft: false
+---
+
+A forecasting model can look excellent for the wrong reason. Randomly shuffle observations, scale with statistics computed over the full history, or tune against one convenient forecast origin, and future information quietly moves into the training process.
+
+Model tuning cannot repair that evaluation. It optimizes the leak.
+
+![Three expanding training windows followed by fixed forecast horizons moving forward through time](/data-alpha/images/blog/time-series-backtesting-production.svg)
+
+Part 1 of this series showed that [model rankings depend on the task](../time-series-no-single-winner/). Part 2 showed why [pretraining makes the information boundary harder to audit](../time-series-foundation-models-2026/). This article turns those cautions into a production evaluation workflow.
+
+## A Forecast Is Always Made From a Point in Time
+
+A normal regression row can often be treated as exchangeable with another row. A time-series observation cannot. At each forecast origin, the system may use only the information that would have existed at that moment.
+
+Suppose a weekly demand model is retrained every Monday and predicts the next four weeks. A realistic backtest should recreate several historical Mondays:
+
+1. Train using data available by the first origin.
+2. Predict the following four weeks.
+3. Advance the origin.
+4. Refit or update exactly as production would.
+5. Repeat through different seasons and operating regimes.
+
+This is rolling-origin evaluation. An expanding-window version retains all earlier training observations. A sliding-window version keeps a fixed amount of recent history and drops older data.
+
+[Forecast Evaluation for Data Scientists](https://arxiv.org/abs/2203.10716) describes why shuffled splits and several common preprocessing choices produce optimistic results. Uber's [introduction to forecasting](https://www.uber.com/en/blog/forecasting-introduction/) provides a practical account of sliding and expanding backtests.
+
+## Build the Split Before the Model
+
+A small dependency-free generator makes the evaluation geometry explicit:
+
+```python
+def expanding_windows(length, minimum_train_size, horizon, step):
+    origin = minimum_train_size
+
+    while origin + horizon <= length:
+        train_indices = range(0, origin)
+        test_indices = range(origin, origin + horizon)
+        yield train_indices, test_indices
+        origin += step
+
+
+for train_indices, test_indices in expanding_windows(
+    length=104,
+    minimum_train_size=52,
+    horizon=4,
+    step=4,
+):
+    print(train_indices.stop, test_indices.start, test_indices.stop)
+```
+
+The generator is not a full backtesting framework. It does expose the questions a framework must answer: minimum history, prediction horizon, origin spacing, and whether training expands or slides.
+
+Choose those values from the production decision. A one-step rolling benchmark is a poor proxy for a system that will issue a fixed 13-week plan once per quarter.
+
+## Leakage Lives Outside the Split
+
+Chronological indices are necessary, but they are not sufficient. Any transformation learned from data must respect the same boundary.
+
+Common leakage paths include:
+
+- fitting a scaler over the complete series before splitting;
+- decomposing trend and seasonality using future observations;
+- calculating rolling features without shifting them behind the forecast origin;
+- imputing historical gaps using later values;
+- selecting features or hyperparameters from performance on the final test period;
+- joining a revised economic series that was not available in its revised form at prediction time.
+
+Fit preprocessing inside each backtest window. For lagged features, verify that a row at time $t$ depends only on information available before the required forecast was issued.
+
+This also applies to covariates. A holiday calendar is known in advance. Actual future weather is not, unless the production system will receive a weather forecast and the backtest uses the historical forecast that was available at that origin.
+
+## Purging and Embargo Solve a Specific Overlap Problem
+
+Some targets summarize a future interval. A financial label might represent the return over the next ten days; a demand feature might summarize the previous 28 days. Samples close to a validation boundary can then share observations even when their timestamps sit on opposite sides of the split.
+
+**Purging** removes training samples whose feature or target windows overlap the validation interval. **Embargo** leaves an additional buffer around the boundary where information could flow backward through overlapping construction or delayed availability.
+
+Do not add purge and embargo mechanically to every forecast. Use them when feature windows, target windows, event durations, or publication delays create real overlap. Record the reason and the excluded interval so the safeguard remains auditable.
+
+## Score Against a Baseline at Every Origin
+
+An aggregate metric can hide when a system fails. Keep errors by forecast origin, horizon, series, and operational segment, then summarize them.
+
+At minimum, compare against:
+
+- last observation;
+- seasonal naive;
+- a stable statistical baseline such as exponential smoothing;
+- the currently deployed model, if one exists.
+
+Report relative improvement over the baseline as well as the raw metric. A candidate that improves average error by 2% but fails badly around holidays may be less useful than a baseline with predictable limitations.
+
+Metric choice should reflect the decision. MAE is interpretable in target units. Scaled errors support comparisons across series. Pinball loss evaluates a requested quantile and penalizes over- and under-prediction asymmetrically.
+
+```python
+def pinball_loss(actual, predicted_quantile, quantile):
+    error = actual - predicted_quantile
+    return max(quantile * error, (quantile - 1) * error)
+
+
+under_forecast_cost = pinball_loss(
+    actual=120,
+    predicted_quantile=105,
+    quantile=0.9,
+)
+```
+
+A high quantile can be appropriate when under-forecasting capacity is especially expensive. It is not a generic confidence setting; it encodes an asymmetric decision.
+
+## Prediction Intervals Need Their Own Backtest
+
+A point forecast cannot express whether several outcomes are similarly plausible. Quantile models and conformal methods can produce intervals, but interval quality has at least two dimensions:
+
+- **Coverage:** how often the observed value falls inside the interval.
+- **Sharpness:** how narrow the interval is while maintaining useful coverage.
+
+An interval wide enough to contain every outcome has perfect coverage and little planning value.
+
+Classical conformal prediction relies on exchangeability, an assumption temporal dependence can violate. Time-series adaptations estimate residual behavior over chronological calibration windows. Nixtla's [StatsForecast conformal tutorial](https://nixtlaverse.nixtla.io/statsforecast/docs/tutorials/conformalprediction.html) uses multiple held-out windows to construct empirical intervals without assuming a specific error distribution.
+
+That is useful, not automatic. Check coverage separately by horizon and regime. Multi-step, multivariate conformal prediction remains an active research area, especially under drift.
+
+## Hierarchies Turn Accuracy Into a Constraint Problem
+
+Retail, staffing, energy, and finance forecasts often form hierarchies. Product forecasts should sum to category totals; stores should sum to regions; regions should sum to the company.
+
+Independent base forecasts usually violate those identities. Reconciliation transforms them into coherent forecasts.
+
+Common approaches include:
+
+- **Bottom-up:** forecast the lowest level and sum upward.
+- **Top-down:** forecast the aggregate and distribute it using historical or forecast proportions.
+- **Middle-out:** anchor a useful middle level, then aggregate upward and allocate downward.
+- **MinTrace:** combine base forecasts using an estimate of their error covariance to reduce total variance.
+
+The [HierarchicalForecast documentation](https://nixtlaverse.nixtla.io/hierarchicalforecast/index.html) implements these approaches and probabilistic reconciliation methods.
+
+Reconciliation must happen inside each backtest. Otherwise, the evaluation may compare incoherent base forecasts while production uses a materially different reconciled output.
+
+## A Production Backtest Contract
+
+Before tuning, write down the contract that every candidate must satisfy:
+
+1. **Origins:** dates when forecasts would have been issued.
+2. **Horizon:** exact steps required by the decision.
+3. **Availability:** features and revisions known at each origin.
+4. **Retraining:** expanding, sliding, incremental, or fixed model.
+5. **Baselines:** named simple and deployed references.
+6. **Metrics:** point, quantile, coverage, and business-weighted measures.
+7. **Segments:** series, horizons, seasons, and regimes that need separate inspection.
+8. **Coherence:** hierarchy constraints and reconciliation method.
+9. **Resources:** training time, inference latency, memory, and external API cost.
+
+Freeze the final test period before model selection. Use earlier backtest windows for feature and hyperparameter decisions, then evaluate the chosen system once on the untouched period.
+
+## Tune Only After the Evaluation Can Fail Honestly
+
+The best first forecasting system is often not the most sophisticated candidate. It is the first system evaluated under a process that makes failure visible.
+
+Once that process exists, model experimentation becomes useful. You can tell whether LightGBM gains come from available promotion features, whether a neural model improves long horizons, or whether a foundation model provides diverse ensemble errors. Without it, every improvement is ambiguous.
+
+Part 4, [The Python Forecasting Stack in 2026](./python-time-series-forecasting-stack-2026/), maps these jobs to maintained Python libraries without pretending that package popularity determines forecast quality.

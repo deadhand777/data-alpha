@@ -1,0 +1,148 @@
+---
+title: "No Single Model Wins: What M3, M4, and M5 Teach Us About Forecasting"
+description: "The M-competitions show why forecasting winners keep changing, simple baselines still matter, and evaluation must match the real decision."
+pubDate: 2026-07-24
+heroImage: "/data-alpha/images/blog/time-series-no-single-winner.svg"
+tags: ["time-series", "forecasting", "benchmarks", "machine-learning", "baselines"]
+slug: "time-series-no-single-winner"
+draft: false
+---
+
+Forecasting has no ImageNet moment: no single architecture arrived, established a durable lead, and made the previous generation obsolete. The history of the M-competitions points in the opposite direction. Statistical methods led one competition, a statistical-neural hybrid led the next, and gradient-boosted trees dominated the one after that.
+
+That sequence is not evidence that forecasting steadily progressed from simple to complex. It is evidence that the task changed.
+
+The frequency and length of the series changed. The amount of related data changed. Retail prices, promotions, calendars, and product hierarchies became available. The winning method changed with them.
+
+![Timeline showing statistical methods leading M3, a hybrid leading M4, and boosted trees leading M5](/data-alpha/images/blog/time-series-no-single-winner.svg)
+
+This is the first article in a four-part series about choosing and evaluating forecasting systems in 2026. It begins with the least fashionable but most useful conclusion: **there is no universally best forecasting model, and every serious comparison starts with a simple baseline.**
+
+## Three Competitions, Three Different Answers
+
+The M-competitions provide unusually useful evidence because they compare many methods over common collections of series. They do not settle which model is best for your data, but they show why that question is incomplete.
+
+### M3: classical statistics held the line
+
+The M3 competition consisted largely of relatively short business and economic series. A later controlled analysis by Makridakis, Spiliotis, and Assimakopoulos compared statistical and machine-learning methods over 1,045 monthly series. In that experiment, traditional approaches such as exponential smoothing and ARIMA outperformed the machine-learning methods on average.
+
+The paper reports an average sMAPE of about 7.19% for ARIMA and 8.39% for the best tested machine-learning model, a multilayer perceptron. A seasonal naive forecast outperformed roughly half of the machine-learning methods in the comparison.
+
+Those numbers should not be generalized to every frequency or domain. They describe a specific set of monthly series and a specific generation of models. The durable lesson is narrower: when each series is short and there is little useful cross-series information, additional model capacity can be a liability rather than an advantage.
+
+Source: [Statistical and Machine Learning forecasting methods: Concerns and ways forward](https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0194889), *PLOS ONE*, 2018.
+
+### M4: a hybrid won
+
+M4 expanded the comparison to 100,000 series and six frequencies. Its winning method, developed by Slawek Smyl, combined exponential smoothing with recurrent neural networks. The statistical component represented level and seasonality; the neural network learned shared behavior across series.
+
+According to Smyl's account of the competition, the hybrid was close to 10% more accurate than the competition benchmark. Twelve of the top 17 submissions were combinations of methods, while pure machine-learning entries performed poorly relative to the leaders.
+
+The interesting result is not simply that a neural network won. It won as part of a system that retained statistical structure. M4 rewarded cross-series learning without discarding useful inductive bias.
+
+Source: [M4 Forecasting Competition: Introducing a New Hybrid ES-RNN Model](https://www.uber.com/en/blog/m4-forecasting-competition/), Uber Engineering, 2018. This is the winning author's account; the competition journal article should remain the reference for a formal treatment.
+
+### M5: tabular machine learning found the right problem
+
+M5 looked different again. It asked participants to forecast hierarchical Walmart unit sales across products and stores. The data included prices, promotions, calendar events, and many related series. This structure favored models that could learn relationships across a large panel and consume rich explanatory features.
+
+Gradient-boosted trees, especially LightGBM-based systems, became the dominant pattern among leading solutions. That does not establish gradient boosting as the new universal winner. It says that a retail panel with shared calendar effects, product metadata, and tens of thousands of related series can be treated effectively as a supervised tabular-learning problem.
+
+A recent review describes LightGBM as having superior forecasting performance in the M5 setting while making the same conditional point: nonlinear methods help when the data-generating process contains nonlinear structure, but can lose to linear models when it does not.
+
+Source: [Selected Topics in Time Series Forecasting](https://pmc.ncbi.nlm.nih.gov/articles/PMC11941414/), *Entropy*, 2025.
+
+## The Dataset Chooses the Contest
+
+The simplified story is tempting:
+
+1. Statistical methods won M3.
+2. A neural hybrid won M4.
+3. Gradient boosting won M5.
+4. Therefore, gradient boosting is the current best method.
+
+The fourth step does not follow. M5 changed the information available to the forecaster. A method that can pool information across products and use prices, promotions, and event flags has an advantage there. Give the same method one short univariate series with no covariates and the advantage may disappear.
+
+Before comparing model families, identify the dimensions that define the actual task:
+
+- **History length:** Do you have dozens, hundreds, or millions of observations?
+- **Number of related series:** Can a model learn shared effects across products, stores, sensors, or customers?
+- **Forecast horizon:** Does the decision require the next step or the next year?
+- **Frequency:** Are observations annual, monthly, hourly, or irregular?
+- **Known future inputs:** Are prices, promotions, holidays, or planned capacity available at prediction time?
+- **Hierarchy:** Must forecasts add up across product, location, and organizational levels?
+- **Loss:** Is a large under-forecast more expensive than the same-size over-forecast?
+
+A benchmark is relevant only when these dimensions resemble the production decision.
+
+## The Transformer Detour
+
+Long-horizon forecasting later produced another apparent winner. Models such as Informer and Autoformer adapted attention mechanisms to long sequences and reported strong benchmark results. Then a remarkably small model disrupted the story.
+
+[DLinear](https://arxiv.org/abs/2205.13504) decomposes a series into trend and remainder components and applies linear mappings. Its authors reported that this simple architecture outperformed several Transformer-based forecasters on widely used long-term forecasting benchmarks. They argued that some reported gains came from the direct multi-step forecasting setup rather than from attention itself.
+
+That was not the final verdict either. [PatchTST](https://arxiv.org/abs/2211.14730) changed the Transformer representation by grouping observations into patches and processing channels independently. It reported stronger results than DLinear on many of the same benchmark families.
+
+The exchange is more valuable than either leaderboard position. DLinear showed that architectural complexity was not sufficient evidence of progress. PatchTST showed that the Transformer category was not exhausted by its earlier formulations.
+
+Other neural architectures also complicate a Transformer-only narrative:
+
+- [N-BEATS](https://arxiv.org/abs/1905.10437) uses stacks of fully connected blocks rather than attention and reported improvements over statistical and hybrid benchmarks on M3, M4, and Tourism datasets.
+- [N-HiTS](https://arxiv.org/abs/2201.12886) adds hierarchical interpolation and multi-rate sampling. Its authors reported better accuracy and substantially lower computation than the contemporary Transformer models they tested.
+
+These are dataset-specific paper results, not permanent rankings. Later models, different preprocessing, or a different horizon can reorder them again.
+
+## A Baseline Is an Instrument, Not an Embarrassment
+
+A seasonal naive model predicts that the next observation will repeat the corresponding observation from the previous seasonal cycle. It has no learned parameters, yet it answers an important question: does the proposed system add value beyond persistence and seasonality?
+
+That makes the baseline part of the measurement apparatus. Without it, a low error value has no operational meaning.
+
+The following dependency-free pattern compares candidate predictions against the same observations and metric. It is deliberately small; a production evaluation must also repeat this comparison across chronological backtest windows.
+
+```python
+from statistics import mean
+
+
+def mean_absolute_error(actual, predicted):
+    return mean(abs(observed - forecast) for observed, forecast in zip(actual, predicted))
+
+
+actual = [112, 118, 121, 119]
+seasonal_naive = [109, 116, 120, 117]
+candidate_model = [111, 120, 124, 121]
+
+baseline_error = mean_absolute_error(actual, seasonal_naive)
+candidate_error = mean_absolute_error(actual, candidate_model)
+
+relative_improvement = (baseline_error - candidate_error) / baseline_error
+print(f"Improvement over baseline: {relative_improvement:.1%}")
+```
+
+Even this tiny example forces three useful disciplines:
+
+1. Compare on exactly the same observations.
+2. Define improvement relative to a named baseline.
+3. Make the metric visible instead of calling a forecast "accurate."
+
+The next step is not to add a more elaborate model. It is to repeat the measurement over multiple forecast origins and inspect whether the result survives different seasons, demand regimes, and horizons.
+
+## What to Carry Into a Real Project
+
+The competition record and architecture debates suggest a practical order of operations:
+
+1. **Define the decision.** Specify the horizon, update frequency, hierarchy, available future information, and cost of errors.
+2. **Establish naive and classical baselines.** Seasonal naive, exponential smoothing, and an autoregressive model provide different reference points.
+3. **Use chronological evaluation.** A random train/test split can let future information influence the past.
+4. **Add complexity for a reason.** Rich covariates and many related series can justify gradient boosting. Long sequences or cross-series representation learning may justify neural models.
+5. **Compare operational costs too.** Training time, inference cost, maintenance, and explanation requirements can outweigh a small average error improvement.
+
+This sequence does not prohibit ambitious models. It makes them earn their place.
+
+## The Durable Result
+
+M3, M4, and M5 did not produce a stable champion because they did not pose the same forecasting problem. DLinear and PatchTST did not settle the argument over Transformers because their results depended on representation, protocol, dataset, and horizon.
+
+The useful conclusion is not that simple models always win. It is that model rankings are conditional, and a baseline is the only way to learn whether complexity helped under your conditions.
+
+Part 2, [Time Series Foundation Models in 2026: Promise, Leakage, and the Zero-Shot Trap](./time-series-foundation-models-2026/), applies the same standard to Chronos, TimesFM, Moirai, Lag-Llama, and TimeGPT. The models are broader and the pretraining corpora are larger, but the central question remains unchanged: what information did the model see, and does the evaluation resemble the decision you need to make?

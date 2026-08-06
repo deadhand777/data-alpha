@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Python forecasting libraries by job</title>
+  <desc id="desc">A matrix maps statistical, machine learning, neural, AutoML, and foundation model jobs to representative Python libraries.</desc>
+  <rect width="1200" height="675" fill="#fbfaf6"/>
+  <text x="70" y="86" fill="#17202a" font-family="Georgia, serif" font-size="42" font-weight="700">Choose the library after you choose the job</text>
+  <text x="70" y="126" fill="#52606d" font-family="Arial, sans-serif" font-size="20">A forecasting stack is a portfolio, not a popularity contest.</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="70" y="180" width="210" height="335" rx="6" fill="#17202a"/>
+    <text x="96" y="225" fill="#ffffff" font-size="18" font-weight="700">JOB</text>
+    <text x="96" y="280" fill="#cbd5df" font-size="18">Statistical baseline</text>
+    <text x="96" y="340" fill="#cbd5df" font-size="18">Panel ML</text>
+    <text x="96" y="400" fill="#cbd5df" font-size="18">Neural / probabilistic</text>
+    <text x="96" y="460" fill="#cbd5df" font-size="18">Broad automated search</text>
+
+    <rect x="300" y="180" width="830" height="335" rx="6" fill="#ffffff" stroke="#d7dee5" stroke-width="2"/>
+    <text x="330" y="225" fill="#17202a" font-size="18" font-weight="700">CANDIDATE TOOLS</text>
+    <line x1="300" y1="245" x2="1130" y2="245" stroke="#d7dee5" stroke-width="2"/>
+    <text x="330" y="282" fill="#2a9d8f" font-size="23" font-weight="700">statsmodels · StatsForecast</text>
+    <line x1="300" y1="305" x2="1130" y2="305" stroke="#e7ebef"/>
+    <text x="330" y="342" fill="#e4572e" font-size="23" font-weight="700">MLForecast + LightGBM</text>
+    <line x1="300" y1="365" x2="1130" y2="365" stroke="#e7ebef"/>
+    <text x="330" y="402" fill="#3a86ff" font-size="23" font-weight="700">NeuralForecast · Darts · GluonTS</text>
+    <line x1="300" y1="425" x2="1130" y2="425" stroke="#e7ebef"/>
+    <text x="330" y="462" fill="#9a6a00" font-size="23" font-weight="700">AutoGluon-TimeSeries</text>
+
+    <rect x="70" y="548" width="1060" height="62" rx="6" fill="#dff3ee"/>
+    <text x="96" y="587" fill="#17202a" font-size="20" font-weight="700">Cross-cutting: sktime for unified APIs · HierarchicalForecast for coherence · Chronos for zero-shot candidates</text>
+  </g>
+</svg>

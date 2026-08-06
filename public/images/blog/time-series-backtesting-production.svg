@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Rolling-origin backtesting windows</title>
+  <desc id="desc">Three expanding training windows are followed by equal forecast horizons, always moving forward through time.</desc>
+  <rect width="1200" height="675" fill="#f7faf9"/>
+  <text x="70" y="86" fill="#17202a" font-family="Georgia, serif" font-size="42" font-weight="700">Make every forecast from a real point in time</text>
+  <text x="70" y="126" fill="#52606d" font-family="Arial, sans-serif" font-size="20">Expanding windows recreate how information becomes available in production.</text>
+  <g font-family="Arial, sans-serif">
+    <text x="70" y="226" fill="#17202a" font-size="18" font-weight="700">ORIGIN 1</text>
+    <rect x="190" y="195" width="430" height="48" rx="4" fill="#2a9d8f"/>
+    <rect x="620" y="195" width="150" height="48" rx="4" fill="#f2b134"/>
+
+    <text x="70" y="326" fill="#17202a" font-size="18" font-weight="700">ORIGIN 2</text>
+    <rect x="190" y="295" width="580" height="48" rx="4" fill="#2a9d8f"/>
+    <rect x="770" y="295" width="150" height="48" rx="4" fill="#f2b134"/>
+
+    <text x="70" y="426" fill="#17202a" font-size="18" font-weight="700">ORIGIN 3</text>
+    <rect x="190" y="395" width="730" height="48" rx="4" fill="#2a9d8f"/>
+    <rect x="920" y="395" width="150" height="48" rx="4" fill="#f2b134"/>
+
+    <rect x="190" y="505" width="26" height="26" rx="3" fill="#2a9d8f"/>
+    <text x="230" y="526" fill="#52606d" font-size="18">information available for training</text>
+    <rect x="560" y="505" width="26" height="26" rx="3" fill="#f2b134"/>
+    <text x="600" y="526" fill="#52606d" font-size="18">forecast horizon</text>
+
+    <line x1="190" y1="475" x2="1070" y2="475" stroke="#17202a" stroke-width="2"/>
+    <path d="M1070 475 l-18 -10 v20z" fill="#17202a"/>
+    <text x="1015" y="466" fill="#52606d" font-size="16">time</text>
+  </g>
+  <text x="70" y="620" fill="#17202a" font-family="Georgia, serif" font-size="25" font-style="italic">Fit transforms inside each window. Score every horizon against a baseline.</text>
+</svg>

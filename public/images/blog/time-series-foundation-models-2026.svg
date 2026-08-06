@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">The zero-shot evaluation boundary</title>
+  <desc id="desc">A diagram contrasts a public pretraining corpus overlapping a benchmark with a clean private holdout after a forecast origin.</desc>
+  <rect width="1200" height="675" fill="#fbfaf6"/>
+  <text x="70" y="86" fill="#17202a" font-family="Georgia, serif" font-size="42" font-weight="700">Zero-shot does not always mean unseen</text>
+  <text x="70" y="126" fill="#52606d" font-family="Arial, sans-serif" font-size="20">Audit the corpus relationship and the time boundary separately.</text>
+  <g font-family="Arial, sans-serif">
+    <circle cx="360" cy="335" r="170" fill="#3a86ff" fill-opacity="0.18" stroke="#3a86ff" stroke-width="3"/>
+    <circle cx="520" cy="335" r="170" fill="#e4572e" fill-opacity="0.18" stroke="#e4572e" stroke-width="3"/>
+    <text x="210" y="250" fill="#205ca8" font-size="23" font-weight="700">PRETRAINING CORPUS</text>
+    <text x="520" y="250" fill="#a53719" font-size="23" font-weight="700">PUBLIC BENCHMARK</text>
+    <text x="405" y="332" fill="#17202a" font-size="20" font-weight="700">possible overlap</text>
+    <text x="430" y="360" fill="#52606d" font-size="16">series · dates · copies</text>
+
+    <line x1="740" y1="220" x2="740" y2="500" stroke="#17202a" stroke-width="4" stroke-dasharray="10 10"/>
+    <text x="694" y="190" fill="#17202a" font-size="18" font-weight="700">FORECAST ORIGIN</text>
+    <path d="M790 355 H1050" stroke="#2a9d8f" stroke-width="8"/>
+    <path d="M1050 355 l-24 -16 v32z" fill="#2a9d8f"/>
+    <rect x="805" y="245" width="250" height="76" rx="6" fill="#ffffff" stroke="#2a9d8f" stroke-width="2"/>
+    <text x="830" y="278" fill="#17202a" font-size="20" font-weight="700">CLEAN HOLDOUT</text>
+    <text x="830" y="304" fill="#52606d" font-size="16">future targets only</text>
+  </g>
+  <rect x="70" y="570" width="1060" height="2" fill="#d7dee5"/>
+  <text x="70" y="620" fill="#17202a" font-family="Georgia, serif" font-size="25" font-style="italic">The prediction API can be zero-shot while the benchmark is not.</text>
+</svg>
