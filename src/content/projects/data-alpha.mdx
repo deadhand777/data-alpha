@@ -1,0 +1,58 @@
+---
+title: "Data Alpha Portfolio"
+description: "A content-driven portfolio for publishing practical work in data, AI, and finance, built as a type-safe static site with Astro and MDX."
+pubDate: 2026-08-02
+tags: ["portfolio", "static-site", "content-engineering", "open-source"]
+demoUrl: "https://deadhand777.github.io/data-alpha/"
+sourceUrl: "https://github.com/deadhand777/data-alpha"
+techStack: ["Astro 4", "React 18", "TypeScript", "Tailwind CSS", "MDX", "GitHub Actions"]
+---
+
+## The Goal
+
+Data Alpha is my publishing and project portfolio for practical work across data, artificial intelligence, and finance. The engineering goal was to keep the site fast and maintainable without turning every article or project into a component-development task.
+
+The result is a statically generated site where most editorial work happens in Markdown with JSX support. Shared layouts and collection schemas provide consistency, while interactive features can still use React when client-side behavior is justified.
+
+## Content as Structured Data
+
+Astro Content Collections define separate contracts for blog posts, projects, and the about page. Each MDX entry is validated against its collection schema during development and production builds, catching missing metadata or malformed values before deployment.
+
+This separates two responsibilities:
+
+- Authors work with frontmatter and Markdown instead of page templates
+- Route components control navigation, metadata, sorting, and presentation
+- Collection schemas keep titles, dates, tags, URLs, and technology lists predictable
+- Dynamic routes turn each validated entry into a static page at build time
+
+Adding this case study, for example, requires one MDX file. The existing projects index discovers it, sorts it by publication date, and generates its detail route without a route configuration change.
+
+## Static-First Architecture
+
+The site uses [Astro 4](https://astro.build/) with static output. Astro components handle the document structure and content-heavy pages, while [React 18](https://react.dev/) is available for interactive islands. This keeps JavaScript opt-in rather than making it the default cost of every page.
+
+[Tailwind CSS](https://tailwindcss.com/) provides responsive utility styling, and [Shiki](https://shiki.style/) highlights code examples during the build. SEO components supply page metadata and Schema.org structured data from the same content used to render each page.
+
+The deployment target introduces one important constraint: the portfolio is hosted from the `/data-alpha/` subpath on GitHub Pages. Internal navigation therefore respects Astro's configured base URL instead of assuming the site lives at a domain root.
+
+## Delivery and Documentation
+
+The [GitHub Actions workflow](https://github.com/deadhand777/data-alpha/actions/workflows/deploy.yml) builds the site with Node.js 24 whenever changes reach `main`. It installs locked dependencies with `npm ci`, creates the static `dist` output, uploads that directory as a Pages artifact, and deploys it with GitHub's official Pages actions.
+
+The repository also contains contributor and customization documentation under `docs/`. That documentation is built with [Zensical](https://zensical.org/) and served locally during documentation work; it is intentionally separate from the portfolio's current GitHub Pages deployment.
+
+## Engineering Tradeoffs
+
+The static-first design favors predictable builds, simple hosting, and a small runtime surface. It also means that publishing always goes through a build and deployment cycle, and features that depend on server-side state would require a separate service or a different hosting model.
+
+Content Collections add a useful contract, but schema changes affect every entry in that collection. Optional fields and focused schemas help the content model evolve without forcing unrelated pages to change together.
+
+Using Astro and React side by side also requires a deliberate boundary: Astro is the default for static presentation, and React is reserved for interactions that need browser state. That boundary keeps the architecture understandable as the portfolio grows.
+
+## What I Learned
+
+The most useful lesson was that a portfolio benefits from the same separation of concerns as a larger publishing system. Content should be easy to author, metadata should be validated, pages should share rendering rules, and deployment should be reproducible.
+
+The implementation is deliberately modest: there is no content database or application server to operate. The complexity that remains is visible in version-controlled schemas, components, content, documentation, and workflow files, which makes the site straightforward to inspect and extend.
+
+Explore the [live portfolio](https://deadhand777.github.io/data-alpha/) or review the [source code on GitHub](https://github.com/deadhand777/data-alpha).
