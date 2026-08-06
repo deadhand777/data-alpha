@@ -1,0 +1,187 @@
+---
+title: "The Python Forecasting Stack in 2026: Which Library Fits Which Job?"
+description: "Choose among statsmodels, Nixtla, sktime, Darts, GluonTS, AutoGluon, Prophet, and Chronos by workflow rather than popularity."
+pubDate: 2026-07-28
+heroImage: "/data-alpha/images/blog/python-time-series-forecasting-stack-2026.svg"
+tags: ["time-series", "python", "forecasting", "libraries", "tooling"]
+slug: "python-time-series-forecasting-stack-2026"
+draft: false
+---
+
+Python has no default forecasting stack. It has mature statistical packages, unified framework APIs, focused high-performance libraries, deep-learning toolkits, AutoML systems, and rapidly changing foundation-model packages.
+
+That abundance creates a misleading question: which library is best?
+
+A better question is: which library owns the job you need to perform, at the scale and maintenance burden you can support?
+
+![Matrix mapping statistical, machine-learning, neural, AutoML, and foundation-model jobs to Python tools](/data-alpha/images/blog/python-time-series-forecasting-stack-2026.svg)
+
+This final article turns the model and evaluation choices from the previous parts into a tooling map. The observations about releases, popularity, and project activity are a snapshot taken on August 6, 2026. They will age faster than the underlying forecasting principles.
+
+## Start With the Workflow, Not the Stars
+
+GitHub stars and PyPI downloads measure attention and distribution, not forecast accuracy. Downloads can be driven by transitive dependencies. Stars accumulate over a project's lifetime and remain after its development slows.
+
+The contrast between Prophet and newer forecasting libraries makes the point. Prophet remains one of the most visible forecasting-specific packages. Its readable additive model and convenient holiday handling made it common in reporting workflows. That does not mean it is the strongest accuracy baseline for every task.
+
+In a [2023 retrospective](https://medium.com/@seanjtaylor/a-personal-retrospective-on-prophet-f223c2378985), Prophet co-creator Sean J. Taylor wrote that the model is not reasonable in many settings and often underperforms alternatives. This is an informed opinion, not a controlled benchmark, but it is a useful warning against treating adoption as validation.
+
+Select tooling on four separate axes:
+
+1. **Method coverage:** statistical, tabular ML, neural, pretrained, or all of them.
+2. **Evaluation support:** backtesting, probabilistic metrics, covariates, and hierarchy handling.
+3. **Scale:** one series, thousands of related series, or distributed training.
+4. **Project health:** current releases, supported Python versions, migration cost, and maintainers.
+
+## statsmodels: the statistical foundation
+
+[statsmodels](https://www.statsmodels.org/) remains the general-purpose statistical foundation for Python. Its time-series modules include ARIMA-family models, exponential smoothing, state-space models, vector autoregression, diagnostics, and statistical tests.
+
+Choose it when:
+
+- the analysis needs statistical diagnostics or parameter inference;
+- you are teaching or implementing a method close to textbook notation;
+- custom state-space structure matters;
+- the number of series is manageable.
+
+It is not primarily optimized as a high-throughput panel forecasting engine. That distinction matters when moving from a notebook with one series to a recurring job with hundreds of thousands.
+
+```python
+from statsmodels.tsa.arima.model import ARIMA
+
+fitted = ARIMA(history, order=(1, 1, 1)).fit()
+forecast = fitted.forecast(steps=horizon)
+```
+
+## The Nixtla Suite: focused layers with a shared data shape
+
+Nixtla splits the forecasting stack across specialized projects:
+
+- [StatsForecast](https://github.com/Nixtla/statsforecast) provides fast statistical and econometric models such as AutoARIMA, ETS, and Theta.
+- [MLForecast](https://github.com/Nixtla/mlforecast) turns panel forecasting into supervised learning with lag, rolling, date, and custom features.
+- [NeuralForecast](https://github.com/Nixtla/neuralforecast) implements architectures including N-BEATS, N-HiTS, TFT, and PatchTST.
+- [HierarchicalForecast](https://nixtlaverse.nixtla.io/hierarchicalforecast/index.html) reconciles forecasts across aggregation structures.
+
+The advantage is composability around long-format panel data. A team can compare statistical, tree-based, and neural candidates without inventing a separate data contract for each model family.
+
+Choose the suite when throughput, multiple related series, and direct comparison across model families matter. The cost is a broader set of packages and APIs to version together.
+
+```python
+from statsforecast import StatsForecast
+from statsforecast.models import AutoARIMA, SeasonalNaive
+
+forecaster = StatsForecast(
+    models=[SeasonalNaive(season_length=7), AutoARIMA(season_length=7)],
+    freq="D",
+)
+predictions = forecaster.forecast(df=panel, h=14)
+```
+
+## sktime: a common interface across an ecosystem
+
+[sktime](https://github.com/sktime/sktime) is a framework rather than one modeling family. It provides common estimator conventions for forecasting, classification, regression, transformations, and related time-series tasks, and integrates methods from other packages.
+
+Choose it when:
+
+- a unified, scikit-learn-inspired API matters;
+- pipeline composition and estimator interchangeability are central;
+- the project spans forecasting and other time-series tasks;
+- you want framework-level evaluation and model-selection tools.
+
+The abstraction layer is also the trade-off. Capability tags, adapters, and wrapped dependencies can add indirection when a team needs the full behavior of one underlying library. Check the current compatibility matrix before upgrades.
+
+## Darts: a broad forecasting workbench
+
+[Darts](https://github.com/unit8co/darts) collects statistical, machine-learning, and deep-learning forecasters behind a consistent `TimeSeries` abstraction. It includes backtesting, historical forecasts, covariates, probabilistic models, ensembling, and anomaly-detection features.
+
+Choose it when a small team wants broad experimentation in one package and values a consistent high-level interface. It is especially useful for notebook-to-prototype workflows that compare heterogeneous models.
+
+Broad dependency coverage can make environments heavier, and the custom `TimeSeries` representation may require conversion at integration boundaries. Test serialization and deployment for the exact model before standardizing on the framework.
+
+## GluonTS: probabilistic deep forecasting
+
+[GluonTS](https://github.com/awslabs/gluonts) provides datasets, transformations, probabilistic output distributions, evaluation, and deep forecasting models. It has influenced both research implementations and production-oriented tools, including models used by AutoGluon-TimeSeries.
+
+Choose it when probabilistic neural forecasting and distributional outputs are first-class requirements, or when reproducing work built around its dataset and estimator abstractions.
+
+For a team interested only in a classical baseline or a LightGBM panel, a narrower package will usually introduce less machinery.
+
+## AutoGluon-TimeSeries: strong baselines with limited manual search
+
+[AutoGluon-TimeSeries](https://auto.gluon.ai/stable/tutorials/timeseries/index.html) trains and ensembles statistical, tabular, deep-learning, and pretrained models under a common predictor. Its value is not that AutoML escapes evaluation design. It is that it can establish a broad candidate set quickly once the data and backtest are correctly specified.
+
+Choose it when:
+
+- the team needs a strong multi-model baseline with limited manual tuning;
+- ensembling across model families is desirable;
+- compute budgets can be expressed explicitly;
+- the additional training and dependency weight is acceptable.
+
+As of version 1.6.0, released August 5, 2026, the project also integrates Toto-2. That release is evidence that pretrained forecasting models are becoming candidates inside AutoML systems rather than remaining isolated research demos. It is too recent to establish long-term stability.
+
+```python
+from autogluon.timeseries import TimeSeriesPredictor
+
+predictor = TimeSeriesPredictor(
+    prediction_length=horizon,
+    eval_metric="WQL",
+)
+predictor.fit(train_data, time_limit=training_budget_seconds)
+```
+
+## Prophet: readable structure and constrained expectations
+
+[Prophet](https://github.com/facebook/prophet) models trend, seasonality, holidays, and changepoints through an additive structure. It remains useful when those components match the problem and non-specialists need to inspect or adjust them.
+
+Choose it for reproducible reporting workflows, understandable holiday configuration, and stable business series where its assumptions are appropriate. Do not choose it merely because it is popular, and always compare it with seasonal naive and another statistical baseline.
+
+The project was active at the time of this snapshot, but its maturity means releases often emphasize compatibility and maintenance rather than new forecasting paradigms.
+
+## Chronos and Other Foundation-Model Packages
+
+[Chronos](https://github.com/amazon-science/chronos-forecasting) offers pretrained zero-shot models and has moved rapidly from the original family through Chronos-Bolt and Chronos-2. The API can provide a forecast before a task-specific model has been trained, which makes it valuable for rapid baselining and heterogeneous collections.
+
+Rapid evolution is the trade-off. Model variants, hardware requirements, and interfaces can shift more quickly than mature statistical packages. Pin model and package versions, cache artifacts deliberately, and evaluate against clean historical origins.
+
+Part 2, [Time Series Foundation Models in 2026](../time-series-foundation-models-2026/), covers the benchmark contamination and distribution-shift questions that package documentation cannot answer for your data.
+
+## Lifecycle Warnings Matter
+
+A package can have thousands of stars and still be a poor choice for new production work.
+
+[Kats](https://github.com/facebookresearch/Kats) was not formally archived at the time of this review, but its latest PyPI release remained 0.2.0 from March 2022. Recent repository activity did not resemble a normal feature-release cadence. Treat it as de facto dormant unless a maintained successor or renewed release process appears.
+
+PyCaret presents a different risk. Its established 3.x library line and emerging 4.x platform direction do not yet provide a clear migration story for every time-series workflow. A rewrite is not abandonment, but it increases adoption uncertainty. Verify that the exact forecasting features you need exist in the target release rather than extrapolating from the older API.
+
+## A Baseline-First Selection Path
+
+For a new project, the following progression keeps tooling proportional to evidence:
+
+1. Use **statsmodels** or **StatsForecast** for seasonal naive, exponential smoothing, and ARIMA-family baselines.
+2. Add **MLForecast** with LightGBM when many related series and known future covariates make panel learning plausible.
+3. Add **NeuralForecast**, **Darts**, or **GluonTS** when the data volume and objective justify neural or probabilistic models.
+4. Use **AutoGluon-TimeSeries** when broad automated comparison and ensembling are worth the compute budget.
+5. Add **Chronos** or another TSFM as a zero-shot candidate or ensemble member, subject to the leakage checks from Part 2.
+6. Add **HierarchicalForecast** when independently generated forecasts must satisfy aggregation constraints.
+
+This is a search order, not a maturity ladder. Stop when a simpler system meets the decision's accuracy, uncertainty, latency, and maintenance requirements.
+
+## What to Record With the Choice
+
+Whichever library wins, preserve more than the fitted artifact:
+
+- package and model versions;
+- training cutoff and feature availability rules;
+- backtest origins, horizon, and metrics;
+- baseline results by segment and horizon;
+- model artifacts and preprocessing state;
+- hardware, training time, and inference latency;
+- fallback behavior when inputs or external services fail.
+
+That record makes the choice reproducible after the package, data, or team changes.
+
+## The Stack Is a Portfolio
+
+The four articles in this series lead to one operating principle. [Competition winners change with the task](./time-series-no-single-winner/). [Foundation models expand the candidate set but complicate evidence](../time-series-foundation-models-2026/). [Backtesting determines whether any comparison is trustworthy](../time-series-backtesting-production/). Libraries are the final implementation choice, not the starting point.
+
+A durable Python forecasting stack therefore looks less like a single framework mandate and more like a controlled portfolio: simple baselines, one or two justified model families, a common evaluation contract, and maintained tools that the team can operate.

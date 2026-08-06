@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Three forecasting competitions, three model paradigms</title>
+  <desc id="desc">A timeline shows classical statistical methods for M3, a statistical-neural hybrid for M4, and gradient-boosted trees for M5.</desc>
+  <rect width="1200" height="675" fill="#f8fafc"/>
+  <path d="M0 565 C210 510 330 610 520 548 S860 472 1200 535 V675 H0Z" fill="#dff3ee"/>
+  <text x="72" y="90" fill="#17202a" font-family="Georgia, serif" font-size="42" font-weight="700">The winner changed with the task</text>
+  <text x="72" y="130" fill="#52606d" font-family="Arial, sans-serif" font-size="20">M3, M4, and M5 rewarded different information and model structures.</text>
+  <line x1="150" y1="365" x2="1050" y2="365" stroke="#17202a" stroke-width="4"/>
+  <g font-family="Arial, sans-serif">
+    <circle cx="220" cy="365" r="16" fill="#e4572e"/>
+    <rect x="110" y="205" width="220" height="118" rx="6" fill="#ffffff" stroke="#d7dee5" stroke-width="2"/>
+    <text x="134" y="240" fill="#e4572e" font-size="18" font-weight="700">M3 · 2000</text>
+    <text x="134" y="274" fill="#17202a" font-size="24" font-weight="700">STATISTICAL</text>
+    <text x="134" y="302" fill="#52606d" font-size="16">Short economic series</text>
+    <line x1="220" y1="323" x2="220" y2="349" stroke="#e4572e" stroke-width="3"/>
+
+    <circle cx="600" cy="365" r="16" fill="#2a9d8f"/>
+    <rect x="490" y="405" width="220" height="118" rx="6" fill="#ffffff" stroke="#d7dee5" stroke-width="2"/>
+    <text x="514" y="440" fill="#2a9d8f" font-size="18" font-weight="700">M4 · 2018</text>
+    <text x="514" y="474" fill="#17202a" font-size="24" font-weight="700">HYBRID</text>
+    <text x="514" y="502" fill="#52606d" font-size="16">ES + recurrent network</text>
+    <line x1="600" y1="381" x2="600" y2="405" stroke="#2a9d8f" stroke-width="3"/>
+
+    <circle cx="980" cy="365" r="16" fill="#f2b134"/>
+    <rect x="870" y="205" width="220" height="118" rx="6" fill="#ffffff" stroke="#d7dee5" stroke-width="2"/>
+    <text x="894" y="240" fill="#9a6a00" font-size="18" font-weight="700">M5 · 2020</text>
+    <text x="894" y="274" fill="#17202a" font-size="24" font-weight="700">BOOSTED TREES</text>
+    <text x="894" y="302" fill="#52606d" font-size="16">Retail panels + covariates</text>
+    <line x1="980" y1="323" x2="980" y2="349" stroke="#f2b134" stroke-width="3"/>
+  </g>
+  <text x="72" y="625" fill="#17202a" font-family="Georgia, serif" font-size="25" font-style="italic">Model rank is conditional. Baselines reveal the condition.</text>
+</svg>

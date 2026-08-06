@@ -1,0 +1,144 @@
+---
+title: "Time Series Foundation Models in 2026: Promise, Leakage, and the Zero-Shot Trap"
+description: "A critical guide to Chronos, TimesFM, Moirai, Lag-Llama, and TimeGPT, including benchmark leakage and practical adoption criteria."
+pubDate: 2026-07-25
+heroImage: "/data-alpha/images/blog/time-series-foundation-models-2026.svg"
+tags: ["time-series", "foundation-models", "forecasting", "data-leakage", "critical-analysis"]
+slug: "time-series-foundation-models-2026"
+draft: false
+---
+
+A time series foundation model promises to turn forecasting into an inference problem. Instead of training a new model for every product, sensor, or market, you pass a previously unseen history to a pretrained model and ask for the next values.
+
+That is a meaningful change in workflow. It is not proof that the resulting forecast is better.
+
+Foundation models bring useful priors, broad pretraining, and a low-friction baseline to time series. They also bring a new evaluation problem: when a model has trained on billions of observations gathered from public archives, it can be difficult to prove that a supposedly unseen benchmark is actually unseen.
+
+![Diagram contrasting overlap between public pretraining data and benchmarks with a clean future holdout](/data-alpha/images/blog/time-series-foundation-models-2026.svg)
+
+This second article in the series examines both sides. Part 1, [No Single Model Wins](../time-series-no-single-winner/), showed how the winning method changed with the task. Foundation models do not repeal that result; they make the task boundary harder to inspect.
+
+## What Makes a Time Series Foundation Model Different?
+
+These systems are not simply chat models prompted with rows of numbers. A purpose-built time series foundation model has a representation, training objective, and prediction interface designed for temporal data.
+
+The major families differ substantially:
+
+- **Chronos** scales and quantizes observations into tokens, then trains a T5-family architecture to predict token distributions.
+- **TimesFM** uses a patched decoder-only Transformer and produces point forecasts over output patches.
+- **Moirai** is designed for variable-dimensional, multivariate series and mixed frequencies, trained over the LOTSA archive.
+- **Lag-Llama** is a probabilistic decoder model built around lagged values and calendar features, originally focused on univariate forecasting.
+- **TimeGPT** is a hosted forecasting service whose model details and training data are less open than the research releases above.
+
+The category therefore does not describe one architecture. It describes a deployment proposition: pretrain broadly, then forecast new series zero-shot or with limited adaptation.
+
+### Chronos: values become tokens
+
+[Chronos](https://arxiv.org/abs/2403.07815) converts scaled numeric observations into a finite vocabulary through quantization. A language-model-style objective predicts the next token distribution, which can be sampled and mapped back to numeric values.
+
+This approach gives Amazon's model family access to mature sequence-modeling infrastructure. The paper reports strong performance across 42 datasets, including competitive zero-shot results on datasets excluded from pretraining. Those are author-reported benchmark results, not a guarantee for an unrelated production distribution.
+
+### TimesFM: patched decoding
+
+[TimesFM](https://arxiv.org/abs/2310.10688), published at ICML 2024, groups observations into input patches and decodes output patches. Google reports that its zero-shot accuracy on unseen datasets approaches supervised models trained separately for those datasets.
+
+"Approaches" matters. A zero-shot model can be operationally valuable without being the most accurate model. Avoiding a training pipeline may be worth a small metric difference during exploration, cold start, or incident recovery.
+
+### Moirai and Lag-Llama: different problem shapes
+
+[Moirai](https://arxiv.org/abs/2402.02592) was trained on more than 27 billion observations from nine domains and was designed to handle arbitrary variates and frequencies. That makes it conceptually attractive for heterogeneous panels where series do not share a clean fixed schema.
+
+[Lag-Llama](https://arxiv.org/abs/2310.08278) instead emphasizes probabilistic univariate forecasting with explicit lag and calendar inputs. Treating both as interchangeable "foundation models" hides the choice that matters: whether the production task is univariate or multivariate, deterministic or probabilistic, and whether future covariates are available.
+
+### TimeGPT: convenience with a different audit surface
+
+[TimeGPT](https://www.nixtla.io/docs/introduction/introduction) exposes forecasting through a managed API. That reduces infrastructure work, but it also changes the evidence available to an evaluator. Training-corpus composition and model internals cannot be inspected to the same degree as an open research model.
+
+Nixtla's performance statements are vendor-reported. They are useful as hypotheses to test, not as independent comparisons.
+
+## Do Not Confuse TSFMs With Chat LLM Forecasting
+
+Passing a sequence such as `12, 15, 14, 18` to a general chat model tests whether language pretraining and prompting happen to recover a numeric pattern. A model such as Chronos is trained directly on transformed time series and returns a predictive distribution.
+
+Both may use Transformer components, but they are not the same experiment. Evidence that chat LLMs struggle with noisy numeric sequences does not invalidate purpose-built TSFMs. Conversely, the success of Chronos does not establish that a general LLM can forecast raw values reliably.
+
+Keep the categories separate in architecture diagrams, evaluations, and procurement discussions.
+
+## The Zero-Shot Trap
+
+"Zero-shot" normally means that the model was not fitted on the target series during the current task. It does not necessarily mean that the model has never seen the dataset, a related series, a later time period, or a transformed copy during pretraining.
+
+That distinction is unusually difficult for time series because public archives are repeatedly repackaged. The same electricity, traffic, weather, and financial datasets can appear in research corpora, library examples, benchmark suites, and downstream evaluations.
+
+A 2025 preprint, [Rethinking Evaluation in the Era of Time Series Foundation Models](https://arxiv.org/abs/2510.13654), audits 22 published TSFMs and 401 datasets. The authors report that only 6% of the datasets had never appeared in the audited models' pretraining or fine-tuning corpora.
+
+One example is Australian Electricity Demand. According to the audit, versions of the dataset were used for pretraining some models, ordinary train/test evaluation for another, and zero-shot testing for others. Even when rows are not identical, correlated series or overlapping dates can leak information about events and regimes.
+
+The exact contamination rate for any one model depends on corpus documentation and matching rules. That is why this article does not repeat provisional model-by-model percentages. The robust conclusion is structural: a public benchmark cannot be assumed clean merely because the evaluation call did not invoke `fit()`.
+
+## Independent Results Are Mixed, as They Should Be
+
+Independent evaluations do not support either extreme position that foundation models always dominate or never help.
+
+An independent [TimeGPT load-forecasting study](https://arxiv.org/abs/2404.04885) found weak zero-shot performance before fine-tuning and results behind other algorithms at daily granularity, with better relative behavior at weekly granularity. This is evidence about electricity load at particular frequencies, not a universal verdict on TimeGPT.
+
+A study of [zero-shot TSFMs on cloud operational data](https://arxiv.org/abs/2502.12944) reports cases where simple seasonal and online linear baselines outperform the evaluated foundation models. Again, the domain is part of the result.
+
+Recent preprints examining distribution shift and operational viability make the same broader point:
+
+- [How Foundational are Foundation Models for Time Series Forecasting?](https://arxiv.org/abs/2510.00742) tests whether performance survives changes in distribution and compares large pretrained systems with smaller task-specific models.
+- [Assessing the Operational Viability of Foundation Models for Time Series Forecasting](https://arxiv.org/abs/2605.24381) evaluates accuracy alongside computation and deployment concerns.
+
+These 2025 and 2026 works should be described as preprints unless their publication status is verified separately. Their value is not that they replace vendor benchmarks with a new universal ranking. They test conditions the original benchmark may not cover.
+
+## A Better Evaluation Contract
+
+Before calling a zero-shot result meaningful, record four facts:
+
+1. **Corpus relationship:** Is the target dataset, a related series, or a later date range known to appear in pretraining?
+2. **Forecast origin:** Does every input observation occur before every evaluated target?
+3. **Baseline parity:** Are seasonal naive, a classical model, and a task-specific ML model evaluated over the same windows and metric?
+4. **Operational budget:** Are latency, memory, API cost, and failure handling included in the decision?
+
+The code surface may be only a few lines, but that simplicity sits on top of these evaluation choices:
+
+```python
+# Conceptual API shape; use the installed model's current documentation.
+context = load_history(ending_before=forecast_origin)
+
+samples = foundation_model.predict(
+    context=context,
+    prediction_length=horizon,
+    num_samples=100,
+)
+
+score(samples, actual_future, baseline=seasonal_naive)
+```
+
+The important line is `ending_before=forecast_origin`, not `predict`. It establishes the information boundary that the evaluation is supposed to test.
+
+## When a Foundation Model Is Worth Trying
+
+Foundation models are especially useful as candidates when:
+
+- a team needs a credible forecast before it can build a domain-specific training pipeline;
+- there are many heterogeneous series and limited labels per series;
+- probabilistic samples are useful for downstream planning;
+- rapid experimentation matters more than squeezing out the last percentage point;
+- the model can join an ensemble with genuinely different statistical and ML approaches.
+
+They deserve more caution when:
+
+- the domain differs sharply from public pretraining corpora;
+- a structural break dominates the evaluation period;
+- the series is short, stable, and already handled well by a simple model;
+- data cannot leave the environment and the model is available only through an API;
+- latency or model size makes the operational cost disproportionate to the gain.
+
+## The Practical Position
+
+Use a TSFM to widen the candidate set, not to eliminate comparison. Run it beside seasonal naive, a classical statistical model, and a task-specific model that uses known covariates. Evaluate all of them over the same forecast origins.
+
+If the foundation model wins under a clean information boundary, keep it. If it provides diverse errors, ensemble it. If a small model matches it, prefer the system you can understand and operate.
+
+Part 3, [Fix Your Backtest Before You Tune Your Forecasting Model](./time-series-backtesting-production/), shows how to build that comparison without letting future information leak into training, preprocessing, or model selection.
