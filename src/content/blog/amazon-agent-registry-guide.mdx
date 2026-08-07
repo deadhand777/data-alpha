@@ -1,0 +1,145 @@
+---
+title: "Amazon Agent Registry in Practice: Discovery, Governance, and Operational Limits"
+description: "Understand how AWS Agent Registry catalogs agents, MCP servers, and skills, where its governance boundary ends, and what to validate before adopting the preview service."
+pubDate: 2026-08-07
+heroImage: "/images/blog/amazon-agent-registry-guide.png"
+tags: ["AWS", "AgentCore", "AI-Agents", "Agent-Registry", "MCP"]
+slug: "amazon-agent-registry-guide"
+draft: false
+---
+
+## The Agent Sprawl Problem Is a Discovery Problem First
+
+AI agents are unusually easy to create and unusually hard to inventory. A team can build an agent, expose an MCP server, or package a reusable skill long before a platform group knows it exists. As the estate grows, ownership becomes unclear, teams duplicate capabilities, and developers fall back to asking around for the right tool.
+
+[AWS Agent Registry](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry.html) is AWS's answer to that discovery problem. Announced in preview in April 2026, it provides a managed, private catalog for agents, MCP servers, agent skills, and custom resources. Publishers submit metadata, curators decide what becomes discoverable, and consumers search approved records through APIs, a directory, or a native MCP endpoint.
+
+That description needs one important qualification:
+
+> AWS Agent Registry governs what consumers can **discover** through the registry. It does not enforce which agents or tools they can **invoke**.
+
+Runtime enforcement belongs elsewhere, such as AgentCore Gateway and AgentCore Policy. A deprecated registry record does not prevent an agent from calling the underlying endpoint directly. Treat Registry as a governed catalog, not as a runtime security boundary.
+
+## How the Registry Is Organized
+
+The service has two core resources:
+
+- A **registry** is a catalog in one AWS account and Region. It owns its authorization mode, approval settings, and records.
+- A **registry record** describes one version of a published resource. A record carries a unique name, type, version, description, and type-specific descriptors.
+
+The current data model supports four record types:
+
+| Record type | What it represents | Primary descriptor options |
+| --- | --- | --- |
+| `MCP` | An MCP server and its tools | MCP server metadata or custom JSON |
+| `AGENT` | An agent exposed through A2A or MCP | A2A agent card, MCP server metadata, or custom JSON |
+| `SKILL` | A reusable agent skill | Agent Skills definition or custom JSON |
+| `CUSTOM` | Anything outside the supported schemas | Custom JSON |
+
+AWS validates MCP and A2A descriptors against their protocol schemas. Resources that do not conform can still be cataloged as `CUSTOM`, but they lose that protocol-level validation. The combination of record name and version is unique, so teams can keep multiple versions discoverable without inventing a separate naming convention.
+
+Records follow an approval lifecycle. After creation, a publisher can iterate while a record is in `DRAFT`, submit it for approval, and wait in `PENDING_APPROVAL`. A curator then approves or rejects it. Approved records can later be marked `DEPRECATED`. Registries can also auto-approve submissions, but enabling that removes the human review that makes the catalog useful as a governance surface.
+
+### Separate the Four Responsibilities
+
+AWS documents four personas, and the separation is worth preserving in IAM:
+
+1. **Administrators** create registries, choose authorization and approval settings, and manage permissions.
+2. **Publishers** create and update records, then submit them for review.
+3. **Curators** approve, reject, and deprecate records.
+4. **Consumers** search and retrieve approved records.
+
+Do not give publishers the curator action merely to simplify onboarding. If the same principal can publish and approve its own metadata, the workflow records a state transition without providing independent review.
+
+Pending approvals can be routed into an existing review process through EventBridge. Under the current namespace, record lifecycle events use the source `aws.agent-registry`, and CloudTrail records Registry API activity. Those integrations make the workflow auditable, but approval still proves only that somebody reviewed the submitted metadata. It does not prove that an endpoint is secure, available, or still matches its record.
+
+## Publishing and Keeping Records Fresh
+
+Teams can publish records manually through the console, CLI, or SDK. They can also point Registry at a live MCP or A2A endpoint and let the service synchronize supported descriptors from the URL.
+
+Synchronization reduces drift, but it is not universal:
+
+- MCP server and A2A agent-card descriptors can synchronize from a URL.
+- Skill records cannot currently auto-synchronize.
+- Custom records must be maintained manually.
+- Credential providers used for synchronization must be in the same account.
+
+This distinction matters for operating the catalog. A synchronized MCP record can follow changes at its source, while a skill document or custom record can become stale without an automatic signal. Assign every record an owner, require an explicit review interval for manually maintained types, and deprecate records instead of letting abandoned entries linger indefinitely.
+
+For external and on-premises resources, "supported" does not mean "automatically inventoried." AWS can store metadata for resources hosted outside AWS, and URL synchronization can read compatible live endpoints, but automatic indexing at deployment time is still roadmap material. Independent launch coverage from [InfoWorld](https://www.infoworld.com/article/4157183/aws-targets-ai-agent-sprawl-with-new-bedrock-agent-registry.html) highlighted the resulting manual-registration burden and the risk of running separate, fragmented catalogs across cloud providers.
+
+## Discovery Through APIs and MCP
+
+Consumers only see approved records. The data plane provides three complementary access patterns:
+
+- **Search** combines keyword matching with semantic understanding for natural-language discovery.
+- **List** supports paginated browsing and filters, returning record summaries rather than full descriptors.
+- **Batch get** retrieves full descriptors for up to 100 selected records in one request.
+
+The efficient pattern is to search or browse for candidates and then batch-fetch the selected descriptors. That matters because the default quotas apply per account, not per individual client.
+
+Each registry also exposes a remote [MCP-compatible endpoint](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry-mcp-endpoint.html) following the MCP `2025-11-25` specification. The endpoint presents search, list, and batch retrieval as MCP tools, allowing compatible clients such as IDE assistants to query the catalog without a custom integration.
+
+This is the product's most compelling adoption path. Internal catalogs often fail because developers must leave their normal workflow to use them. Making the registry available through MCP puts discovery inside the same clients where agents and tools are selected.
+
+Authorization is configured per registry using either AWS IAM credentials or JWTs from an identity provider. The choice is exclusive, and the authorization type cannot be changed after creation. The JWT discovery URL is also immutable. Decide who the consumers are and how their clients authenticate before creating the registry; correcting the wrong choice means replacing it.
+
+## The August 2026 Namespace Break
+
+On August 6, 2026, AWS moved Registry APIs from the `bedrock-agentcore` namespace to a dedicated `agent-registry` namespace. This was more than a rename: endpoints, IAM actions, ARNs, SDK clients, CLI commands, EventBridge sources, CloudWatch namespaces, and parts of the record schema changed.
+
+Existing preview users have until **September 17, 2026** to migrate. New users should build only against the dedicated namespace. The [AWS migration guide](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry-faq.html) also notes that data is not migrated automatically.
+
+The break is useful evidence when deciding how deeply to automate against a preview service. AWS improved the model with explicit record types, versioned names, browsing APIs, and fuller lifecycle events, but consumers received a six-week migration window for a backward-incompatible change. Keep Registry integrations behind a small adapter, pin SDK versions, and avoid spreading raw service shapes through application code until the API stabilizes.
+
+## Quotas and Pricing Shape the Architecture
+
+The default quota is **five registries per account per Region**, adjustable through Service Quotas. AWS suggests organizing registries by team, business unit, environment, or resource type, but five disappears quickly if every group receives its own catalog. Before provisioning, decide whether the primary boundary is organizational, environmental, or regulatory. Do not use registries as lightweight folders.
+
+The default API rates are also modest. Record creation is limited to 5 transactions per second, while search, list, and batch-get operations default to 10 transactions per second per account. All are adjustable, but an organization planning to connect thousands of developer clients should request and test the needed quota before rollout. Batch retrieval and client-side caching should be part of the design rather than later optimizations.
+
+As of August 7, 2026, AWS states that Registry usage is free during preview while also publishing a post-preview rate card:
+
+| Dimension | Monthly free tier | Published price above it |
+| --- | --- | --- |
+| Registry records | First 5,000 | $0.400 per 1,000 records |
+| Search API calls | First 1,000,000 | $0.020 per 1,000 calls |
+| List and get API calls | First 2,000,000 combined | $0.004 per 1,000 calls |
+
+The [AgentCore pricing page](https://aws.amazon.com/bedrock/agentcore/pricing/) does not state exactly when post-preview billing begins. The prices are low enough that operating effort and quota planning will usually matter more than the direct service bill, but verify the current page before creating budgets or chargeback rules.
+
+Preview availability is limited to five Regions: US East (N. Virginia), US West (Oregon), Asia Pacific (Tokyo), Asia Pacific (Sydney), and Europe (Ireland). There is no documented cross-registry search today, so a multi-Region or multi-account catalog requires consumers to know where to query or a separate aggregation layer.
+
+## A Production-Shaped Adoption Checklist
+
+Use this sequence for a proof of concept that tests the difficult parts rather than only the happy path:
+
+1. **Define the catalog boundary.** Choose the account, Region, and registry split before requesting quota increases.
+2. **Choose IAM or JWT deliberately.** Test the actual developer and agent clients because the choice cannot be changed in place.
+3. **Separate IAM personas.** Publishers should not approve their own records, and consumers should receive discovery permissions only.
+4. **Keep manual approval enabled.** If curation is not required, a searchable repository may solve the problem with less machinery.
+5. **Test every record type you intend to use.** Validate protocol schemas and define an ownership policy for skills and custom records that cannot synchronize.
+6. **Integrate lifecycle events.** Route pending approvals to the platform team's existing queue and verify CloudTrail coverage.
+7. **Load-test discovery.** Measure realistic IDE and agent traffic against the default quotas, including retry and cache behavior.
+8. **Pair discovery with enforcement.** Use Gateway, Policy, IAM, and endpoint controls where invocation must be restricted.
+9. **Isolate the preview API.** Centralize SDK calls and service shapes so another migration is contained.
+
+## Should You Adopt It Now?
+
+AWS Agent Registry is a reasonable preview candidate for an AWS-centric organization with a growing agent estate, a platform team willing to curate records, and a real problem with duplicated or undiscoverable capabilities. The MCP endpoint is particularly valuable because it makes the catalog available inside developer workflows.
+
+It is a weaker fit when the actual requirement is runtime enforcement, when most resources live across clouds and would be maintained manually, or when the organization cannot absorb preview API changes. Small estates may be better served by a version-controlled collection of agent cards and skill documents until catalog ownership and search become genuine bottlenecks.
+
+The practical decision is not "managed registry or no governance." It is whether a managed discovery control plane solves enough of your inventory problem to justify another AWS dependency and an evolving preview API. Run a focused proof of concept, test authentication and quotas with real clients, and keep the distinction between discoverability and enforcement explicit from day one.
+
+## Sources and Further Reading
+
+- [AWS Agent Registry developer guide](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry.html)
+- [AWS Agent Registry concepts and terminology](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry-concepts.html)
+- [AWS Agent Registry MCP endpoint](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry-mcp-endpoint.html)
+- [AWS Agent Registry migration guide](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry-faq.html)
+- [Amazon Bedrock AgentCore quotas](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/bedrock-agentcore-limits.html)
+- [Amazon Bedrock AgentCore pricing](https://aws.amazon.com/bedrock/agentcore/pricing/)
+- [InfoWorld: AWS targets AI agent sprawl with new Bedrock Agent Registry](https://www.infoworld.com/article/4157183/aws-targets-ai-agent-sprawl-with-new-bedrock-agent-registry.html)
+
+*Product status, quotas, pricing, and migration dates were verified on August 7, 2026. AWS Agent Registry remains in preview and these details may change.*
