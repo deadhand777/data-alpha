@@ -92,24 +92,6 @@ Existing preview users have until **September 17, 2026** to migrate. New users s
 
 The break is useful evidence when deciding how deeply to automate against a preview service. AWS improved the model with explicit record types, versioned names, browsing APIs, and fuller lifecycle events, but consumers received a six-week migration window for a backward-incompatible change. Keep Registry integrations behind a small adapter, pin SDK versions, and avoid spreading raw service shapes through application code until the API stabilizes.
 
-## Quotas and Pricing Shape the Architecture
-
-The default quota is **five registries per account per Region**, adjustable through Service Quotas. AWS suggests organizing registries by team, business unit, environment, or resource type, but five disappears quickly if every group receives its own catalog. Before provisioning, decide whether the primary boundary is organizational, environmental, or regulatory. Do not use registries as lightweight folders.
-
-The default API rates are also modest. Record creation is limited to 5 transactions per second, while search, list, and batch-get operations default to 10 transactions per second per account. All are adjustable, but an organization planning to connect thousands of developer clients should request and test the needed quota before rollout. Batch retrieval and client-side caching should be part of the design rather than later optimizations.
-
-As of August 7, 2026, AWS states that Registry usage is free during preview while also publishing a post-preview rate card:
-
-| Dimension | Monthly free tier | Published price above it |
-| --- | --- | --- |
-| Registry records | First 5,000 | $0.400 per 1,000 records |
-| Search API calls | First 1,000,000 | $0.020 per 1,000 calls |
-| List and get API calls | First 2,000,000 combined | $0.004 per 1,000 calls |
-
-The [AgentCore pricing page](https://aws.amazon.com/bedrock/agentcore/pricing/) does not state exactly when post-preview billing begins. The prices are low enough that operating effort and quota planning will usually matter more than the direct service bill, but verify the current page before creating budgets or chargeback rules.
-
-Preview availability is limited to five Regions: US East (N. Virginia), US West (Oregon), Asia Pacific (Tokyo), Asia Pacific (Sydney), and Europe (Ireland). There is no documented cross-registry search today, so a multi-Region or multi-account catalog requires consumers to know where to query or a separate aggregation layer.
-
 ## A Production-Shaped Adoption Checklist
 
 Use this sequence for a proof of concept that tests the difficult parts rather than only the happy path:
