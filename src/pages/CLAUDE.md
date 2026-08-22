@@ -17,12 +17,12 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const items = await getCollection('blog'); // or 'projects'
-  return items.map(item => ({ params: { slug: item.slug }, props: { item } }));
+  return items.map(item => ({ params: { slug: item.id }, props: { item } }));
 }
 
 const { item } = Astro.props;
 if (!item) return Astro.redirect(`${import.meta.env.BASE_URL}blog`);
-const { Content } = await item.render();
+const { Content } = await render(item);
 ---
 <Layout>
   <SEO title={`${item.data.title} | Data Alpha Portfolio`} description={item.data.description} />
@@ -37,7 +37,7 @@ Static pages (`about.astro`) instead use `getEntry('about', 'index')` for single
 ## Conventions
 - Always wrap page content in `<Layout>` + `<SEO title=... description=... />`.
 - Respect `import.meta.env.BASE_URL` when building internal links (site is served under `/data-alpha/`, per `astro.config.mjs` `base`).
-- Content collections (`blog`, `projects`, `about`) schema lives in `src/content/config.ts`.
+- Content collections (`blog`, `projects`, `about`) schema lives in `src/content.config.ts` (Astro 5+ Content Layer, `glob()` loader).
 
 ## Image loading
 Use `astro:assets` (`import { Image } from 'astro:assets'`) for optimized images — `@astrojs/image` is deprecated, not used here.

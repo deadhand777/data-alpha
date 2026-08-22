@@ -1,12 +1,12 @@
 ---
 import Layout from '../../components/Layout.astro';
 import SEO from '../../components/SEO.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog', ({ data }) => !data.draft);
   return blogPosts.map(post => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post }
   }));
 }
@@ -17,7 +17,7 @@ if (!blogPost) {
   return Astro.redirect(`${import.meta.env.BASE_URL}blog`);
 }
 
-const { Content } = await blogPost.render();
+const { Content } = await render(blogPost);
 const heroImageSrc = blogPost.data.heroImage?.startsWith('http')
   ? blogPost.data.heroImage
   : blogPost.data.heroImage

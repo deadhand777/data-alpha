@@ -85,7 +85,7 @@ For domain-specific guidance, refer to the specialized CLAUDE.md files:
 - `@src/styles/CLAUDE.md` - Styling methodology, tokens, responsive design
 - `@src/utils/CLAUDE.md` - Generic utility helpers (currently empty, see file)
 
-`docs/content-guidelines.md` referenced previously here does not exist — content collection schema lives in `src/content/config.ts`.
+`docs/content-guidelines.md` referenced previously here does not exist — content collection schema lives in `src/content.config.ts`.
 
 ## Quick Reference
 
