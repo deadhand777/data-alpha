@@ -1,13 +1,13 @@
                                                                                                         ---
 import Layout from '../components/Layout.astro';
 import SEO from '../components/SEO.astro';
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import AboutSection from '../components/AboutSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import ExperienceSection from '../components/ExperienceSection.astro';
 
 const aboutPage = await getEntry('about', 'index');
-const Content = aboutPage ? (await aboutPage.render()).Content : null;
+const Content = aboutPage ? (await render(aboutPage)).Content : null;
 const base = import.meta.env.BASE_URL;
 ---
 

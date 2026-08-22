@@ -18,7 +18,7 @@ const sortedBlogPosts = blogPosts
     description: post.data.description,
     pubDate: post.data.pubDate,
     tags: post.data.tags,
-    slug: post.slug
+    slug: post.id
   }));
 
 // Sort projects by date (newest first) and map to shape expected by ProjectGrid
@@ -30,7 +30,7 @@ const sortedProjects = projects
     description: project.data.description,
     pubDate: project.data.pubDate,
     tags: project.data.tags,
-    slug: project.slug,
+    slug: project.id,
     demoUrl: project.data.demoUrl,
     sourceUrl: project.data.sourceUrl,
     techStack: project.data.techStack
