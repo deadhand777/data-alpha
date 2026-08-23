@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">EU asset management regulatory timeline from 2024 to 2028</title>
+  <desc id="desc">An editorial timeline showing ELTIF 2.0 applying in 2024, AIFMD II and UCITS implementation in 2026, ESMA risk supervision during 2026 and 2027, UCITS reporting in 2027, and supervisory findings expected in 2028.</desc>
+
+  <rect width="1600" height="900" fill="#f4f6f8"/>
+  <path d="M0 0h1600v206H0z" fill="#10233f"/>
+  <rect x="72" y="52" width="8" height="106" fill="#e6b84a"/>
+
+  <g font-family="Georgia, 'Times New Roman', serif">
+    <text x="112" y="92" fill="#8fd3ca" font-size="24" font-weight="700">REGULATORY OUTLOOK</text>
+    <text x="112" y="154" fill="#ffffff" font-size="58" font-weight="700">EU asset management</text>
+  </g>
+  <text x="1530" y="91" fill="#b8c5d6" font-family="ui-sans-serif, system-ui, sans-serif" font-size="25" text-anchor="end">IMPLEMENTATION MAP</text>
+  <text x="1530" y="153" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" text-anchor="end">2024—2028</text>
+
+  <g stroke="#dfe4ea" stroke-width="1">
+    <line x1="0" y1="258" x2="1600" y2="258"/>
+    <line x1="0" y1="508" x2="1600" y2="508"/>
+    <line x1="0" y1="758" x2="1600" y2="758"/>
+  </g>
+
+  <text x="72" y="252" fill="#526174" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26">Five milestones shaping product, risk, and reporting operations</text>
+
+  <line x1="190" y1="500" x2="1410" y2="500" stroke="#9aa8b7" stroke-width="4"/>
+  <path d="M1410 500l-18-11v22z" fill="#9aa8b7"/>
+
+  <g font-family="ui-sans-serif, system-ui, sans-serif">
+    <g>
+      <rect x="66" y="294" width="258" height="154" rx="8" fill="#ffffff" stroke="#ced6df" stroke-width="2"/>
+      <rect x="66" y="294" width="258" height="8" rx="4" fill="#2856a3"/>
+      <text x="90" y="337" fill="#2856a3" font-size="22" font-weight="700">IN FORCE</text>
+      <text x="90" y="380" fill="#10233f" font-size="37" font-weight="700">10 Jan 2024</text>
+      <text x="90" y="420" fill="#334155" font-size="31">ELTIF 2.0 applies</text>
+      <line x1="195" y1="448" x2="195" y2="480" stroke="#2856a3" stroke-width="4"/>
+      <circle cx="195" cy="500" r="18" fill="#2856a3" stroke="#f4f6f8" stroke-width="8"/>
+    </g>
+
+    <g>
+      <circle cx="495" cy="500" r="18" fill="#2856a3" stroke="#f4f6f8" stroke-width="8"/>
+      <line x1="495" y1="520" x2="495" y2="552" stroke="#2856a3" stroke-width="4"/>
+      <rect x="366" y="552" width="258" height="174" rx="8" fill="#ffffff" stroke="#ced6df" stroke-width="2"/>
+      <rect x="366" y="718" width="258" height="8" rx="4" fill="#2856a3"/>
+      <text x="390" y="593" fill="#2856a3" font-size="22" font-weight="700">NATIONAL LAW</text>
+      <text x="390" y="636" fill="#10233f" font-size="37" font-weight="700">16 Apr 2026</text>
+      <text x="390" y="676" fill="#334155" font-size="29">AIFMD II + UCITS</text>
+      <text x="390" y="708" fill="#526174" font-size="24">core measures apply</text>
+    </g>
+
+    <g>
+      <rect x="671" y="294" width="258" height="154" rx="8" fill="#ffffff" stroke="#ced6df" stroke-width="2"/>
+      <rect x="671" y="294" width="258" height="8" rx="4" fill="#148477"/>
+      <text x="695" y="337" fill="#148477" font-size="22" font-weight="700">SUPERVISION</text>
+      <text x="695" y="380" fill="#10233f" font-size="37" font-weight="700">2026—2027</text>
+      <text x="695" y="420" fill="#334155" font-size="31">ESMA risk CSA</text>
+      <line x1="800" y1="448" x2="800" y2="480" stroke="#148477" stroke-width="4"/>
+      <circle cx="800" cy="500" r="18" fill="#148477" stroke="#f4f6f8" stroke-width="8"/>
+    </g>
+
+    <g>
+      <circle cx="1105" cy="500" r="18" fill="#2856a3" stroke="#f4f6f8" stroke-width="8"/>
+      <line x1="1105" y1="520" x2="1105" y2="552" stroke="#2856a3" stroke-width="4"/>
+      <rect x="976" y="552" width="258" height="174" rx="8" fill="#ffffff" stroke="#ced6df" stroke-width="2"/>
+      <rect x="976" y="718" width="258" height="8" rx="4" fill="#2856a3"/>
+      <text x="1000" y="593" fill="#2856a3" font-size="22" font-weight="700">REPORTING</text>
+      <text x="1000" y="636" fill="#10233f" font-size="37" font-weight="700">16 Apr 2027</text>
+      <text x="1000" y="676" fill="#334155" font-size="29">UCITS supervisory</text>
+      <text x="1000" y="708" fill="#526174" font-size="24">reporting applies</text>
+    </g>
+
+    <g>
+      <rect x="1281" y="294" width="258" height="154" rx="8" fill="#ffffff" stroke="#ced6df" stroke-width="2"/>
+      <rect x="1281" y="294" width="258" height="8" rx="4" fill="#b97916"/>
+      <text x="1305" y="337" fill="#9b620d" font-size="22" font-weight="700">EXPECTED</text>
+      <text x="1305" y="380" fill="#10233f" font-size="37" font-weight="700">2028</text>
+      <text x="1305" y="420" fill="#334155" font-size="31">CSA findings</text>
+      <line x1="1410" y1="448" x2="1410" y2="480" stroke="#b97916" stroke-width="4"/>
+      <circle cx="1410" cy="500" r="18" fill="#b97916" stroke="#f4f6f8" stroke-width="8"/>
+    </g>
+  </g>
+
+  <line x1="72" y1="806" x2="1528" y2="806" stroke="#cbd3dc" stroke-width="2"/>
+  <text x="72" y="850" fill="#526174" font-family="ui-sans-serif, system-ui, sans-serif" font-size="25">EU-level dates verified 23 August 2026</text>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="20">
+    <circle cx="1025" cy="842" r="8" fill="#2856a3"/>
+    <text x="1044" y="850" fill="#526174">Binding rule</text>
+    <circle cx="1196" cy="842" r="8" fill="#148477"/>
+    <text x="1215" y="850" fill="#526174">Supervisory activity</text>
+    <circle cx="1431" cy="842" r="8" fill="#b97916"/>
+    <text x="1450" y="850" fill="#526174">Future</text>
+  </g>
+</svg>
