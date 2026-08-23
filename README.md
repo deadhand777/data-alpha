@@ -82,7 +82,10 @@ The documentation is organized into the following sections:
    ```bash
    npm run dev
    ```
-
+3. Check for any formatting violations
+   ```bash
+   npx astro check
+   ```
 3. Build for production:
    ```bash
    npm run build
