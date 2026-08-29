@@ -13,19 +13,19 @@ interface Props {
 const { role, introduction, highlights } = Astro.props;
 ---
 <section class="mb-16" aria-labelledby="profile-summary">
-  <p id="profile-summary" class="mb-5 text-sm font-semibold uppercase tracking-wide text-accent-tech-dark">
+  <p id="profile-summary" class="mb-5 text-sm font-semibold uppercase tracking-wide text-accent-tech-light">
     {role}
   </p>
-  <p class="max-w-3xl text-xl leading-8 text-gray-700 sm:text-2xl sm:leading-9">
+  <p class="max-w-3xl text-xl leading-8 text-text-secondary sm:text-2xl sm:leading-9">
     {introduction}
   </p>
 
   {highlights.length > 0 && (
-    <dl class="mt-10 grid gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 sm:grid-cols-2 lg:grid-cols-4">
+    <dl class="mt-10 grid gap-px overflow-hidden rounded-lg border border-white/5 bg-white/5 shadow-resting sm:grid-cols-2 lg:grid-cols-4">
       {highlights.map((highlight) => (
-        <div class="min-h-36 bg-white p-6">
-          <dt class="text-sm leading-6 text-gray-600">{highlight.label}</dt>
-          <dd class="mt-2 text-3xl font-bold text-gray-900">{highlight.value}</dd>
+        <div class="min-h-36 bg-bg-surface p-6">
+          <dt class="text-sm leading-6 text-text-muted">{highlight.label}</dt>
+          <dd class="mt-2 text-3xl font-bold text-text-primary">{highlight.value}</dd>
         </div>
       ))}
     </dl>

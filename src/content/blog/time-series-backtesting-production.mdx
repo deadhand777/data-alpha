@@ -2,17 +2,18 @@
 title: "Fix Your Backtest Before You Tune Your Forecasting Model"
 description: "Build forecasting evaluations that respect time, prevent preprocessing leakage, quantify uncertainty, and preserve hierarchical coherence."
 pubDate: 2026-07-26
-heroImage: "/data-alpha/images/blog/time-series-backtesting-production.svg"
+heroImage: "/images/blog/time-series-backtesting-production.svg"
 tags: ["time-series", "backtesting", "forecasting", "production", "uncertainty"]
 slug: "time-series-backtesting-production"
 draft: false
+series: "Forecasting in Production"
+seriesOrder: 3
 ---
 
 A forecasting model can look excellent for the wrong reason. Randomly shuffle observations, scale with statistics computed over the full history, or tune against one convenient forecast origin, and future information quietly moves into the training process.
 
 Model tuning cannot repair that evaluation. It optimizes the leak.
 
-![Three expanding training windows followed by fixed forecast horizons moving forward through time](/data-alpha/images/blog/time-series-backtesting-production.svg)
 
 Part 1 of this series showed that [model rankings depend on the task](../time-series-no-single-winner/). Part 2 showed why [pretraining makes the information boundary harder to audit](../time-series-foundation-models-2026/). This article turns those cautions into a production evaluation workflow.
 
@@ -167,4 +168,4 @@ The best first forecasting system is often not the most sophisticated candidate.
 
 Once that process exists, model experimentation becomes useful. You can tell whether LightGBM gains come from available promotion features, whether a neural model improves long horizons, or whether a foundation model provides diverse ensemble errors. Without it, every improvement is ambiguous.
 
-Part 4, [The Python Forecasting Stack in 2026](./python-time-series-forecasting-stack-2026/), maps these jobs to maintained Python libraries without pretending that package popularity determines forecast quality.
+Part 4, [The Python Forecasting Stack in 2026](../python-time-series-forecasting-stack-2026/), maps these jobs to maintained Python libraries without pretending that package popularity determines forecast quality.

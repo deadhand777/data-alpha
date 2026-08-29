@@ -1,6 +1,5 @@
 ---
 import Layout from '../components/Layout.astro';
-import SEO from '../components/SEO.astro';
 import { HeroSection } from '../components/HeroSection.tsx';
 import { BlogPreview } from '../components/BlogPreview.tsx';
 import { ProjectGrid } from '../components/ProjectGrid.tsx';
@@ -37,9 +36,11 @@ const sortedProjects = projects
   }));
 ---
 
-<Layout>
-  <SEO title="Home | Data Alpha Portfolio" description="Welcome to my personal website featuring data, AI, and finance insights" />
-
+<Layout
+  title="Data Alpha — Chris Schulz on production AI, data, and finance"
+  description="Writing on taking AI from experiment to production in regulated financial services: architecture, evaluation, governance, and the tradeoffs that transfer."
+  path="/"
+>
   <HeroSection />
 
   <div class="mt-16">

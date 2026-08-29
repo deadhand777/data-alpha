@@ -1,15 +1,26 @@
 ---
 const base = import.meta.env.BASE_URL;
 const pathname = new URL(Astro.url).pathname;
+
+// pathname carries the deploy base ('/data-alpha/blog'), so compare against it.
+const path = pathname.replace(base.replace(/\/$/, ''), '') || '/';
+
+const links = [
+  { href: base, label: 'Home', active: path === '/' },
+  { href: `${base}blog`, label: 'Blog', active: path.startsWith('/blog') },
+  { href: `${base}projects`, label: 'Projects', active: path.startsWith('/projects') },
+  { href: `${base}about`, label: 'About', active: path.startsWith('/about') },
+  { href: `${base}contact`, label: 'Contact', active: path.startsWith('/contact') }
+];
 ---
-<header class="bg-bg-primary/90 backdrop-blur-sm border-b border-gray-100/50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-20 items-center justify-between border-b border-gray-100/25">
+<header class="bg-bg-primary/90 backdrop-blur-sm border-b border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-20 items-center justify-between ">
     {/* Brand Logo with Data Accent */}
     <a href={base} class="flex items-center space-x-3">
       <span class="text-2xl font-semibold text-text-primary tracking-tighter">
         Data Alpha
       </span>
-      <span class="text-accent-tech">Portfolio</span>
+      <span class="text-accent-tech-light">Portfolio</span>
       <span class="flex h-4 w-4 items-center justify-center">
         <div class="w-1.5 h-1.5 bg-accent-success rounded-full"></div>
       </span>
@@ -17,61 +28,24 @@ const pathname = new URL(Astro.url).pathname;
 
     {/* Desktop Navigation */}
     <nav class="hidden md:flex space-x-6">
-      <a
-        href={base}
-        class={`
-          flex-1 text-center text-sm font-medium
-          transition-all duration-200
-          ${pathname === '/' ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
-        `}
-      >
-        Home
-      </a>
-      <a
-        href={`${base}blog`}
-        class={`
-          flex-1 text-center text-sm font-medium
-          transition-all duration-200
-          ${pathname.startsWith('/blog') ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
-        `}
-      >
-        Blog
-      </a>
-      <a
-        href={`${base}projects`}
-        class={`
-          flex-1 text-center text-sm font-medium
-          transition-all duration-200
-          ${pathname.startsWith('/projects') ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
-        `}
-      >
-        Projects
-      </a>
-      <a
-        href={`${base}about`}
-        class={`
-          flex-1 text-center text-sm font-medium
-          transition-all duration-200
-          ${pathname === '/about' ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
-        `}
-      >
-        About
-      </a>
-      <a
-        href={`${base}contact`}
-        class={`
-          flex-1 text-center text-sm font-medium
-          transition-all duration-200
-          ${pathname === '/contact' ? 'text-accent-success border-b-2 border-accent-success' : 'text-text-secondary hover:text-accent-success hover:border-b-2 border-gray-100'}
-        `}
-      >
-        Contact
-      </a>
+      {links.map((link) => (
+        <a
+          href={link.href}
+          aria-current={link.active ? 'page' : undefined}
+          class={`text-sm font-medium border-b-2 pb-1 transition-colors duration-200 ${
+            link.active
+              ? 'text-accent-tech-light border-accent-tech'
+              : 'text-text-secondary border-transparent hover:text-accent-tech-light hover:border-accent-tech/40'
+          }`}
+        >
+          {link.label}
+        </a>
+      ))}
     </nav>
 
     {/* Mobile Menu Button */}
     <button id="mobile-menu-button"
-            class="md:hidden p-2 rounded-md text-text-secondary hover:text-accent-success hover:bg-accent-success/10 focus:outline-none focus:ring-2 focus:ring-accent-success"
+            class="md:hidden p-2 rounded-md text-text-secondary hover:text-accent-tech-light hover:bg-accent-tech/10 focus:outline-none focus:ring-2 focus:ring-accent-tech"
             aria-label="Open main menu"
             aria-expanded="false">
       <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,43 +56,21 @@ const pathname = new URL(Astro.url).pathname;
 </header>
 
 <!-- Mobile Menu (hidden by default) -->
-<div id="mobile-menu" class="md:hidden hidden">
-  <div class="px-2 pt-2 pb-3 space-y-1">
-    <a
-      href={base}
-      class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname === '/' ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
-    >
-      Home
-    </a>
-    <a
-      href={`${base}blog`}
-      class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname.startsWith('/blog') ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
-    >
-      Blog
-    </a>
-    <a
-      href={`${base}projects`}
-      class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname.startsWith('/projects') ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
-    >
-      Projects
-    </a>
-    <a
-      href={`${base}about`}
-      class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname === '/about' ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
-    >
-      About
-    </a>
-    <a
-      href={`${base}contact`}
-      class="block px-3 py-2 rounded-md text-base font-medium
-             {pathname === '/contact' ? 'text-accent-success bg-accent-success/10' : 'text-text-secondary hover:text-accent-success'}"
-    >
-      Contact
-    </a>
+<div id="mobile-menu" class="md:hidden hidden border-b border-white/5 bg-bg-primary/95 backdrop-blur-sm">
+  <div class="px-4 pt-2 pb-3 space-y-1">
+    {links.map((link) => (
+      <a
+        href={link.href}
+        aria-current={link.active ? 'page' : undefined}
+        class={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+          link.active
+            ? 'text-accent-tech-light bg-accent-tech/10'
+            : 'text-text-secondary hover:text-accent-tech-light hover:bg-white/5'
+        }`}
+      >
+        {link.label}
+      </a>
+    ))}
   </div>
 </div>
 

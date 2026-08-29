@@ -2,10 +2,12 @@
 title: "No Single Model Wins: What M3, M4, and M5 Teach Us About Forecasting"
 description: "The M-competitions show why forecasting winners keep changing, simple baselines still matter, and evaluation must match the real decision."
 pubDate: 2026-07-24
-heroImage: "/data-alpha/images/blog/time-series-no-single-winner.svg"
+heroImage: "/images/blog/time-series-no-single-winner.svg"
 tags: ["time-series", "forecasting", "benchmarks", "machine-learning", "baselines"]
 slug: "time-series-no-single-winner"
 draft: false
+series: "Forecasting in Production"
+seriesOrder: 1
 ---
 
 Forecasting has no ImageNet moment: no single architecture arrived, established a durable lead, and made the previous generation obsolete. The history of the M-competitions points in the opposite direction. Statistical methods led one competition, a statistical-neural hybrid led the next, and gradient-boosted trees dominated the one after that.
@@ -14,7 +16,6 @@ That sequence is not evidence that forecasting steadily progressed from simple t
 
 The frequency and length of the series changed. The amount of related data changed. Retail prices, promotions, calendars, and product hierarchies became available. The winning method changed with them.
 
-![Timeline showing statistical methods leading M3, a hybrid leading M4, and boosted trees leading M5](/data-alpha/images/blog/time-series-no-single-winner.svg)
 
 This is the first article in a four-part series about choosing and evaluating forecasting systems in 2026. It begins with the least fashionable but most useful conclusion: **there is no universally best forecasting model, and every serious comparison starts with a simple baseline.**
 
@@ -145,4 +146,4 @@ M3, M4, and M5 did not produce a stable champion because they did not pose the s
 
 The useful conclusion is not that simple models always win. It is that model rankings are conditional, and a baseline is the only way to learn whether complexity helped under your conditions.
 
-Part 2, [Time Series Foundation Models in 2026: Promise, Leakage, and the Zero-Shot Trap](./time-series-foundation-models-2026/), applies the same standard to Chronos, TimesFM, Moirai, Lag-Llama, and TimeGPT. The models are broader and the pretraining corpora are larger, but the central question remains unchanged: what information did the model see, and does the evaluation resemble the decision you need to make?
+Part 2, [Time Series Foundation Models in 2026: Promise, Leakage, and the Zero-Shot Trap](../time-series-foundation-models-2026/), applies the same standard to Chronos, TimesFM, Moirai, Lag-Llama, and TimeGPT. The models are broader and the pretraining corpora are larger, but the central question remains unchanged: what information did the model see, and does the evaluation resemble the decision you need to make?

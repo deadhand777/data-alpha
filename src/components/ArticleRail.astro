@@ -1,0 +1,93 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  /** `sticky` is the desktop gutter rail; `inline` is the collapsed mobile version. */
+  variant: 'sticky' | 'inline';
+}
+
+const { headings, variant } = Astro.props;
+
+// Only h2/h3 carry article structure; deeper levels make the rail noise.
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{items.length >= 3 && variant === 'sticky' && (
+  <aside class="hidden lg:block" aria-labelledby="toc-heading">
+    <nav class="sticky top-8 max-h-[calc(100vh-6rem)] overflow-y-auto border-l border-white/5 pl-5">
+      <h2 id="toc-heading" class="mb-4 text-xs font-semibold uppercase tracking-wider text-text-muted">
+        On this page
+      </h2>
+      <ul class="space-y-2.5 text-sm">
+        {items.map((h) => (
+          <li class={h.depth === 3 ? 'pl-4' : ''}>
+            <a
+              href={`#${h.slug}`}
+              data-toc-link={h.slug}
+              class="block text-text-muted transition-colors duration-200 hover:text-accent-tech-light aria-[current=true]:font-medium aria-[current=true]:text-accent-tech-light"
+            >
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </aside>
+)}
+
+{items.length >= 3 && variant === 'inline' && (
+  <details class="mb-10 rounded-lg border border-white/5 bg-bg-surface shadow-resting lg:hidden">
+    <summary class="cursor-pointer list-none px-5 py-4 text-sm font-medium text-text-secondary marker:content-['']">
+      <span class="flex items-center justify-between">
+        On this page
+        <span class="text-xs text-text-muted">{items.length} sections</span>
+      </span>
+    </summary>
+    <ul class="space-y-2.5 border-t border-white/5 px-5 py-4 text-sm">
+      {items.map((h) => (
+        <li class={h.depth === 3 ? 'pl-4' : ''}>
+          <a href={`#${h.slug}`} class="text-text-muted transition-colors hover:text-accent-tech-light">
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </details>
+)}
+
+{items.length >= 3 && variant === 'sticky' && (
+  <script>
+    // Mark the section currently in view. Progressive enhancement: without JS the
+    // rail is still a working list of anchors.
+    const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+    const targets = [...links]
+      .map((link) => document.getElementById(link.dataset.tocLink!))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (targets.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
+
+    const setCurrent = (id: string | null) => {
+      links.forEach((link) => {
+        link.setAttribute('aria-current', String(link.dataset.tocLink === id));
+      });
+    };
+
+    const seen = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) seen.add(entry.target.id);
+          else seen.delete(entry.target.id);
+        });
+        const first = targets.find((t) => seen.has(t.id));
+        if (first) setCurrent(first.id);
+      },
+      { rootMargin: '-80px 0px -70% 0px' }
+    );
+
+    targets.forEach((t) => observer.observe(t));
+  </script>
+)}
