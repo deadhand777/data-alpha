@@ -24,7 +24,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
           {projects.map((project) => (
             <div
               key={project.slug}
-              className="bg-bg-surface/90 backdrop-blur-sm border border-gray-100/50 rounded-lg overflow-hidden hover:border-gray-200/70 hover:shadow-lg transition-all duration-300 group"
+              className="bg-bg-surface/90 backdrop-blur-sm border border-white/5 rounded-lg overflow-hidden shadow-resting hover:border-white/10 hover:shadow-lifted transition-all duration-300 group"
             >
               <div className="p-8">
                 <h3 className="text-xl font-semibold text-text-primary tracking-tighter mb-3">
@@ -36,7 +36,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                 {project.techStack.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4 text-xs">
                     {project.techStack.map((tech) => (
-                      <span key={tech} className="bg-accent-tech/20 text-accent-tech text-xs font-medium px-2 py-0.5 rounded">
+                      <span key={tech} className="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2 py-0.5 rounded">
                         {tech}
                       </span>
                     ))}
@@ -44,7 +44,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                 )}
                 <div className="flex flex-wrap gap-2 mb-4 text-xs">
                   {project.tags.map((tag) => (
-                    <span key={tag} className="bg-accent-tech/20 text-accent-tech text-xs font-medium px-2 py-0.5 rounded">
+                    <span key={tag} className="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2 py-0.5 rounded">
                       #{tag}
                     </span>
                   ))}
@@ -55,7 +55,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-accent-success hover:bg-accent-success/80 text-white font-medium py-2 px-4 rounded-md transition-colors flex-1"
+                      className="inline-block bg-accent-tech-dark hover:bg-accent-tech-deep text-text-primary text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200"
                     >
                       Demo
                     </a>
@@ -65,19 +65,19 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                       href={project.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="border border-accent-success hover:bg-accent-success/10 text-accent-success font-medium py-2 px-4 rounded-md transition-colors flex-1"
+                      className="inline-block border border-accent-tech text-accent-tech-light hover:text-accent-tech-pale hover:bg-bg-surface-light text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200"
                     >
                       Source
                     </a>
                   )}
                 </div>
-                <div className="flex items-center justify-between text-xs text-text-secondary mt-4">
+                <div className="flex items-center justify-between text-xs text-text-muted mt-4">
                   <span>{new Date(project.pubDate).toLocaleDateString(undefined, {
                     year: 'numeric', month: 'short', day: 'numeric'
                   })}</span>
                   <a
                     href={`${import.meta.env.BASE_URL}projects/${project.slug}`}
-                    className="font-medium text-accent-tech hover:text-accent-tech/80 transition-colors hover:underline"
+                    className="font-medium text-accent-tech-light hover:underline underline-offset-4 transition-colors"
                   >
                     View project →
                   </a>
@@ -89,7 +89,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
         <div className="mt-8 text-center">
           <a
             href={`${import.meta.env.BASE_URL}projects`}
-            className="text-accent-tech hover:text-accent-tech/80 font-medium transition-colors"
+            className="text-accent-tech-light hover:underline underline-offset-4 font-medium transition-colors"
           >
             View All Projects →
           </a>

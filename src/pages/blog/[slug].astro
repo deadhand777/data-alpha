@@ -1,6 +1,7 @@
 ---
 import Layout from '../../components/Layout.astro';
-import SEO from '../../components/SEO.astro';
+import ArticleRail from '../../components/ArticleRail.astro';
+import ArticleFooter from '../../components/ArticleFooter.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -11,69 +12,119 @@ export async function getStaticPaths() {
   }));
 }
 
-const { post: blogPost } = Astro.props;
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
 
-if (!blogPost) {
-  return Astro.redirect(`${import.meta.env.BASE_URL}blog`);
-}
+const all = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const { Content } = await render(blogPost);
-const heroImageSrc = blogPost.data.heroImage?.startsWith('http')
-  ? blogPost.data.heroImage
-  : blogPost.data.heroImage
-    ? `${import.meta.env.BASE_URL}${blogPost.data.heroImage.replace(/^\/?(?:data-alpha\/)?/, '')}`
+// Next part of the same series, else the closest post by shared tags.
+const series = post.data.series
+  ? all.filter(p => p.data.series === post.data.series)
+       .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0))
+  : [];
+const seriesIndex = series.findIndex(p => p.id === post.id);
+const nextInSeries = seriesIndex >= 0 ? series[seriesIndex + 1] : undefined;
+
+const related = all
+  .filter(p => p.id !== post.id && p.id !== nextInSeries?.id)
+  .map(p => ({ post: p, shared: p.data.tags.filter(t => post.data.tags.includes(t)).length }))
+  .filter(p => p.shared > 0)
+  .sort((a, b) => b.shared - a.shared || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf())
+  .slice(0, 2)
+  .map(p => p.post);
+
+const words = post.body?.split(/\s+/).length ?? 0;
+const readingMinutes = Math.max(1, Math.round(words / 220));
+
+const heroImage = post.data.heroImage?.startsWith('http')
+  ? post.data.heroImage
+  : post.data.heroImage
+    ? `${import.meta.env.BASE_URL}${post.data.heroImage.replace(/^\//, '')}`
     : undefined;
+
+const dateFormat = { year: 'numeric', month: 'long', day: 'numeric' } as const;
 ---
 
-<Layout>
-  <SEO
-    title={`${blogPost.data.title} | Data Alpha Portfolio`}
-    description={blogPost.data.description}
-  />
-
-  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 prose prose-lg prose-indigo max-w-none">
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">{blogPost.data.title}</h1>
-      <div class="flex flex-wrap gap-4 mb-6 text-sm text-gray-500">
-        <span>{new Date(blogPost.data.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-        {blogPost.data.updatedDate && (
-          <>
-            <span class="mx-1">•</span>
-            <span>{new Date(blogPost.data.updatedDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-          </>
+<Layout
+  title={`${post.data.title} | Data Alpha`}
+  description={post.data.description}
+  path={`/blog/${post.id}/`}
+  image={`/images/og/${post.id}.png`}
+  article={{
+    headline: post.data.title,
+    datePublished: post.data.pubDate,
+    dateModified: post.data.updatedDate,
+    tags: post.data.tags
+  }}
+>
+  <div class="py-12 lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-12">
+    <article class="max-w-3xl min-w-0">
+      <header class="mb-10">
+        {post.data.series && seriesIndex >= 0 && (
+          <p class="mb-4 text-sm font-medium text-accent-tech-light">
+            {post.data.series} · Part {seriesIndex + 1} of {series.length}
+          </p>
         )}
-        {blogPost.data.tags.map((tag) => (
-          <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
-            #{tag}
-          </span>
-        ))}
+
+        <h1 class="text-4xl font-bold tracking-tight text-text-primary sm:text-5xl text-balance">
+          {post.data.title}
+        </h1>
+
+        <p class="mt-5 text-lg leading-relaxed text-text-secondary text-pretty">
+          {post.data.description}
+        </p>
+
+        <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-text-muted">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString(undefined, dateFormat)}
+          </time>
+          <span aria-hidden="true" class="text-bg-surface-light">/</span>
+          <span>{readingMinutes} min read</span>
+          {post.data.updatedDate && (
+            <>
+              <span aria-hidden="true" class="text-bg-surface-light">/</span>
+              <span class="text-accent-success-light">
+                Updated {post.data.updatedDate.toLocaleDateString(undefined, dateFormat)}
+              </span>
+            </>
+          )}
+        </div>
+
+        {post.data.tags.length > 0 && (
+          <ul class="mt-5 flex flex-wrap gap-2">
+            {post.data.tags.map((tag) => (
+              <li class="rounded bg-bg-surface-light px-2.5 py-0.5 text-xs font-medium tracking-wide text-accent-tech-pale">
+                {tag}
+              </li>
+            ))}
+          </ul>
+        )}
+      </header>
+
+      {heroImage && (
+        <figure class="mb-10">
+          <img
+            src={heroImage}
+            alt={`${post.data.title} illustration`}
+            width="1200"
+            height="675"
+            class="w-full aspect-video object-cover rounded-lg border border-white/5 shadow-resting"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </figure>
+      )}
+
+      <ArticleRail headings={headings} variant="inline" />
+
+      <div class="prose prose-lg prose-invert prose-panel max-w-none">
+        <Content />
       </div>
-    </header>
 
-    {heroImageSrc && (
-      <figure class="not-prose mb-10">
-        <img
-          src={heroImageSrc}
-          alt={`${blogPost.data.title} illustration`}
-          class="w-full aspect-video object-cover rounded-lg border border-gray-200"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </figure>
-    )}
+      <ArticleFooter next={nextInSeries} related={related} seriesName={post.data.series} />
+    </article>
 
-    <div class="prose prose-lg prose-indigo max-w-none">
-      <Content />
-    </div>
-
-    <div class="mt-8">
-      <p>
-        <strong>Tags:</strong> {blogPost.data.tags.map(tag => (
-          <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
-            #{tag}
-          </span>
-        ))}
-      </p>
-    </div>
-  </article>
+    <ArticleRail headings={headings} variant="sticky" />
+  </div>
 </Layout>

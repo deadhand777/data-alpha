@@ -1,6 +1,5 @@
 ---
 import Layout from '../../components/Layout.astro';
-import SEO from '../../components/SEO.astro';
 import { getCollection } from 'astro:content';
 
 const blogPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -10,35 +9,34 @@ const sortedPosts = blogPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout>
-  <SEO
-    title="Blog | Data Alpha Portfolio"
-    description="Explore my latest writings on data, AI, and finance topics"
-  />
-
+<Layout
+  title="Writing | Data Alpha"
+  description="Articles on time-series forecasting, agentic AI, cloud data platforms, and AI regulation — written from production experience."
+  path="/blog/"
+>
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Blog</h1>
-    <p class="text-gray-600 mb-8">
+    <h1 class="text-3xl font-bold text-text-primary mb-8">Blog</h1>
+    <p class="max-w-2xl leading-relaxed text-text-secondary mb-8">
       Discover insights and tutorials on data analysis, artificial intelligence,
       machine learning, and financial modeling.
     </p>
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {sortedPosts.map((post) => (
-        <article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-          <div class="p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-3">{post.data.title}</h2>
-            <p class="text-gray-600 mb-4 line-clamp-3">{post.data.description}</p>
+        <article class="bg-bg-surface border border-white/5 rounded-lg overflow-hidden shadow-resting hover:border-white/10 hover:shadow-lifted transition-all duration-300">
+          <div class="p-8">
+            <h2 class="text-xl font-semibold tracking-tight text-text-primary mb-3">{post.data.title}</h2>
+            <p class="text-sm leading-relaxed text-text-secondary mb-4 line-clamp-3">{post.data.description}</p>
             <div class="flex flex-wrap gap-2 mb-4 text-xs">
               {post.data.tags.map((tag) => (
-                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                <span class="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2.5 py-0.5 rounded">
                   #{tag}
                 </span>
               ))}
             </div>
-            <div class="flex items-center justify-between text-sm text-gray-500">
+            <div class="flex items-center justify-between text-xs text-text-muted">
               <span>{new Date(post.data.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-              <a href={`${import.meta.env.BASE_URL}blog/${post.id}`} class="font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+              <a href={`${import.meta.env.BASE_URL}blog/${post.id}`} class="font-medium text-accent-tech-light hover:underline underline-offset-4 transition-colors">
                 Read more →
               </a>
             </div>
@@ -48,7 +46,7 @@ const sortedPosts = blogPosts
     </div>
 
     {sortedPosts.length === 0 && (
-      <p class="text-center text-gray-500 py-8">No blog posts found. Check back soon for new content!</p>
+      <p class="text-center text-text-muted py-8">No blog posts found. Check back soon for new content!</p>
     )}
   </section>
 </Layout>

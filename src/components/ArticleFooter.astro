@@ -1,0 +1,86 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  next?: CollectionEntry<'blog'>;
+  related: CollectionEntry<'blog'>[];
+  seriesName?: string;
+}
+
+const { next, related, seriesName } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+// PRODUCT.md records these three as the binding proof surface.
+const links = [
+  { label: 'Full CV', href: 'https://github.com/deadhand777/cs_cv/blob/main/cv/cv.pdf' },
+  { label: 'GitHub', href: 'https://github.com/deadhand777' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/chris-schulz-ai-first/' }
+];
+---
+
+<footer class="mt-16 space-y-8 border-t border-white/5 pt-10">
+  {next && (
+    <a
+      href={`${base}blog/${next.id}`}
+      class="group block rounded-lg border border-white/5 bg-bg-surface p-6 shadow-resting transition-all duration-300 hover:border-accent-tech/40 hover:shadow-lifted"
+    >
+      <p class="text-xs font-semibold uppercase tracking-wider text-accent-tech-light">
+        {seriesName ? `Next in ${seriesName}` : 'Read next'}
+      </p>
+      <p class="mt-3 text-xl font-semibold tracking-tight text-text-primary">{next.data.title}</p>
+      <p class="mt-2 text-sm leading-relaxed text-text-secondary">{next.data.description}</p>
+    </a>
+  )}
+
+  <section class="rounded-lg border border-white/5 bg-bg-surface p-6" aria-labelledby="author-heading">
+    <h2 id="author-heading" class="text-lg font-semibold text-text-primary">Chris Schulz</h2>
+    <p class="mt-1 text-sm text-text-muted">Head of Data &amp; AI</p>
+    <p class="mt-4 max-w-2xl leading-relaxed text-text-secondary">
+      I take AI from experiment to production — combining engineering, product strategy, and governance to
+      build systems that hold up in regulated financial services.
+    </p>
+    <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-accent-tech-light underline decoration-accent-tech/40 underline-offset-4 transition-colors hover:decoration-accent-tech-light"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a
+          href={`${base}rss.xml`}
+          class="text-accent-tech-light underline decoration-accent-tech/40 underline-offset-4 transition-colors hover:decoration-accent-tech-light"
+        >
+          RSS
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  {related.length > 0 && (
+    <section aria-labelledby="related-heading">
+      <h2 id="related-heading" class="mb-4 text-xs font-semibold uppercase tracking-wider text-text-muted">
+        Related reading
+      </h2>
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {related.map((item) => (
+          <li>
+            <a
+              href={`${base}blog/${item.id}`}
+              class="block h-full rounded-lg border border-white/5 bg-bg-surface p-5 shadow-resting transition-all duration-300 hover:border-white/10 hover:shadow-lifted"
+            >
+              <p class="font-semibold tracking-tight text-text-primary">{item.data.title}</p>
+              <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-text-secondary">{item.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</footer>

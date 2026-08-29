@@ -21,7 +21,7 @@ export const BlogPreview = ({ posts }: BlogPreviewProps) => {
           {posts.map((post) => (
             <div
               key={post.slug}
-              className="bg-bg-surface/90 backdrop-blur-sm border border-gray-100/50 rounded-lg overflow-hidden hover:border-gray-200/70 hover:shadow-lg transition-all duration-300 group"
+              className="bg-bg-surface/90 backdrop-blur-sm border border-white/5 rounded-lg overflow-hidden shadow-resting hover:border-white/10 hover:shadow-lifted transition-all duration-300 group"
             >
               <div className="p-8">
                 <h3 className="text-xl font-semibold text-text-primary tracking-tighter mb-4">
@@ -32,12 +32,12 @@ export const BlogPreview = ({ posts }: BlogPreviewProps) => {
                 </p>
                 <div className="flex flex-wrap gap-2 mb-5 text-xs">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="bg-accent-tech/20 text-accent-tech text-xs font-medium px-2 py-0.5 rounded">
+                    <span key={tag} className="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2 py-0.5 rounded">
                       #{tag}
                     </span>
                   ))}
                 </div>
-                <div className="flex items-center justify-between text-xs text-text-secondary group-hover:text-text-primary transition-colors">
+                <div className="flex items-center justify-between text-xs text-text-muted group-hover:text-text-secondary transition-colors">
                   <span className="flex items-center space-x-1">
                     {/* Optional calendar icon */}
                     {/* {typeof CalendarIcon !== 'undefined' && <CalendarIcon className="h-3 w-3" />} */}
@@ -47,7 +47,7 @@ export const BlogPreview = ({ posts }: BlogPreviewProps) => {
                   </span>
                   <a
                     href={`${import.meta.env.BASE_URL}blog/${post.slug}`}
-                    className="font-medium text-accent-tech hover:text-accent-tech/80 transition-colors hover:underline"
+                    className="font-medium text-accent-tech-light hover:underline underline-offset-4 transition-colors"
                   >
                     Read more →
                   </a>
@@ -59,7 +59,7 @@ export const BlogPreview = ({ posts }: BlogPreviewProps) => {
         <div className="mt-8 text-center">
           <a
             href={`${import.meta.env.BASE_URL}blog`}
-            className="text-accent-tech hover:text-accent-tech/80 font-medium transition-colors"
+            className="text-accent-tech-light hover:underline underline-offset-4 font-medium transition-colors"
           >
             View All Blog Posts →
           </a>

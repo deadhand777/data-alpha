@@ -10,7 +10,10 @@ const blogCollection = defineCollection({
     updatedDate: z.date().optional(),
     heroImage: z.string().optional(),
     tags: z.array(z.string()).default([]),
-    draft: z.boolean().default(false)
+    draft: z.boolean().default(false),
+    // Optional: groups multi-part posts so the article template can offer the next part.
+    series: z.string().optional(),
+    seriesOrder: z.number().optional()
   })
 });
 

@@ -1,0 +1,53 @@
+---
+import Layout from '../components/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+const recent = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<Layout title="Page not found | Data Alpha" description="That page does not exist." path="/404/">
+  <section class="mx-auto max-w-2xl py-24 text-center">
+    <p class="text-sm font-semibold uppercase tracking-wider text-accent-tech-light">404</p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight text-text-primary sm:text-5xl">
+      That page does not exist
+    </h1>
+    <p class="mt-5 leading-relaxed text-text-secondary">
+      The link may be out of date, or the address may have a typo. The writing is all still here.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a
+        class="rounded-md bg-accent-tech-dark px-5 py-3 text-sm font-semibold text-text-primary shadow-resting transition-all duration-200 hover:-translate-y-px hover:bg-accent-tech-deep hover:shadow-lifted"
+        href={`${base}blog`}
+      >
+        Browse all writing
+      </a>
+      <a
+        class="rounded-md border border-accent-tech px-5 py-3 text-sm font-semibold text-accent-tech-light transition-colors duration-200 hover:border-accent-tech-light hover:bg-bg-surface-light hover:text-accent-tech-pale"
+        href={base}
+      >
+        Go home
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl pb-24" aria-labelledby="recent-heading">
+    <h2 id="recent-heading" class="mb-4 text-xs font-semibold uppercase tracking-wider text-text-muted">
+      Recent articles
+    </h2>
+    <ul class="grid gap-4 sm:grid-cols-3">
+      {recent.map((post) => (
+        <li>
+          <a
+            href={`${base}blog/${post.id}`}
+            class="block h-full rounded-lg border border-white/5 bg-bg-surface p-5 shadow-resting transition-all duration-300 hover:border-white/10 hover:shadow-lifted"
+          >
+            <p class="font-semibold tracking-tight text-text-primary">{post.data.title}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Layout>

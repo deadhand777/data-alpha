@@ -1,0 +1,407 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-29T00:00:00Z",
+  "title": "Design System: Data Alpha",
+  "extensions": {
+    "colorMeta": {
+      "ink-slate": {
+        "role": "neutral",
+        "displayName": "Ink Slate",
+        "canonical": "#0F172A",
+        "tonalRamp": [
+          "#020617",
+          "#0F172A",
+          "#1E293B",
+          "#334155",
+          "#475569",
+          "#64748B",
+          "#94A3B8",
+          "#CBD5E1"
+        ]
+      },
+      "panel-slate": {
+        "role": "neutral",
+        "displayName": "Panel Slate",
+        "canonical": "#1E293B",
+        "tonalRamp": [
+          "#020617",
+          "#0F172A",
+          "#1E293B",
+          "#334155",
+          "#475569",
+          "#64748B",
+          "#94A3B8",
+          "#E2E8F0"
+        ]
+      },
+      "panel-slate-raised": {
+        "role": "neutral",
+        "displayName": "Panel Slate Raised",
+        "canonical": "#334155",
+        "tonalRamp": [
+          "#0F172A",
+          "#1E293B",
+          "#334155",
+          "#475569",
+          "#64748B",
+          "#94A3B8",
+          "#CBD5E1",
+          "#F1F5F9"
+        ]
+      },
+      "signal-white": {
+        "role": "neutral",
+        "displayName": "Signal White",
+        "canonical": "#F8FAFC",
+        "tonalRamp": [
+          "#334155",
+          "#475569",
+          "#64748B",
+          "#94A3B8",
+          "#CBD5E1",
+          "#E2E8F0",
+          "#F1F5F9",
+          "#F8FAFC"
+        ]
+      },
+      "readout-grey": {
+        "role": "neutral",
+        "displayName": "Readout Grey",
+        "canonical": "#E2E8F0",
+        "tonalRamp": [
+          "#1E293B",
+          "#334155",
+          "#475569",
+          "#64748B",
+          "#94A3B8",
+          "#CBD5E1",
+          "#E2E8F0",
+          "#F8FAFC"
+        ]
+      },
+      "instrument-blue": {
+        "role": "primary",
+        "displayName": "Instrument Blue",
+        "canonical": "#3B82F6",
+        "tonalRamp": [
+          "#172554",
+          "#1E3A8A",
+          "#1D4ED8",
+          "#2563EB",
+          "#3B82F6",
+          "#60A5FA",
+          "#93C5FD",
+          "#DBEAFE"
+        ]
+      },
+      "instrument-blue-light": {
+        "role": "primary",
+        "displayName": "Instrument Blue Light",
+        "canonical": "#60A5FA",
+        "tonalRamp": [
+          "#172554",
+          "#1E3A8A",
+          "#1D4ED8",
+          "#2563EB",
+          "#3B82F6",
+          "#60A5FA",
+          "#93C5FD",
+          "#DBEAFE"
+        ]
+      },
+      "instrument-blue-deep": {
+        "role": "primary",
+        "displayName": "Instrument Blue Deep",
+        "canonical": "#2563EB",
+        "tonalRamp": [
+          "#172554",
+          "#1E3A8A",
+          "#1D4ED8",
+          "#2563EB",
+          "#3B82F6",
+          "#60A5FA",
+          "#93C5FD",
+          "#DBEAFE"
+        ]
+      },
+      "live-emerald": {
+        "role": "secondary",
+        "displayName": "Live Emerald",
+        "canonical": "#10B981",
+        "tonalRamp": [
+          "#022C22",
+          "#064E3B",
+          "#065F46",
+          "#047857",
+          "#059669",
+          "#10B981",
+          "#34D399",
+          "#A7F3D0"
+        ]
+      },
+      "live-emerald-light": {
+        "role": "secondary",
+        "displayName": "Live Emerald Light",
+        "canonical": "#34D399",
+        "tonalRamp": [
+          "#022C22",
+          "#064E3B",
+          "#065F46",
+          "#047857",
+          "#059669",
+          "#10B981",
+          "#34D399",
+          "#A7F3D0"
+        ]
+      },
+      "live-emerald-deep": {
+        "role": "secondary",
+        "displayName": "Live Emerald Deep",
+        "canonical": "#059669",
+        "tonalRamp": [
+          "#022C22",
+          "#064E3B",
+          "#065F46",
+          "#047857",
+          "#059669",
+          "#10B981",
+          "#34D399",
+          "#A7F3D0"
+        ]
+      },
+      "instrument-blue-pressed": {
+        "role": "primary",
+        "displayName": "Instrument Blue Pressed",
+        "canonical": "#1D4ED8",
+        "tonalRamp": [
+          "#172554",
+          "#1E3A8A",
+          "#1D4ED8",
+          "#2563EB",
+          "#3B82F6",
+          "#60A5FA",
+          "#93C5FD",
+          "#DBEAFE"
+        ]
+      },
+      "instrument-blue-pale": {
+        "role": "primary",
+        "displayName": "Instrument Blue Pale",
+        "canonical": "#93C5FD",
+        "tonalRamp": [
+          "#172554",
+          "#1E3A8A",
+          "#1D4ED8",
+          "#2563EB",
+          "#3B82F6",
+          "#60A5FA",
+          "#93C5FD",
+          "#DBEAFE"
+        ]
+      },
+      "meter-grey": {
+        "role": "neutral",
+        "displayName": "Meter Grey",
+        "canonical": "#94A3B8",
+        "tonalRamp": [
+          "#0F172A",
+          "#1E293B",
+          "#334155",
+          "#475569",
+          "#64748B",
+          "#94A3B8",
+          "#CBD5E1",
+          "#F1F5F9"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page-opening headline. One per page, never repeated."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings and index page titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles and sub-sections. Tight tracking is the one deliberate typographic gesture."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All running text, capped at a 768px measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Eyebrows, metadata, chips, nav items, dates. Often uppercase."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Inline code and Shiki dark-plus blocks."
+      }
+    },
+    "shadows": [
+      {
+        "name": "resting",
+        "value": "0 1px 3px rgba(0,0,0,0.4)",
+        "purpose": "Cards and panels at rest. Separates the panel edge from the chassis."
+      },
+      {
+        "name": "lifted",
+        "value": "0 10px 25px -5px rgba(0,0,0,0.5)",
+        "purpose": "Card hover, paired with the border brightening from 5% to 10% white."
+      },
+      {
+        "name": "overlay",
+        "value": "0 20px 40px -10px rgba(0,0,0,0.65)",
+        "purpose": "Menus, dialogs, anything floating over content."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state-fast",
+        "value": "200ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Navigation and text color state changes."
+      },
+      {
+        "name": "state-lift",
+        "value": "300ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Card hover: border, shadow, and translate together."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one navigable action on a view. Instrument Blue fill, lifts on hover.",
+      "html": "<button class=\"ds-btn-primary\">Read latest</button>",
+      "css": ".ds-btn-primary { background: #2563EB; color: #F8FAFC; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; transition: background 200ms cubic-bezier(0.4,0,0.2,1), transform 200ms cubic-bezier(0.4,0,0.2,1), box-shadow 200ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: #1D4ED8; transform: translateY(-1px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); } .ds-btn-primary:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(0); background: #1E3A8A; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The paired alternative action. Outlined, fills to the raised panel tone on hover.",
+      "html": "<button class=\"ds-btn-secondary\">View projects</button>",
+      "css": ".ds-btn-secondary { background: transparent; color: #3B82F6; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; padding: 12px 24px; border: 1px solid #3B82F6; border-radius: 6px; cursor: pointer; transition: background 200ms cubic-bezier(0.4,0,0.2,1), color 200ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-secondary:hover { background: #334155; color: #93C5FD; border-color: #60A5FA; } .ds-btn-secondary:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The recurring panel silhouette: blog previews, project tiles, grouped controls.",
+      "html": "<article class=\"ds-card\"><h3 class=\"ds-card-title\">Time-series foundation models in 2026</h3><p class=\"ds-card-body\">What actually held up when these models met production data and a compliance review.</p><div class=\"ds-card-meta\"><span>Aug 12, 2026</span><a class=\"ds-card-link\" href=\"#\">Read more &rarr;</a></div></article>",
+      "css": ".ds-card { background: rgba(30,41,59,0.9); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); transition: border-color 300ms cubic-bezier(0.4,0,0.2,1), box-shadow 300ms cubic-bezier(0.4,0,0.2,1); font-family: ui-sans-serif, system-ui, sans-serif; max-width: 360px; } .ds-card:hover { border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); } .ds-card-title { color: #F8FAFC; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.05em; line-height: 1.4; margin: 0 0 16px; } .ds-card-body { color: #E2E8F0; font-size: 0.875rem; line-height: 1.75; margin: 0 0 20px; } .ds-card-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: #94A3B8; } .ds-card-link { color: #60A5FA; font-weight: 500; text-decoration: none; } .ds-card-link:hover { text-decoration: underline; }"
+    },
+    {
+      "name": "Tag Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Topic and technology tags. Blue text marks them as navigable-adjacent metadata.",
+      "html": "<span class=\"ds-chip\">#time-series</span>",
+      "css": ".ds-chip { display: inline-block; background: #334155; color: #93C5FD; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; }"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "refersTo": "chip-status",
+      "description": "State only. Emerald text is the sole difference from a tag chip, and it carries the whole meaning.",
+      "html": "<span class=\"ds-chip-status\">Live</span>",
+      "css": ".ds-chip-status { display: inline-block; background: #334155; color: #34D399; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "The 80px chrome band. Wordmark with a live status dot, inline links above 768px, current page marked with a bottom border.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span class=\"ds-nav-name\">Data Alpha</span><span class=\"ds-nav-sub\">Portfolio</span><span class=\"ds-nav-dot\"></span></a><nav class=\"ds-nav-links\"><a class=\"ds-nav-link\" href=\"#\">Home</a><a class=\"ds-nav-link ds-nav-link-active\" href=\"#\" aria-current=\"page\">Blog</a><a class=\"ds-nav-link\" href=\"#\">Projects</a><a class=\"ds-nav-link\" href=\"#\">About</a></nav></header>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; height: 80px; padding: 0 32px; background: rgba(15,23,42,0.9); backdrop-filter: blur(4px); border-bottom: 1px solid rgba(255,255,255,0.05); font-family: ui-sans-serif, system-ui, sans-serif; } .ds-nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; } .ds-nav-name { color: #F8FAFC; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.05em; } .ds-nav-sub { color: #60A5FA; font-size: 1rem; } .ds-nav-dot { width: 6px; height: 6px; border-radius: 9999px; background: #10B981; } .ds-nav-links { display: flex; gap: 24px; } .ds-nav-link { color: #E2E8F0; font-size: 0.875rem; font-weight: 500; text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent; transition: color 200ms cubic-bezier(0.4,0,0.2,1), border-color 200ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-link:hover { color: #60A5FA; border-bottom-color: rgba(96,165,250,0.4); } .ds-nav-link-active { color: #60A5FA; border-bottom-color: #3B82F6; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": null,
+      "description": "Synthesized from the tokens: no form exists in the implementation yet. Inherits the panel silhouette; focus is a border shift plus a ring, never a glow.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@example.com\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; font-family: ui-sans-serif, system-ui, sans-serif; max-width: 320px; } .ds-field-label { color: #E2E8F0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; } .ds-input { background: #1E293B; color: #F8FAFC; font-size: 1rem; padding: 12px; border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; transition: border-color 200ms cubic-bezier(0.4,0,0.2,1); } .ds-input::placeholder { color: #64748B; } .ds-input:focus { outline: none; border-color: #3B82F6; box-shadow: 0 0 0 2px rgba(59,130,246,0.4); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Instrument Panel",
+    "overview": "This is a dark, monitored surface for someone who writes about systems that have to keep running. The subject is production AI in regulated financial services — evaluation, observability, governance — and the interface takes its manners from the same place: a dark chassis, precise readouts, and color that only appears when it means something. The panel is calm at rest. It responds when touched.\n\nDensity is moderate, not cramped. Content sits on layered slate surfaces inside a wide shell, with generous internal padding (32px in cards) so that dense technical writing never feels compressed. Type does the structural work; there is currently no display typeface, only the system sans stack, which keeps the panel neutral and fast but leaves the strongest identity lever unpulled.\n\nComponents are tactile and confident: solid fills, real hover lift, a defined shadow vocabulary. This is deliberately not a flat system — surfaces sit above the page and acknowledge being pressed. On dark backgrounds shadows read weakly, so hairline borders carry the edge and shadows carry the lift; neither works alone here.",
+    "keyCharacteristics": [
+      "Dark chassis (#0F172A) with layered slate surfaces (#1E293B, #334155)",
+      "Instrument-blue leads as identity and navigation color; emerald is reserved for state",
+      "Tactile components: solid fills, hover lift, structural shadows paired with hairline borders",
+      "Wide 1280px shell, 768px article measure",
+      "System sans stack throughout; no committed display face yet",
+      "Accent color is scarce by rule, not by accident"
+    ],
+    "rules": [
+      {
+        "name": "The Two Meanings Rule",
+        "body": "Blue means navigable. Emerald means live. A color never appears outside its meaning — an emerald button that navigates, or a blue dot indicating status, is a bug, not a variation.",
+        "section": "colors"
+      },
+      {
+        "name": "The Scarce Accent Rule",
+        "body": "Accent color covers no more than 10% of any screen. On a dark chassis, accent is the only thing that draws the eye; spend it on the one action that matters and let everything else be slate and grey.",
+        "section": "colors"
+      },
+      {
+        "name": "The Contrast Floor Rule",
+        "body": "Every text pair clears 4.5:1 and every non-text signal clears 3:1, measured, not estimated. Base Instrument Blue (#3B82F6) is 3.98:1 on Panel Slate and 3.52:1 under white text, so it is never a text color and never a button fill. Accent text steps up with the surface underneath it — #60A5FA on the chassis and panel, #93C5FD on the raised tone.",
+        "section": "colors"
+      },
+      {
+        "name": "The Measure Rule",
+        "body": "Running text never exceeds 768px. The 1280px shell is for grids and chrome, not for prose.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Display Rule",
+        "body": "A page gets one Display-weight headline. Everything below it steps down to Headline or Title.",
+        "section": "typography"
+      },
+      {
+        "name": "The Border-and-Shadow Rule",
+        "body": "On this chassis, a shadow without a hairline border is invisible and a border without a shadow is flat. Elevated surfaces always carry both.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put every reading surface behind the 768px measure, regardless of how wide the shell is.",
+      "Do pair every elevated surface with both a hairline border and a shadow (The Border-and-Shadow Rule).",
+      "Do use Instrument Blue for anything navigable and Live Emerald for anything stateful, and nothing else for either (The Two Meanings Rule).",
+      "Do step the accent up as the surface lightens: #60A5FA on chassis and panel, #93C5FD on the raised tone. Base #3B82F6 is structure only.",
+      "Do fill primary actions with #2563EB and press them to #1D4ED8; white on base blue is 3.52:1 and fails.",
+      "Do keep accent coverage under 10% of any screen.",
+      "Do define new colors as tokens in tailwind.config.cjs rather than reaching for a raw Tailwind palette class in a component."
+    ],
+    "donts": [
+      "Don't introduce indigo. It is the residue of the earlier light system, not part of this one.",
+      "Don't use a raw gray-* class where a slate token exists; bg-gray-50, text-gray-900, and bg-white belong to the superseded system.",
+      "Don't make emerald a link or blue a status indicator.",
+      "Don't round anything to rounded-full unless it represents state.",
+      "Don't let a card grid exceed three columns; the shell is wide, the content is not.",
+      "Don't treat the system sans stack as a settled decision — it is an unmade choice, and new work should not build defenses around it."
+    ]
+  }
+}

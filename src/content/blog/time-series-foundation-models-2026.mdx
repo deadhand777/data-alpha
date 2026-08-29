@@ -2,10 +2,12 @@
 title: "Time Series Foundation Models in 2026: Promise, Leakage, and the Zero-Shot Trap"
 description: "A critical guide to Chronos, TimesFM, Moirai, Lag-Llama, and TimeGPT, including benchmark leakage and practical adoption criteria."
 pubDate: 2026-07-25
-heroImage: "/data-alpha/images/blog/time-series-foundation-models-2026.svg"
+heroImage: "/images/blog/time-series-foundation-models-2026.svg"
 tags: ["time-series", "foundation-models", "forecasting", "data-leakage", "critical-analysis"]
 slug: "time-series-foundation-models-2026"
 draft: false
+series: "Forecasting in Production"
+seriesOrder: 2
 ---
 
 A time series foundation model promises to turn forecasting into an inference problem. Instead of training a new model for every product, sensor, or market, you pass a previously unseen history to a pretrained model and ask for the next values.
@@ -14,7 +16,6 @@ That is a meaningful change in workflow. It is not proof that the resulting fore
 
 Foundation models bring useful priors, broad pretraining, and a low-friction baseline to time series. They also bring a new evaluation problem: when a model has trained on billions of observations gathered from public archives, it can be difficult to prove that a supposedly unseen benchmark is actually unseen.
 
-![Diagram contrasting overlap between public pretraining data and benchmarks with a clean future holdout](/data-alpha/images/blog/time-series-foundation-models-2026.svg)
 
 This second article in the series examines both sides. Part 1, [No Single Model Wins](../time-series-no-single-winner/), showed how the winning method changed with the task. Foundation models do not repeal that result; they make the task boundary harder to inspect.
 
@@ -141,4 +142,4 @@ Use a TSFM to widen the candidate set, not to eliminate comparison. Run it besid
 
 If the foundation model wins under a clean information boundary, keep it. If it provides diverse errors, ensemble it. If a small model matches it, prefer the system you can understand and operate.
 
-Part 3, [Fix Your Backtest Before You Tune Your Forecasting Model](./time-series-backtesting-production/), shows how to build that comparison without letting future information leak into training, preprocessing, or model selection.
+Part 3, [Fix Your Backtest Before You Tune Your Forecasting Model](../time-series-backtesting-production/), shows how to build that comparison without letting future information leak into training, preprocessing, or model selection.
