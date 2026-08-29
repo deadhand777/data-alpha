@@ -1,9 +1,9 @@
 # Data Alpha Portfolio
 
 [![Deploy to GitHub Pages](https://github.com/deadhand777/data-alpha/actions/workflows/deploy.yml/badge.svg)](https://github.com/deadhand777/data-alpha/actions/workflows/deploy.yml)
-![Astro](https://img.shields.io/badge/Astro-4-FF5D01?logo=astro&logoColor=white)
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-7-FF5D01?logo=astro&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
 ![MDX](https://img.shields.io/badge/MDX-1C1E21?logo=mdx&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
@@ -19,16 +19,16 @@ A personal portfolio website showcasing expertise in data, AI, and finance throu
 - Responsive design with Tailwind CSS
 - SEO metadata and Schema.org structured data
 - Syntax highlighting with Shiki's `dark-plus` theme
-- Static site generation with Astro 4
+- Static site generation with Astro 7
 - Automated GitHub Pages deployment with GitHub Actions
 - TypeScript for type safety
 
 ## Tech Stack
 
-- **Framework**: [Astro 4](https://astro.build) with static output
-- **UI**: [React 18](https://react.dev) through `@astrojs/react`
-- **Styling**: [Tailwind CSS](https://tailwindcss.com) through `@astrojs/tailwind`
-- **Language**: [TypeScript 5.9](https://www.typescriptlang.org)
+- **Framework**: [Astro 7](https://astro.build) with static output
+- **UI**: [React 19](https://react.dev) through `@astrojs/react`
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com) through `@tailwindcss/vite`
+- **Language**: [TypeScript 6](https://www.typescriptlang.org)
 - **Content**: [MDX](https://mdxjs.com) through `@astrojs/mdx` and Astro Content Collections
 - **Syntax highlighting**: [Shiki](https://shiki.style) using the `dark-plus` theme
 - **Build tooling**: [Vite](https://vite.dev) (provided by Astro) and npm

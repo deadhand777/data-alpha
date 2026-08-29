@@ -4,11 +4,11 @@ Welcome to the Data Alpha Portfolio documentation.
 
 ## Overview
 
-Data Alpha is a statically generated portfolio for writing about data, AI, and finance. It uses Astro 4, React 18, TypeScript, Tailwind CSS, MDX, and Astro Content Collections.
+Data Alpha is a statically generated portfolio for writing about data, AI, and finance. It uses Astro 7, React 19, TypeScript 6, Tailwind CSS 4, MDX, and Astro Content Collections.
 
 ## Prerequisites
 
-- Node.js 20 LTS and npm 9.6.5 or later for the portfolio
+- Node.js 24 and npm 11 or later for the portfolio
 - Python 3.14 and [uv](https://docs.astral.sh/uv/) for the documentation site
 
 ## Run Locally

@@ -15,9 +15,9 @@ Following these principles helps the assistant act effectively:
 
 Personal portfolio website for data/AI/finance blogging built with:
 
-- **Astro 4** - Static site builder
-- **React 18** - UI components
-- **Tailwind CSS 4** - Styling via @astrojs/tailwind
+- **Astro 7** - Static site builder
+- **React 19** - UI components
+- **Tailwind CSS 4** - Styling via @tailwindcss/vite
 - **MDX** - Markdown with JSX support via @astrojs/mdx
 - **TypeScript** - Type safety
 - **Vite** - Build tooling (via Astro)
