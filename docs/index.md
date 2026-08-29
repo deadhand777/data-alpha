@@ -2,7 +2,7 @@
 
 Documentation for developing, customizing, and contributing to the Data Alpha Portfolio.
 
-Data Alpha is a statically generated portfolio for writing about data, AI, and finance. It uses Astro 4, React 18, TypeScript, Tailwind CSS, MDX, and Astro Content Collections.
+Data Alpha is a statically generated portfolio for writing about data, AI, and finance. It uses Astro 7, React 19, TypeScript 6, Tailwind CSS 4, MDX, and Astro Content Collections.
 
 ## Start Here
 
