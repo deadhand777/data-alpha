@@ -4,21 +4,18 @@ import { HeroSection } from '../components/HeroSection.tsx';
 import { BlogPreview } from '../components/BlogPreview.tsx';
 import { ProjectGrid } from '../components/ProjectGrid.tsx';
 import { getCollection } from 'astro:content';
+import { getLatestPosts } from '../lib/publication-catalog';
 
-const blogPosts = await getCollection('blog', ({ data }) => !data.draft);
 const projects = await getCollection('projects');
 
 // Sort blog posts by date (newest first) and map to shape expected by BlogPreview
-const sortedBlogPosts = blogPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3) // Show latest 3 posts
-  .map(post => ({
-    title: post.data.title,
-    description: post.data.description,
-    pubDate: post.data.pubDate,
-    tags: post.data.tags,
-    slug: post.id
-  }));
+const sortedBlogPosts = (await getLatestPosts(3)).map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  pubDate: post.data.pubDate,
+  tags: post.data.tags,
+  slug: post.id
+}));
 
 // Sort projects by date (newest first) and map to shape expected by ProjectGrid
 const sortedProjects = projects

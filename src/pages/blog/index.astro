@@ -1,12 +1,8 @@
 ---
 import Layout from '../../components/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '../../lib/publication-catalog';
 
-const blogPosts = await getCollection('blog', ({ data }) => !data.draft);
-
-// Sort by date (newest first)
-const sortedPosts = blogPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const sortedPosts = await getPublishedPosts();
 ---
 
 <Layout
