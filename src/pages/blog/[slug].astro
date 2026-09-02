@@ -2,11 +2,15 @@
 import Layout from '../../components/Layout.astro';
 import ArticleRail from '../../components/ArticleRail.astro';
 import ArticleFooter from '../../components/ArticleFooter.astro';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import {
+  getArticleContext,
+  getPublishedPosts
+} from '../../lib/publication-catalog';
 
 export async function getStaticPaths() {
-  const blogPosts = await getCollection('blog', ({ data }) => !data.draft);
-  return blogPosts.map(post => ({
+  const blogPosts = await getPublishedPosts();
+  return blogPosts.map((post) => ({
     params: { slug: post.id },
     props: { post }
   }));
@@ -15,24 +19,8 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 
-const all = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-// Next part of the same series, else the closest post by shared tags.
-const series = post.data.series
-  ? all.filter(p => p.data.series === post.data.series)
-       .sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0))
-  : [];
-const seriesIndex = series.findIndex(p => p.id === post.id);
-const nextInSeries = seriesIndex >= 0 ? series[seriesIndex + 1] : undefined;
-
-const related = all
-  .filter(p => p.id !== post.id && p.id !== nextInSeries?.id)
-  .map(p => ({ post: p, shared: p.data.tags.filter(t => post.data.tags.includes(t)).length }))
-  .filter(p => p.shared > 0)
-  .sort((a, b) => b.shared - a.shared || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf())
-  .slice(0, 2)
-  .map(p => p.post);
+const { series, seriesIndex, nextInSeries, related } =
+  await getArticleContext(post, 2);
 
 const words = post.body?.split(/\s+/).length ?? 0;
 const readingMinutes = Math.max(1, Math.round(words / 220));
