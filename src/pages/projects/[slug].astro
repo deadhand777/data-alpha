@@ -1,6 +1,7 @@
 ---
 import Layout from '../../components/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { formatProjectDate } from '../../lib/project-date';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -28,10 +29,10 @@ const { Content } = await render(project);
     <header class="mb-8">
       <h1 class="text-4xl font-bold tracking-tight text-text-primary mb-4 text-balance">{project.data.title}</h1>
       <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6 text-sm text-text-muted">
-        <span>{new Date(project.data.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        <span>{formatProjectDate(project.data.pubDate, project.data.period, 'long')}</span>
         {project.data.updatedDate && (
           <span class="mx-1">•</span>
-          <span>{new Date(project.data.updatedDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          <span>Updated {formatProjectDate(project.data.updatedDate, undefined, 'long')}</span>
         )}
         {project.data.tags.map((tag) => (
           <span class="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2.5 py-0.5 rounded">

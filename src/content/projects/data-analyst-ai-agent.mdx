@@ -1,0 +1,29 @@
+---
+title: "Data Analyst AI Agent"
+description: "A production analytics agent that turns plain-language questions into insights grounded in an internal enterprise data catalog."
+pubDate: 2026-08-15
+tags: ["ai-agents", "data-analytics", "self-service-bi", "production"]
+techStack: ["AWS", "Bedrock AgentCore", "Strands Agents", "Python 3.13", "DataHub", "CDK"]
+---
+
+## Context
+
+Business teams often depend on a limited pool of analysts to translate questions into data work. This production agent provides a self-service path for routine analysis while grounding its responses in the organization's governed data universe.
+
+## What It Does
+
+Users ask questions in plain language through a dashboard. An autonomous analyst agent interprets the request and produces an evidence-grounded response using metadata and context from an internal DataHub catalog.
+
+The dashboard gives teams direct access to recurring analysis so decisions do not have to wait in the same queue as higher-complexity analyst work.
+
+## Architecture
+
+- Amazon Bedrock AgentCore provides the production agent runtime
+- Strands Agents structures the analytical workflow
+- Python 3.13 implements the agent and integration logic
+- DataHub supplies the governed internal data context
+- AWS CDK defines the deployment infrastructure
+
+## Boundaries
+
+The underlying datasets, business definitions, and internal integrations are proprietary. This case study describes the platform pattern without exposing organization-specific data or access paths.

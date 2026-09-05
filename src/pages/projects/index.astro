@@ -1,6 +1,7 @@
 ---
 import Layout from '../../components/Layout.astro';
 import { getCollection } from 'astro:content';
+import { formatProjectDate } from '../../lib/project-date';
 
 const projects = await getCollection('projects');
 
@@ -17,8 +18,9 @@ const sortedProjects = projects
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <h1 class="text-3xl font-bold text-text-primary mb-8">Projects</h1>
     <p class="max-w-2xl leading-relaxed text-text-secondary mb-8">
-      Showcase of my work in data analysis, artificial intelligence,
-      and financial modeling through open-source projects and case studies.
+      Selected work across production AI agents, data platforms, and open-source
+      engineering for data, AI, and regulated financial services. Additional
+      implementation details are available upon request.
     </p>
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -66,7 +68,7 @@ const sortedProjects = projects
               )}
             </div>
             <div class="flex items-center justify-between text-xs text-text-muted mt-4">
-              <span>{new Date(project.data.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              <span>{formatProjectDate(project.data.pubDate, project.data.period)}</span>
               <a href={`${import.meta.env.BASE_URL}projects/${project.id}`} class="font-medium text-accent-tech-light hover:underline underline-offset-4 transition-colors">
                 View project →
               </a>

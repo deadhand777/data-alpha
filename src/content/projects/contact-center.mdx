@@ -1,88 +1,44 @@
 ---
-title: "contact-center"
-description: "An agentic contact-center proof of concept for a regulated German bank—autonomous assistant answers product questions with citations, looks up authenticated account balances, and escalates to human agents inside EU data residency under BaFin/DORA constraints."
+title: "Agentic Contact Center"
+description: "A regulated-banking proof of concept for cited product answers, authenticated balance lookups, and deterministic escalation from AI to a human queue."
 pubDate: 2026-08-03
 updatedDate: 2026-08-03
 heroImage: "/images/projects/contact-center.jpg"
-tags: ["ai", "aws", "bedrock", "cdk", "agentcore"]
+tags: ["ai-agents", "contact-center", "regulated-banking", "open-source"]
 demoUrl: "https://github.com/deadhand777/contact-center#readme"
 sourceUrl: "https://github.com/deadhand777/contact-center"
-techStack: ["AWS Bedrock AgentCore", "Amazon Connect", "AWS CDK", "Python"]
+techStack: ["Bedrock AgentCore", "Nova 2 Lite", "Strands Agents", "Amazon Connect", "S3 Vectors", "MCP", "CDK"]
 ---
 
-# contact-center
+## Context
 
-An agentic contact-center proof of concept for a regulated German bank, enabling autonomous customer support with citations, secure balance lookup, and human escalation under BaFin/DORA compliance in AWS eu-central-1.
+Customer-service automation in regulated banking has to do more than produce plausible answers. It must ground product information in evidence, bind access to the authenticated customer, constrain disallowed behavior, and hand control to a human through a predictable path.
 
-## Overview
+## What It Does
 
-This project transforms traditional human-heavy customer service into an autonomous assistant that can:
-- Answer product questions with citations from verified sources
-- Look up authenticated account balances securely
-- Escalate to human agents when necessary, all while maintaining compliance with banking regulations
+A supervisor agent on Amazon Bedrock AgentCore serves an Amazon Connect chat experience. It routes each request through one of three explicit paths:
 
-## Features
+1. Product questions retrieve cited answers from an S3 Vectors knowledge base.
+2. Account-balance requests use server-side identity binding and an MCP gateway for authenticated lookup.
+3. Requests that require a person follow deterministic escalation into a human queue.
 
-- **Autonomous Agent**: AI-powered assistant that handles customer inquiries independently
-- **Citation System**: Provides verifiable sources for all information given to customers
-- **Secure Balance Lookup**: Authenticated access to account information with proper authorization
-- **Human Escalation**: Seamless transfer to human agents for complex situations
-- **Regulatory Compliance**: Built to meet BaFin/DORA requirements for German financial institutions
-- **EU Data Residency**: All data processing and storage occurs within EU boundaries
-- **Golden Test Set**: Evaluated against a comprehensive test suite for reliability
+## Architecture
 
-## Technical Architecture
+- Nova 2 Lite provides the foundation model
+- Strands Agents structures the supervisor workflow
+- Amazon Connect and Lex V2 provide the customer-service channel
+- S3 Vectors stores the product knowledge base
+- An MCP gateway exposes the authenticated balance capability
+- AWS CDK defines the infrastructure in `eu-central-1`
 
-### Core Components
+## Guardrails and Evaluation
 
-- **AWS Bedrock AgentCore**: Orchestrates the autonomous agent behavior and decision-making
-- **Amazon Connect**: Provides the telephony infrastructure for customer interactions
-- **AWS CDK**: Infrastructure as Code for reproducible deployment
-- **Python**: Primary language for business logic and integrations
+A Bedrock Guardrail anonymizes personally identifiable information and denies investment advice. A deterministic evaluation harness exercises a golden set of 14 questions; the current implementation scores 14 out of 14 on that set.
 
-### Data Flow
+This evaluation result is evidence for the covered scenarios, not a claim of unrestricted production readiness.
 
-1. Customer initiates contact via phone or chat
-2. AWS Bedrock AgentCore processes the inquiry and determines intent
-3. For product questions: searches knowledge base and provides answers with citations
-4. For account inquiries: authenticates user and retrieves balance information securely
-5. For complex issues: initiates seamless transfer to human agent with context preservation
-6. All interactions logged and monitored for compliance and quality assurance
+## Boundaries
 
-### Security & Compliance
+This repository is a proof of concept for regulated German banking under BaFin and DORA constraints. Production use would require organization-specific security review, operational controls, scalability work, and regulatory approval.
 
-- Deployed in AWS eu-central-1 (Frankfurt) region for EU data residency
-- End-to-end encryption for data in transit and at rest
-- IAM roles and policies following least privilege principle
-- Audit logging for all agent actions and data access
-- Regular security assessments and penetration testing
-
-## Key Learnings
-
-Building this proof of concept highlighted several important aspects of regulated AI systems:
-
-1. **Balancing Automation with Compliance**: Ensuring AI agents operate within strict regulatory boundaries
-2. **Secure Authentication in AI Systems**: Implementing robust identity verification for financial data access
-3. **Escalation Protocols**: Designing smooth transitions between AI and human agents
-4. **Observability in AI Systems**: Monitoring agent behavior for both performance and compliance
-5. **Infrastructure as Code**: Using CDK for reproducible, auditable infrastructure deployments
-
-## Future Enhancements
-
-- Multi-language support for diverse customer bases
-- Advanced sentiment analysis for customer satisfaction monitoring
-- Integration with additional banking systems (loan applications, transaction history)
-- Machine learning model continuous improvement pipeline
-- Enhanced analytics dashboard for supervisor insights
-- Mobile app integration for agent accessibility
-
-## Getting Started
-
-To explore this project further:
-
-1. Review the source code on GitHub
-2. Examine the infrastructure as code definitions
-3. Review the agent configuration and prompt engineering
-4. Check the test suites for validation approaches
-
-*Note: This is a proof of concept implementation. For production use, additional security measures, scalability considerations, and regulatory approvals would be required.*
+Review the [source code](https://github.com/deadhand777/contact-center) and its [README](https://github.com/deadhand777/contact-center#readme) for the implementation and deployment instructions.

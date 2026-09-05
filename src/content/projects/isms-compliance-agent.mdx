@@ -1,0 +1,29 @@
+---
+title: "ISMS & Compliance Agent"
+description: "A production agent that answers information-security and regulatory questions with cited evidence from a central ISMS knowledge base."
+pubDate: 2026-07-14
+tags: ["ai-agents", "information-security", "compliance", "production"]
+techStack: ["AWS", "Bedrock AgentCore", "Strands Agents", "Claude Haiku 4.5", "CDK"]
+---
+
+## Context
+
+Information-security and regulatory questions depend on current, traceable source material. This production system gives internal teams a conversational interface to a central ISMS knowledge base while keeping each answer grounded in cited evidence.
+
+## What It Does
+
+The containerized agent runs on Amazon Bedrock AgentCore and uses Strands Agents with Claude Haiku 4.5. Cross-region inference is configured through `eu-central-1` to support EU data-residency requirements.
+
+Rather than maintaining an embedding pipeline, the retrieval flow follows a vectorless manifest-then-fetch pattern. The agent identifies relevant source documents from a manifest and fetches the authoritative material needed for its answer.
+
+## Architecture
+
+- Amazon Bedrock AgentCore hosts the agent runtime
+- Strands Agents coordinates the agent workflow
+- AgentCore Memory maintains continuity between turns
+- A vectorless retrieval layer accesses the central ISMS knowledge base
+- AWS CDK deploys the system as a single infrastructure stack
+
+## Boundaries
+
+The project is an internal production system. Its public case study therefore focuses on the transferable architecture and operating constraints rather than organization-specific controls, documents, or implementation details.
