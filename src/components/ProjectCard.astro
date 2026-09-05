@@ -1,0 +1,95 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatProjectDate } from '../lib/project-date';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Heading level for the card title, so the surrounding page keeps a valid outline. */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { project, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+const base = import.meta.env.BASE_URL;
+const { title, description, tags, techStack, demoUrl, sourceUrl, pubDate, period } = project.data;
+const hasLinks = Boolean(demoUrl || sourceUrl);
+
+// Four per group keeps each chip row inside working memory; the remainder is counted.
+const CHIP_LIMIT = 4;
+const shownTech = techStack.slice(0, CHIP_LIMIT);
+const hiddenTech = techStack.length - shownTech.length;
+---
+
+<article
+  class="group relative flex h-full flex-col rounded-lg border border-white/5 bg-bg-surface p-8 shadow-resting transition-all duration-300 hover:border-white/10 hover:shadow-lifted focus-within:border-accent-tech/40"
+>
+  <Heading class="text-xl font-semibold tracking-tight text-text-primary">
+    <a
+      href={`${base}projects/${project.id}`}
+      class="text-accent-tech-light transition-colors after:absolute after:inset-0 after:rounded-lg after:content-[''] group-hover:text-accent-tech-pale"
+    >
+      {title}
+    </a>
+  </Heading>
+
+  <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-text-secondary">{description}</p>
+
+  {techStack.length > 0 && (
+    <ul class="mt-4 flex flex-wrap gap-2" aria-label="Technology stack">
+      {shownTech.map((tech) => (
+        <li class="rounded bg-bg-surface-light px-2 py-0.5 text-xs font-medium tracking-wide text-accent-tech-pale">
+          {tech}
+        </li>
+      ))}
+      {hiddenTech > 0 && (
+        <li class="px-1 py-0.5 text-xs font-medium tracking-wide text-text-muted">
+          +{hiddenTech} more
+        </li>
+      )}
+    </ul>
+  )}
+
+  {tags.length > 0 && (
+    <ul class="mt-2 flex flex-wrap gap-2" aria-label="Topics">
+      {tags.map((tag) => (
+        <li class="rounded bg-bg-surface-light px-2 py-0.5 text-xs font-medium tracking-wide text-accent-tech-pale">
+          #{tag}
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <div class="mt-auto pt-6">
+    {hasLinks && (
+      <div class="relative z-10 mb-4 flex flex-wrap gap-3">
+        {demoUrl && (
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block rounded-md bg-accent-tech-dark px-4 py-2 text-sm font-medium text-text-primary transition-colors duration-200 hover:bg-accent-tech-deep"
+          >
+            Demo
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        )}
+        {sourceUrl && (
+          <a
+            href={sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block rounded-md border border-accent-tech px-4 py-2 text-sm font-medium text-accent-tech-light transition-colors duration-200 hover:border-accent-tech-light hover:bg-bg-surface-light hover:text-accent-tech-pale"
+          >
+            Source
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        )}
+      </div>
+    )}
+
+    <div class="flex items-center justify-between text-xs text-text-muted">
+      <span>{formatProjectDate(pubDate, period)}</span>
+      <span class="font-medium text-accent-tech-light" aria-hidden="true">View project &rarr;</span>
+    </div>
+  </div>
+</article>

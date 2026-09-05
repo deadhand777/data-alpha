@@ -1,13 +1,14 @@
 ---
 import Layout from '../../components/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
-import { formatProjectDate } from '../../lib/project-date';
 
 const projects = await getCollection('projects');
 
-// Sort by date (newest first)
-const sortedProjects = projects
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+// Newest first; copy before sorting so the collection array stays untouched for other pages.
+const sortedProjects = [...projects].sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 ---
 
 <Layout
@@ -15,71 +16,27 @@ const sortedProjects = projects
   description="Systems built for production: agent platforms, data foundations, and applied machine learning in regulated financial services."
   path="/projects/"
 >
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-3xl font-bold text-text-primary mb-8">Projects</h1>
-    <p class="max-w-2xl leading-relaxed text-text-secondary mb-8">
-      Selected work on production AI agents, data platforms, and open-source
-      engineering, most of it for regulated financial services. I can share more
-      implementation detail on request.
+  <section class="py-12">
+    <h1 class="text-4xl font-bold tracking-tight text-text-primary text-balance">Projects</h1>
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-text-secondary text-pretty">
+      Selected work on production AI agents, data platforms, and open-source engineering, most of it
+      for regulated financial services. <a
+        href={`${import.meta.env.BASE_URL}contact`}
+        class="text-accent-tech-light underline decoration-accent-tech/40 underline-offset-4 transition-colors hover:decoration-accent-tech-light"
+        >Ask me</a
+      > for more implementation detail than these pages can carry.
     </p>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {sortedProjects.map((project) => (
-        <article class="bg-bg-surface border border-white/5 rounded-lg overflow-hidden shadow-resting hover:border-white/10 hover:shadow-lifted transition-all duration-300">
-          <div class="p-8">
-            <h2 class="text-xl font-semibold tracking-tight text-text-primary mb-3">{project.data.title}</h2>
-            <p class="text-sm leading-relaxed text-text-secondary mb-4 line-clamp-3">{project.data.description}</p>
-            {project.data.techStack.length > 0 && (
-              <div class="flex flex-wrap gap-2 mb-4 text-xs">
-                {project.data.techStack.map((tech) => (
-                  <span class="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2.5 py-0.5 rounded">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            )}
-            <div class="flex flex-wrap gap-2 mb-4 text-xs">
-              {project.data.tags.map((tag) => (
-                <span class="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2.5 py-0.5 rounded">
-                  #{tag}
-                </span>
-              ))}
-            </div>
-            <div class="mt-4 space-x-3">
-              {project.data.demoUrl && (
-                <a
-                  href={project.data.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block bg-accent-tech-dark hover:bg-accent-tech-deep text-text-primary text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200"
-                >
-                  Demo
-                </a>
-              )}
-              {project.data.sourceUrl && (
-                <a
-                  href={project.data.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block border border-accent-tech text-accent-tech-light hover:text-accent-tech-pale hover:bg-bg-surface-light text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200"
-                >
-                  Source
-                </a>
-              )}
-            </div>
-            <div class="flex items-center justify-between text-xs text-text-muted mt-4">
-              <span>{formatProjectDate(project.data.pubDate, project.data.period)}</span>
-              <a href={`${import.meta.env.BASE_URL}projects/${project.id}`} class="font-medium text-accent-tech-light hover:underline underline-offset-4 transition-colors">
-                View project →
-              </a>
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-
-    {sortedProjects.length === 0 && (
-      <p class="text-center text-text-muted py-8">No projects published yet.</p>
+    {sortedProjects.length > 0 ? (
+      <ul class="mt-12 grid list-none gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {sortedProjects.map((project) => (
+          <li class="h-full">
+            <ProjectCard project={project} headingLevel="h2" />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="mt-12 text-text-muted">No projects published yet.</p>
     )}
   </section>
 </Layout>

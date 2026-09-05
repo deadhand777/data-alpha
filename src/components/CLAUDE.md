@@ -2,8 +2,8 @@
 
 `src/components/` holds both Astro and React components, flat (no subdirs):
 
-- **Astro (`.astro`)**: `Layout.astro` (base layout — html/head/body, Header+Footer, SchemaOrg, imports `global.css`), `Header.astro`, `Footer.astro`, `SEO.astro`, `SchemaOrg.astro`, `AboutSection.astro`, `SkillsSection.astro`, `ExperienceSection.astro`
-- **React (`.tsx`)**: `Button.tsx`, `Card.tsx`, `HeroSection.tsx`, `BlogPreview.tsx`, `ProjectGrid.tsx`
+- **Astro (`.astro`)**: `Layout.astro` (base layout — html/head/body, Header+Footer, SchemaOrg, imports `global.css`), `Header.astro`, `Footer.astro`, `SEO.astro`, `SchemaOrg.astro`, `AboutSection.astro`, `SkillsSection.astro`, `ExperienceSection.astro`, `ProjectCard.astro`, `ArticleFooter.astro`, `ArticleRail.astro`
+- **React (`.tsx`)**: `Button.tsx`, `Card.tsx`, `HeroSection.tsx`, `BlogPreview.tsx`
 
 Static/structural pieces are Astro; anything needing client interactivity or reused as a typed React unit is `.tsx`.
 

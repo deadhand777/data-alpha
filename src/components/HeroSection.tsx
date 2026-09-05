@@ -7,8 +7,8 @@ export const HeroSection = () => {
             Data, AI & Finance Insights
           </h1>
           <p className="text-xl leading-relaxed text-text-secondary max-w-2xl mx-auto">
-            Exploring the intersection of data science, artificial intelligence,
-            and financial analysis through practical tutorials and project showcases.
+            Practical tutorials and project write-ups on data science, artificial
+            intelligence, and financial analysis.
           </p>
           <div className="mt-8 flex justify-center space-x-4">
             <a

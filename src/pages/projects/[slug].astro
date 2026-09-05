@@ -1,127 +1,133 @@
 ---
 import Layout from '../../components/Layout.astro';
+import ArticleFooter from '../../components/ArticleFooter.astro';
 import { getCollection, render } from 'astro:content';
 import { formatProjectDate } from '../../lib/project-date';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  return projects.map(project => ({
+  const ordered = [...projects].sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+
+  return ordered.map((project, index) => ({
     params: { slug: project.id },
-    props: { project }
+    props: {
+      project,
+      // The next-older write-up, wrapping to the newest, so no project page is a dead end.
+      next: ordered.length > 1 ? (ordered[index + 1] ?? ordered[0]) : undefined,
+      ordered
+    }
   }));
 }
 
-const { project } = Astro.props;
+const { project, next, ordered } = Astro.props;
 
-if (!project) {
-  return Astro.redirect(`${import.meta.env.BASE_URL}projects`);
-}
-
+const related = ordered
+  .filter((entry) => entry.id !== project.id && entry.id !== next?.id)
+  .slice(0, 2);
 const { Content } = await render(project);
+const base = import.meta.env.BASE_URL;
+
+const { title, description, tags, techStack, demoUrl, sourceUrl, pubDate, updatedDate, period } =
+  project.data;
+
+// `updatedDate` only earns a line when it actually differs from publication.
+const showUpdated = updatedDate && updatedDate.valueOf() !== pubDate.valueOf();
 ---
 
 <Layout
-  title={`${project.data.title} | Data Alpha`}
-  description={project.data.description}
+  title={`${title} | Data Alpha`}
+  description={description}
   path={`/projects/${project.id}/`}
+  article={{
+    headline: title,
+    datePublished: pubDate,
+    dateModified: updatedDate,
+    tags,
+    type: 'CreativeWork'
+  }}
 >
-  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold tracking-tight text-text-primary mb-4 text-balance">{project.data.title}</h1>
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6 text-sm text-text-muted">
-        <span>{formatProjectDate(project.data.pubDate, project.data.period, 'long')}</span>
-        {project.data.updatedDate && (
-          <span class="mx-1">•</span>
-          <span>Updated {formatProjectDate(project.data.updatedDate, undefined, 'long')}</span>
+  <article class="max-w-3xl mx-auto py-12">
+    <header class="mb-10">
+      <a
+        href={`${base}projects`}
+        class="text-sm font-medium text-accent-tech-light transition-colors hover:underline underline-offset-4"
+      >
+        &larr; All projects
+      </a>
+
+      <h1 class="mt-5 text-4xl font-bold tracking-tight text-text-primary sm:text-5xl text-balance">{title}</h1>
+
+      <p class="mt-5 text-lg leading-relaxed text-text-secondary text-pretty">{description}</p>
+
+      <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-text-muted">
+        {period ? (
+          <span>{period}</span>
+        ) : (
+          <time datetime={pubDate.toISOString()}>{formatProjectDate(pubDate, undefined, 'long')}</time>
         )}
-        {project.data.tags.map((tag) => (
-          <span class="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2.5 py-0.5 rounded">
-            #{tag}
-          </span>
-        ))}
+        {showUpdated && (
+          <>
+            <span aria-hidden="true" class="text-bg-surface-light">/</span>
+            <span class="text-accent-success-light">
+              Updated {formatProjectDate(updatedDate, undefined, 'long')}
+            </span>
+          </>
+        )}
+        {demoUrl && (
+          <>
+            <span aria-hidden="true" class="text-bg-surface-light">/</span>
+            <a
+              href={demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-medium text-accent-tech-light transition-colors hover:underline underline-offset-4"
+            >
+              Live demo<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </>
+        )}
+        {sourceUrl && (
+          <>
+            <span aria-hidden="true" class="text-bg-surface-light">/</span>
+            <a
+              href={sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-medium text-accent-tech-light transition-colors hover:underline underline-offset-4"
+            >
+              Source code<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </>
+        )}
       </div>
+
+      {techStack.length > 0 && (
+        <ul class="mt-6 flex flex-wrap gap-2" aria-label="Technology stack">
+          {techStack.map((tech) => (
+            <li class="rounded bg-bg-surface-light px-2 py-0.5 text-xs font-medium tracking-wide text-accent-tech-pale">
+              {tech}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {tags.length > 0 && (
+        <ul class="mt-2 flex flex-wrap gap-2" aria-label="Topics">
+          {tags.map((tag) => (
+            <li class="rounded bg-bg-surface-light px-2 py-0.5 text-xs font-medium tracking-wide text-accent-tech-pale">
+              #{tag}
+            </li>
+          ))}
+        </ul>
+      )}
     </header>
 
-    <div class="space-y-8">
-      {/* Project description */}
-      <section>
-        <h2 class="text-2xl font-bold text-text-primary mb-4">Overview</h2>
-        <p class="leading-relaxed text-text-secondary mb-6">{project.data.description}</p>
-      </section>
-
-      {/* Technical details */}
-      {project.data.techStack.length > 0 && (
-        <section>
-          <h2 class="text-2xl font-bold text-text-primary mb-4">Technical Stack</h2>
-          <div class="flex flex-wrap gap-4 mb-6">
-            {project.data.techStack.map((tech) => (
-              <div class="flex items-center gap-2 bg-bg-surface border border-white/5 px-4 py-2 rounded-md text-sm font-medium text-text-secondary">
-                <span class="block w-1.5 h-1.5 bg-accent-tech rounded-full" aria-hidden="true"></span>
-                <span>{tech}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Tags */}
-      {project.data.tags.length > 0 && (
-        <section>
-          <h2 class="text-2xl font-bold text-text-primary mb-4">Tags</h2>
-          <div class="flex flex-wrap gap-2 mb-6">
-            {project.data.tags.map((tag) => (
-              <span class="bg-bg-surface-light text-accent-tech-pale text-xs font-medium tracking-wide px-2.5 py-0.5 rounded">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Links */}
-      {((project.data.demoUrl || project.data.sourceUrl) && (
-        <section>
-          <h2 class="text-2xl font-bold text-text-primary mb-4">Links</h2>
-          <div class="space-y-4">
-            {project.data.demoUrl && (
-              <div class="flex items-center gap-3">
-                <span class="block w-1.5 h-1.5 bg-accent-tech rounded-full" aria-hidden="true"></span>
-                <a
-                  href={project.data.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-accent-tech-light hover:underline underline-offset-4 font-medium transition-colors"
-                >
-                  Live Demo
-                </a>
-              </div>
-            )}
-            {project.data.sourceUrl && (
-              <div class="flex items-center gap-3">
-                <span class="block w-1.5 h-1.5 bg-bg-surface-light rounded-full" aria-hidden="true"></span>
-                <a
-                  href={project.data.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-accent-tech-light hover:underline underline-offset-4 font-medium transition-colors"
-                >
-                  Source Code
-                </a>
-              </div>
-            )}
-          </div>
-        </section>
-      ))}
-
-      {/* Project content (if any) */}
-      {project.body && (
-        <section>
-          <h2 class="text-2xl font-bold text-text-primary mb-4">Details</h2>
-          <div class="prose prose-lg prose-invert prose-panel max-w-none">
-            <Content />
-          </div>
-        </section>
-      )}
+    <div class="prose prose-lg prose-invert prose-panel max-w-none">
+      <Content />
     </div>
+
+    <ArticleFooter next={next} related={related} basePath="projects" nextLabel="Next project" />
   </article>
 </Layout>
