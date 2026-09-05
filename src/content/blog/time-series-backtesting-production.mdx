@@ -127,7 +127,7 @@ An interval wide enough to contain every outcome has perfect coverage and little
 
 Classical conformal prediction relies on exchangeability, an assumption temporal dependence can violate. Time-series adaptations estimate residual behavior over chronological calibration windows. Nixtla's [StatsForecast conformal tutorial](https://nixtlaverse.nixtla.io/statsforecast/docs/tutorials/conformalprediction.html) uses multiple held-out windows to construct empirical intervals without assuming a specific error distribution.
 
-That is useful, not automatic. Check coverage separately by horizon and regime. Multi-step, multivariate conformal prediction remains an active research area, especially under drift.
+That helps, but nothing about it is automatic. Check coverage separately by horizon and regime. Multi-step, multivariate conformal prediction remains an active research area, especially under drift.
 
 ## Hierarchies Turn Accuracy Into a Constraint Problem
 
@@ -164,7 +164,7 @@ Freeze the final test period before model selection. Use earlier backtest window
 
 ## Tune Only After the Evaluation Can Fail Honestly
 
-The best first forecasting system is often not the most sophisticated candidate. It is the first system evaluated under a process that makes failure visible.
+The first forecasting system worth shipping is rarely the most sophisticated candidate. It is the one you evaluated under a process that could have shown it failing.
 
 Once that process exists, model experimentation becomes useful. You can tell whether LightGBM gains come from available promotion features, whether a neural model improves long horizons, or whether a foundation model provides diverse ensemble errors. Without it, every improvement is ambiguous.
 

@@ -1,7 +1,7 @@
 interface ProjectProps {
   title: string;
   description: string;
-  pubDate: Date;
+  dateLabel: string;
   tags: string[];
   slug: string;
   demoUrl?: string;
@@ -72,9 +72,7 @@ export const ProjectGrid = ({ projects }: ProjectGridProps) => {
                   )}
                 </div>
                 <div className="flex items-center justify-between text-xs text-text-muted mt-4">
-                  <span>{new Date(project.pubDate).toLocaleDateString(undefined, {
-                    year: 'numeric', month: 'short', day: 'numeric'
-                  })}</span>
+                  <span>{project.dateLabel}</span>
                   <a
                     href={`${import.meta.env.BASE_URL}projects/${project.slug}`}
                     className="font-medium text-accent-tech-light hover:underline underline-offset-4 transition-colors"

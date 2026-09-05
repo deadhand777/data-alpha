@@ -1,0 +1,30 @@
+---
+title: "Central Datalake"
+description: "A central AWS data platform that unified lending and market data for self-service analytics, KPIs, machine learning, and data products."
+pubDate: 2024-10-09
+tags: ["data-platform", "datalake", "self-service-analytics", "financial-services"]
+techStack: ["AWS", "Amazon S3", "AWS Glue", "Amazon Athena", "CDK"]
+---
+
+## Context
+
+Mortgage and lending data was distributed across silos, making it harder for teams to answer operational and strategic questions consistently. The central datalake created a shared foundation for proprietary business data and external market sources.
+
+## What It Did
+
+The platform ingested mortgage and loan data alongside external market data into a governed AWS data layer. Stakeholder groups could then use the same foundation for self-service analytics, operational and strategic KPIs, machine-learning training, and product data access.
+
+## Architecture
+
+- Amazon S3 formed the central storage layer
+- AWS Glue supported ingestion, processing, and cataloging
+- Amazon Athena enabled serverless analytical queries
+- AWS CDK made the infrastructure reproducible
+
+## Outcome
+
+The shared platform ended isolated data access patterns and shortened the path from a business question to a usable insight.
+
+## Boundaries
+
+The source systems, datasets, and stakeholder-specific metrics are proprietary. This account is limited to the platform pattern and organizational capabilities delivered between 2020 and 2021.

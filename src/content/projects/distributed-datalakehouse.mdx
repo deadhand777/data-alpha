@@ -1,0 +1,29 @@
+---
+title: "Distributed Datalakehouse"
+description: "A production AWS data platform supporting analytics, machine learning, and product data access with built-in quality monitoring and observability."
+pubDate: 2026-02-23
+tags: ["data-platform", "datalakehouse", "observability", "production"]
+techStack: ["AWS", "Amazon S3", "AWS Glue", "Lake Formation", "DuckDB", "CDK"]
+---
+
+## Context
+
+Analytics, machine-learning training, and data-enabled products need a shared foundation without forcing every workload through one execution pattern. This distributed datalakehouse provides that foundation on AWS.
+
+## What It Does
+
+The platform stores and governs data through Amazon S3, AWS Glue, and Lake Formation. DuckDB supports efficient analytical access where a lightweight execution engine is appropriate.
+
+Automated data-quality monitoring and platform observability are part of the operating model rather than follow-up additions. The same infrastructure supports analytics, ML training, and product data access across the organization.
+
+## Architecture
+
+- Amazon S3 provides the durable data layer
+- AWS Glue manages catalog and data-processing capabilities
+- Lake Formation controls governed access
+- DuckDB supports analytical workloads close to the data
+- AWS CDK defines repeatable infrastructure
+
+## Boundaries
+
+Dataset identities, access policies, and product integrations are proprietary. The public case study covers the platform's responsibilities and technology choices.

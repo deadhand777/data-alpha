@@ -7,7 +7,7 @@ slug: "free-claude-code-practical-guide"
 draft: false
 ---
 
-Free Claude Code (FCC) makes an appealing promise: keep the coding-agent workflow you already know while choosing from free-tier, paid, or locally hosted models. The important qualification is in the details. FCC is free and open-source software, but it is not free access to Anthropic's Claude models. It is a local proxy that connects supported coding agents to other model providers.
+Free Claude Code (FCC) makes an appealing promise: keep the coding-agent workflow you already know while choosing from free-tier, paid, or locally hosted models. FCC is free and open-source software, but it is not free access to Anthropic's Claude models. It is a local proxy that connects supported coding agents to other model providers.
 
 That distinction shapes how you should evaluate it. FCC can be a useful tool for learning, provider comparison, privacy-sensitive prototyping, and reducing dependence on one model vendor. Its reliability, cost, and coding ability still depend on the model and provider behind the proxy.
 
@@ -52,7 +52,7 @@ Run the same command again when you want to update FCC. Because the project move
 
 ## Start the Proxy and Open Admin
 
-On Windows, open **Free Claude Code** from the desktop or Start menu. On macOS, open it from the desktop or Applications folder. The desktop launcher keeps FCC in the system tray or menu bar.
+On Windows, open Free Claude Code from the desktop or Start menu. On macOS, open it from the desktop or Applications folder. The desktop launcher keeps FCC in the system tray or menu bar.
 
 On Linux, or when you prefer a terminal on another platform, run:
 
@@ -78,7 +78,7 @@ The upstream quick start uses NVIDIA NIM:
 2. Open the Admin UI URL shown in the FCC server log.
 3. Enter the key in `NVIDIA_NIM_API_KEY`.
 4. Keep the documented default model or choose another tool-capable model.
-5. Select **Validate**, then **Apply**.
+5. Select Validate, then Apply.
 
 Other providers have different authentication and model-discovery requirements. For example, OpenAI uses a connected ChatGPT account in the Admin UI, while local providers require their model server to be running at the configured local address. Follow FCC's current [provider instructions](https://github.com/Alishahryar1/free-claude-code#choose-a-provider) instead of assuming that every provider accepts the same kind of API key.
 
@@ -121,21 +121,21 @@ This can support a deliberate mix, such as:
 
 Routing is useful only when the selected models can handle the requests they receive. It does not make a small model equivalent to Opus or Sonnet; the tier name is a routing signal, not a capability guarantee. Begin with a single fallback model, collect real workflow results, and add tier overrides only when there is a clear reason.
 
-## What Does “Free” Cost?
+## What Does "Free" Cost?
 
 FCC itself is distributed under the [MIT License](https://github.com/Alishahryar1/free-claude-code/blob/main/LICENSE). It does not require an FCC subscription. Operating it can still involve several kinds of cost:
 
-- **Provider usage:** Commercial APIs may charge by token or request. Free tiers can have quotas, rate limits, regional restrictions, or changing terms.
-- **Existing subscriptions:** Connected-account providers may require an eligible subscription rather than an API key.
-- **Local hardware:** Local inference uses your CPU, GPU, RAM, storage, and electricity. A model that fits is not necessarily a model that runs interactively.
-- **Engineering time:** Provider setup, compatibility testing, upgrades, and troubleshooting are real operational costs.
-- **Quality trade-offs:** A cheaper model can become expensive if unreliable tool use creates rework or requires constant supervision.
+- Provider usage: Commercial APIs may charge by token or request. Free tiers can have quotas, rate limits, regional restrictions, or changing terms.
+- Existing subscriptions: Connected-account providers may require an eligible subscription rather than an API key.
+- Local hardware: Local inference uses your CPU, GPU, RAM, storage, and electricity. A model that fits is not necessarily a model that runs interactively.
+- Engineering time: Provider setup, compatibility testing, upgrades, and troubleshooting are real operational costs.
+- Quality trade-offs: A cheaper model can become expensive if unreliable tool use creates rework or requires constant supervision.
 
 FCC gives you choices; it does not normalize provider billing or guarantee that a free option will remain available. Check each provider's current pricing, quota, terms, and data-handling policy before sending project data through it.
 
 ## Where FCC Fits Well
 
-Based on my review of the available implementations and their operating trade-offs, FCC is strongest when exploration and control matter more than uniform behavior.
+FCC is strongest when exploration and control matter more than uniform behavior.
 
 Good fits include:
 

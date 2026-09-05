@@ -5,6 +5,7 @@ import { BlogPreview } from '../components/BlogPreview.tsx';
 import { ProjectGrid } from '../components/ProjectGrid.tsx';
 import { getCollection } from 'astro:content';
 import { getLatestPosts } from '../lib/publication-catalog';
+import { formatProjectDate } from '../lib/project-date';
 
 const projects = await getCollection('projects');
 
@@ -24,7 +25,7 @@ const sortedProjects = projects
   .map(project => ({
     title: project.data.title,
     description: project.data.description,
-    pubDate: project.data.pubDate,
+    dateLabel: formatProjectDate(project.data.pubDate, project.data.period),
     tags: project.data.tags,
     slug: project.id,
     demoUrl: project.data.demoUrl,
