@@ -10,13 +10,15 @@ interface Props {
   path?: string;
   /** Site-relative image path; defaults to the site-wide OG card. */
   image?: string;
-  /** Present on article pages; switches the JSON-LD from WebSite to BlogPosting. */
+  /** Present on article pages; switches the JSON-LD off WebSite. */
   article?: {
     /** Bare article title, without the site suffix carried by `title`. */
     headline: string;
     datePublished: Date;
     dateModified?: Date;
     tags?: string[];
+    /** schema.org type; project write-ups are CreativeWork, posts are BlogPosting. */
+    type?: 'BlogPosting' | 'CreativeWork';
   };
 }
 
@@ -37,7 +39,7 @@ const author = { name: 'Chris Schulz', url: 'https://github.com/deadhand777' };
 const schema = article
   ? {
       '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
+      '@type': article.type ?? 'BlogPosting',
       '@id': canonical,
       headline: article.headline,
       description,

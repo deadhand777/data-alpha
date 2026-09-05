@@ -1,13 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 
+type ArticleEntry = CollectionEntry<'blog'> | CollectionEntry<'projects'>;
+
 interface Props {
-  next?: CollectionEntry<'blog'>;
-  related: CollectionEntry<'blog'>[];
+  next?: ArticleEntry;
+  related: ArticleEntry[];
   seriesName?: string;
+  /** Collection segment the next/related links point into. */
+  basePath?: 'blog' | 'projects';
+  /** Label for the next-entry card when it is not part of a series. */
+  nextLabel?: string;
 }
 
-const { next, related, seriesName } = Astro.props;
+const { next, related, seriesName, basePath = 'blog', nextLabel = 'Read next' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 
 // PRODUCT.md records these three as the binding proof surface.
@@ -21,11 +27,11 @@ const links = [
 <footer class="mt-16 space-y-8 border-t border-white/5 pt-10">
   {next && (
     <a
-      href={`${base}blog/${next.id}`}
+      href={`${base}${basePath}/${next.id}`}
       class="group block rounded-lg border border-white/5 bg-bg-surface p-6 shadow-resting transition-all duration-300 hover:border-accent-tech/40 hover:shadow-lifted"
     >
       <p class="text-xs font-semibold uppercase tracking-wider text-accent-tech-light">
-        {seriesName ? `Next in ${seriesName}` : 'Read next'}
+        {seriesName ? `Next in ${seriesName}` : nextLabel}
       </p>
       <p class="mt-3 text-xl font-semibold tracking-tight text-text-primary">{next.data.title}</p>
       <p class="mt-2 text-sm leading-relaxed text-text-secondary">{next.data.description}</p>
@@ -36,8 +42,8 @@ const links = [
     <h2 id="author-heading" class="text-lg font-semibold text-text-primary">Chris Schulz</h2>
     <p class="mt-1 text-sm text-text-muted">Head of Data &amp; AI</p>
     <p class="mt-4 max-w-2xl leading-relaxed text-text-secondary">
-      I take AI from experiment to production — combining engineering, product strategy, and governance to
-      build systems that hold up in regulated financial services.
+      I take AI from experiment to production: engineering, product strategy, and governance for
+      systems that hold up in regulated financial services.
     </p>
     <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
       {links.map((link) => (
@@ -48,7 +54,7 @@ const links = [
             rel="noopener noreferrer"
             class="text-accent-tech-light underline decoration-accent-tech/40 underline-offset-4 transition-colors hover:decoration-accent-tech-light"
           >
-            {link.label}
+            {link.label}<span class="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
       ))}
@@ -72,7 +78,7 @@ const links = [
         {related.map((item) => (
           <li>
             <a
-              href={`${base}blog/${item.id}`}
+              href={`${base}${basePath}/${item.id}`}
               class="block h-full rounded-lg border border-white/5 bg-bg-surface p-5 shadow-resting transition-all duration-300 hover:border-white/10 hover:shadow-lifted"
             >
               <p class="font-semibold tracking-tight text-text-primary">{item.data.title}</p>
