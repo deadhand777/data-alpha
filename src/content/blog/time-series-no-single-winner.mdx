@@ -17,7 +17,7 @@ That sequence is not evidence that forecasting steadily progressed from simple t
 The frequency and length of the series changed. The amount of related data changed. Retail prices, promotions, calendars, and product hierarchies became available. The winning method changed with them.
 
 
-This is the first article in a four-part series about choosing and evaluating forecasting systems in 2026. It begins with the least fashionable but most useful conclusion: **there is no universally best forecasting model, and every serious comparison starts with a simple baseline.**
+This is the first article in a four-part series about choosing and evaluating forecasting systems in 2026. It starts with the least fashionable conclusion available: there is no universally best forecasting model, and every serious comparison starts with a simple baseline.
 
 ## Three Competitions, Three Different Answers
 
@@ -39,7 +39,7 @@ M4 expanded the comparison to 100,000 series and six frequencies. Its winning me
 
 According to Smyl's account of the competition, the hybrid was close to 10% more accurate than the competition benchmark. Twelve of the top 17 submissions were combinations of methods, while pure machine-learning entries performed poorly relative to the leaders.
 
-The interesting result is not simply that a neural network won. It won as part of a system that retained statistical structure. M4 rewarded cross-series learning without discarding useful inductive bias.
+The neural network won as part of a system that kept its statistical structure. M4 rewarded cross-series learning without throwing away useful inductive bias.
 
 Source: [M4 Forecasting Competition: Introducing a New Hybrid ES-RNN Model](https://www.uber.com/en/blog/m4-forecasting-competition/), Uber Engineering, 2018. This is the winning author's account; the competition journal article should remain the reference for a formal treatment.
 
@@ -78,7 +78,7 @@ A benchmark is relevant only when these dimensions resemble the production decis
 
 ## The Transformer Detour
 
-Long-horizon forecasting later produced another apparent winner. Models such as Informer and Autoformer adapted attention mechanisms to long sequences and reported strong benchmark results. Then a remarkably small model disrupted the story.
+Long-horizon forecasting later produced another apparent winner. Models such as Informer and Autoformer adapted attention mechanisms to long sequences and reported strong benchmark results. Then a much smaller model undercut that result.
 
 [DLinear](https://arxiv.org/abs/2205.13504) decomposes a series into trend and remainder components and applies linear mappings. Its authors reported that this simple architecture outperformed several Transformer-based forecasters on widely used long-term forecasting benchmarks. They argued that some reported gains came from the direct multi-step forecasting setup rather than from attention itself.
 
@@ -93,7 +93,7 @@ Other neural architectures also complicate a Transformer-only narrative:
 
 These are dataset-specific paper results, not permanent rankings. Later models, different preprocessing, or a different horizon can reorder them again.
 
-## A Baseline Is an Instrument, Not an Embarrassment
+## What a Baseline Actually Measures
 
 A seasonal naive model predicts that the next observation will repeat the corresponding observation from the previous seasonal cycle. It has no learned parameters, yet it answers an important question: does the proposed system add value beyond persistence and seasonality?
 
@@ -144,6 +144,6 @@ This sequence does not prohibit ambitious models. It makes them earn their place
 
 M3, M4, and M5 did not produce a stable champion because they did not pose the same forecasting problem. DLinear and PatchTST did not settle the argument over Transformers because their results depended on representation, protocol, dataset, and horizon.
 
-The useful conclusion is not that simple models always win. It is that model rankings are conditional, and a baseline is the only way to learn whether complexity helped under your conditions.
+Simple models do not always win either. Model rankings are conditional, and a baseline is the only way to find out whether complexity helped under your conditions.
 
 Part 2, [Time Series Foundation Models in 2026: Promise, Leakage, and the Zero-Shot Trap](../time-series-foundation-models-2026/), applies the same standard to Chronos, TimesFM, Moirai, Lag-Llama, and TimeGPT. The models are broader and the pretraining corpora are larger, but the central question remains unchanged: what information did the model see, and does the evaluation resemble the decision you need to make?

@@ -14,7 +14,7 @@ A time series foundation model promises to turn forecasting into an inference pr
 
 That is a meaningful change in workflow. It is not proof that the resulting forecast is better.
 
-Foundation models bring useful priors, broad pretraining, and a low-friction baseline to time series. They also bring a new evaluation problem: when a model has trained on billions of observations gathered from public archives, it can be difficult to prove that a supposedly unseen benchmark is actually unseen.
+Foundation models bring useful priors and broad pretraining, and they produce a baseline with almost no setup. They also bring a new evaluation problem: when a model has trained on billions of observations gathered from public archives, it can be difficult to prove that a supposedly unseen benchmark is actually unseen.
 
 
 This second article in the series examines both sides. Part 1, [No Single Model Wins](../time-series-no-single-winner/), showed how the winning method changed with the task. Foundation models do not repeal that result; they make the task boundary harder to inspect.
@@ -31,7 +31,7 @@ The major families differ substantially:
 - **Lag-Llama** is a probabilistic decoder model built around lagged values and calendar features, originally focused on univariate forecasting.
 - **TimeGPT** is a hosted forecasting service whose model details and training data are less open than the research releases above.
 
-The category therefore does not describe one architecture. It describes a deployment proposition: pretrain broadly, then forecast new series zero-shot or with limited adaptation.
+The category describes a deployment proposition rather than an architecture: pretrain broadly, then forecast new series zero-shot or with limited adaptation.
 
 ### Chronos: values become tokens
 
@@ -77,7 +77,7 @@ One example is Australian Electricity Demand. According to the audit, versions o
 
 The exact contamination rate for any one model depends on corpus documentation and matching rules. That is why this article does not repeat provisional model-by-model percentages. The robust conclusion is structural: a public benchmark cannot be assumed clean merely because the evaluation call did not invoke `fit()`.
 
-## Independent Results Are Mixed, as They Should Be
+## Independent Results Are Mixed
 
 Independent evaluations do not support either extreme position that foundation models always dominate or never help.
 
@@ -90,7 +90,7 @@ Recent preprints examining distribution shift and operational viability make the
 - [How Foundational are Foundation Models for Time Series Forecasting?](https://arxiv.org/abs/2510.00742) tests whether performance survives changes in distribution and compares large pretrained systems with smaller task-specific models.
 - [Assessing the Operational Viability of Foundation Models for Time Series Forecasting](https://arxiv.org/abs/2605.24381) evaluates accuracy alongside computation and deployment concerns.
 
-These 2025 and 2026 works should be described as preprints unless their publication status is verified separately. Their value is not that they replace vendor benchmarks with a new universal ranking. They test conditions the original benchmark may not cover.
+These 2025 and 2026 works should be described as preprints unless their publication status is verified separately. Neither one replaces vendor benchmarks with a new universal ranking. They test conditions the original benchmark may not cover.
 
 ## A Better Evaluation Contract
 
