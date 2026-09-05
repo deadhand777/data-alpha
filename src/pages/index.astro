@@ -2,10 +2,9 @@
 import Layout from '../components/Layout.astro';
 import { HeroSection } from '../components/HeroSection.tsx';
 import { BlogPreview } from '../components/BlogPreview.tsx';
-import { ProjectGrid } from '../components/ProjectGrid.tsx';
+import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { getLatestPosts } from '../lib/publication-catalog';
-import { formatProjectDate } from '../lib/project-date';
 
 const projects = await getCollection('projects');
 
@@ -18,20 +17,10 @@ const sortedBlogPosts = (await getLatestPosts(3)).map((post) => ({
   slug: post.id
 }));
 
-// Sort projects by date (newest first) and map to shape expected by ProjectGrid
-const sortedProjects = projects
+// Latest three projects, newest first; copy before sorting to leave the collection array alone.
+const sortedProjects = [...projects]
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3) // Show latest 3 projects
-  .map(project => ({
-    title: project.data.title,
-    description: project.data.description,
-    dateLabel: formatProjectDate(project.data.pubDate, project.data.period),
-    tags: project.data.tags,
-    slug: project.id,
-    demoUrl: project.data.demoUrl,
-    sourceUrl: project.data.sourceUrl,
-    techStack: project.data.techStack
-  }));
+  .slice(0, 3);
 ---
 
 <Layout
@@ -45,7 +34,22 @@ const sortedProjects = projects
     <BlogPreview posts={sortedBlogPosts} />
   </div>
 
-  <div class="mt-16">
-    <ProjectGrid projects={sortedProjects} />
-  </div>
+  <section class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold text-text-primary">Featured Projects</h2>
+    <ul class="mt-6 grid list-none gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {sortedProjects.map((project) => (
+        <li class="h-full">
+          <ProjectCard project={project} headingLevel="h3" />
+        </li>
+      ))}
+    </ul>
+    <div class="mt-8 text-center">
+      <a
+        href={`${import.meta.env.BASE_URL}projects`}
+        class="font-medium text-accent-tech-light underline decoration-accent-tech/40 underline-offset-4 transition-colors hover:decoration-accent-tech-light"
+      >
+        All projects &rarr;
+      </a>
+    </div>
+  </section>
 </Layout>
