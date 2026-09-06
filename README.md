@@ -20,6 +20,7 @@ A personal portfolio website showcasing expertise in data, AI, and finance throu
 - SEO metadata and Schema.org structured data
 - Syntax highlighting with Shiki's `dark-plus` theme
 - Static site generation with Astro 7
+- Medium cross-posting status and canonical checks via `npm run medium:status`
 - Automated GitHub Pages deployment with GitHub Actions
 - TypeScript for type safety
 
@@ -109,6 +110,67 @@ To create and preview the production build locally:
 npm run build
 npm run preview
 ```
+
+## Cross-Posting to Medium
+
+Blog posts are mirrored to [Medium](https://medium.com/@chrisschulz133) using Medium's import tool. Medium's Publishing API is deprecated and no new integration tokens are issued, so the import itself stays manual. What this repository automates is the bookkeeping: which posts still need importing, and whether the imported copies still point their canonical URL back here.
+
+Canonical tags are the reason to care. Without a `rel="canonical"` link back to this site, the Medium copy competes with the original in search results. The import tool sets that tag automatically; pasting Markdown into Medium's editor does not.
+
+### Status command
+
+```bash
+npm run medium:status
+```
+
+The command reads `src/content/blog/*.mdx` directly. No build step and no development server are required, and it makes no network requests unless a post already records a Medium URL. Posts marked `draft: true` are ignored.
+
+Output is split into two sections. The first lists published posts that are not yet on Medium, with the live URL to feed the import tool:
+
+```
+Pending import (9) — paste into https://medium.com/p/import
+  https://deadhand777.github.io/data-alpha/blog/time-series-no-single-winner/
+    No Single Model Wins: What M3, M4, and M5 Teach Us About Forecasting
+```
+
+The second lists posts that record a Medium URL, fetches each one, and reports what its canonical link points to:
+
+```
+On Medium (1) — canonical check
+  [OK] time-series-no-single-winner
+    https://medium.com/@chrisschulz133/no-single-model-wins-abc123
+    https://deadhand777.github.io/data-alpha/blog/time-series-no-single-winner/
+```
+
+### Publishing a post to Medium
+
+1. Publish the post to the site and wait for the GitHub Pages deployment to finish. The import tool fetches the live page, so it has to be reachable first.
+2. Run `npm run medium:status` and copy a URL from the pending list.
+3. Paste it into <https://medium.com/p/import> and complete the import.
+4. Copy the resulting Medium URL into that post's frontmatter:
+
+   ```yaml
+   mediumUrl: "https://medium.com/@chrisschulz133/no-single-model-wins-abc123"
+   ```
+
+5. Run `npm run medium:status` again. The post moves to the second section and its canonical link is verified.
+
+### Reading the results
+
+| Status | Meaning | What to do |
+|---|---|---|
+| `OK` | The canonical link points back at the post on this site. | Nothing. |
+| `MISSING` | The Medium page declares no canonical link. | Re-import through the import tool. A manual paste never sets the tag. |
+| `MISMATCH` | The canonical link points somewhere else. | Check for a wrong URL in the frontmatter, or an import of the wrong source page. |
+| `UNKNOWN` | The page could not be fetched, or returned a non-200 response. | Medium sometimes rejects plain `fetch` requests with a 403. Open the page manually before assuming anything is broken. |
+
+A post whose URL is not under `medium.com/@chrisschulz133` or `chrisschulz133.medium.com` gets an extra note. That usually means the post lives in a Medium publication, which is fine, so it is reported rather than treated as a failure.
+
+The command exits `0` when every checked post reports `OK` and `1` when any does not. Pending posts never fail the run, since not being cross-posted yet is a normal state rather than an error. The exit codes make the command usable in CI unchanged if canonical rot is worth catching automatically later.
+
+### Scope
+
+Formatting fidelity is not checked. Verifying that Medium's converter preserved layout would mean diffing rendered output against Medium's DOM, which is not worth the effort at this post count. Review code blocks by eye after the first import instead.
 
 ## Content Structure
 

@@ -11,6 +11,8 @@ const blogCollection = defineCollection({
     heroImage: z.string().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // Set once the post has been imported to Medium; `npm run medium:status` reads it.
+    mediumUrl: z.string().url().optional(),
     // Optional: groups multi-part posts so the article template can offer the next part.
     series: z.string().optional(),
     seriesOrder: z.number().optional()
