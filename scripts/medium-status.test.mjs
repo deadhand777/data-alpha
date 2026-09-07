@@ -2,9 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import {
   belongsToAuthor,
+  checkPost,
   classifyPosts,
-  extractCanonical,
-  parseFrontmatter
+  parseFeed,
+  parseFrontmatter,
+  storyId
 } from './medium-status.mjs';
 
 const post = (fields) => `---\n${fields}\n---\n\nBody text.\n`;
@@ -52,14 +54,89 @@ describe('classifyPosts', () => {
   });
 });
 
-describe('extractCanonical', () => {
-  it('finds the canonical href regardless of attribute order', () => {
-    const html = '<link rel="stylesheet" href="/a.css"><link href="https://example.com/p/" rel="canonical">';
-    expect(extractCanonical(html)).toBe('https://example.com/p/');
+describe('storyId', () => {
+  it('reads the same id from every URL shape Medium hands out', () => {
+    expect(storyId('https://medium.com/@me/a-post-99bddf70afa0')).toBe('99bddf70afa0');
+    expect(storyId('https://me.medium.com/a-post-99bddf70afa0')).toBe('99bddf70afa0');
+    expect(storyId('https://medium.com/@me/a-post-99bddf70afa0?source=rss-abc------2')).toBe('99bddf70afa0');
   });
 
-  it('returns undefined when no canonical link is present', () => {
-    expect(extractCanonical('<link rel="icon" href="/f.ico">')).toBeUndefined();
+  it('returns undefined when the last segment is not a hex id', () => {
+    expect(storyId('https://medium.com/@me/a-post')).toBeUndefined();
+  });
+});
+
+const feedItem = (link, source) => `
+  <item>
+    <link>${link}</link>
+    <pubDate>Sun, 06 Sep 2026 17:20:21 GMT</pubDate>
+    <content:encoded><![CDATA[<p>Body.</p>${
+      source ? `<p><em>Originally published at </em><a href="${source}"><em>${source}</em></a></p>` : ''
+    }]]></content:encoded>
+  </item>`;
+
+const feed = (...items) => `<rss><channel>${items.join('')}</channel></rss>`;
+
+describe('parseFeed', () => {
+  it('reads the import source out of the story footer', () => {
+    const entries = parseFeed(
+      feed(feedItem('https://medium.com/@me/a-post-abc123?source=rss-x------2', 'https://example.com/blog/a-post/'))
+    );
+    expect(entries).toHaveLength(1);
+    expect(entries[0].id).toBe('abc123');
+    expect(entries[0].sourceUrl).toBe('https://example.com/blog/a-post/');
+  });
+
+  it('leaves the source undefined for a story with no footer', () => {
+    const entries = parseFeed(feed(feedItem('https://medium.com/@me/a-post-abc123')));
+    expect(entries[0].sourceUrl).toBeUndefined();
+  });
+
+  it('returns nothing for an empty feed', () => {
+    expect(parseFeed(feed())).toEqual([]);
+  });
+});
+
+describe('checkPost', () => {
+  const post = {
+    slug: 'a-post',
+    pubDate: '2026-09-06',
+    siteUrl: 'https://example.com/blog/a-post/',
+    mediumUrl: 'https://medium.com/@me/a-post-abc123'
+  };
+
+  it('passes when the story was imported from the site URL', () => {
+    const entries = parseFeed(feed(feedItem('https://medium.com/@me/a-post-abc123', 'https://example.com/blog/a-post/')));
+    expect(checkPost(post, entries).status).toBe('ok');
+  });
+
+  it('ignores a trailing-slash difference', () => {
+    const entries = parseFeed(feed(feedItem('https://medium.com/@me/a-post-abc123', 'https://example.com/blog/a-post')));
+    expect(checkPost(post, entries).status).toBe('ok');
+  });
+
+  it('reports a mismatch when a different URL was imported', () => {
+    const source = 'https://github.com/me/repo/blob/main/a-post.mdx';
+    const entries = parseFeed(feed(feedItem('https://medium.com/@me/a-post-abc123', source)));
+    const result = checkPost(post, entries);
+    expect(result.status).toBe('mismatch');
+    expect(result.detail).toContain(source);
+  });
+
+  it('reports a missing canonical when the story has no import source', () => {
+    const entries = parseFeed(feed(feedItem('https://medium.com/@me/a-post-abc123')));
+    expect(checkPost(post, entries).status).toBe('missing');
+  });
+
+  it('reports a recent post absent from the feed', () => {
+    const entries = parseFeed(feed(feedItem('https://medium.com/@me/other-def456', 'https://example.com/blog/other/')));
+    expect(checkPost(post, entries).status).toBe('absent');
+  });
+
+  it('does not fail a post older than everything the feed carries', () => {
+    const entries = parseFeed(feed(feedItem('https://medium.com/@me/other-def456', 'https://example.com/blog/other/')));
+    const older = { ...post, pubDate: '2024-01-01' };
+    expect(checkPost(older, entries).status).toBe('unknown');
   });
 });
 
