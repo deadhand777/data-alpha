@@ -3,10 +3,10 @@ import Layout from '../components/Layout.astro';
 ---
 <Layout
   title="Contact | Data Alpha"
-  description="Reach Chris Schulz on LinkedIn for introductions, collaboration, and speaking requests, or find the technical work on GitHub."
+  description="Reach Chris Schulz on LinkedIn for introductions, collaboration, and speaking requests, find the technical work on GitHub, or read the articles on Medium."
   path="/contact/"
 >
-  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
     <div class="max-w-2xl">
       <p class="text-sm font-semibold uppercase tracking-wider text-accent-tech-light mb-3">Contact</p>
       <h1 class="text-4xl font-bold tracking-tight text-text-primary mb-5 text-balance">Start a conversation</h1>
@@ -18,7 +18,7 @@ import Layout from '../components/Layout.astro';
 
     <section aria-labelledby="contact-options" class="mt-12">
       <h2 id="contact-options" class="sr-only">Contact options</h2>
-      <div class="grid gap-6 md:grid-cols-2">
+      <div class="grid gap-6 lg:grid-cols-3">
         <article class="flex flex-col rounded-lg border border-accent-tech/40 bg-bg-surface p-8 shadow-resting">
           <p class="text-sm font-semibold uppercase tracking-wider text-accent-tech-light">Recommended</p>
           <h3 class="mt-3 text-2xl font-bold text-text-primary">LinkedIn</h3>
@@ -32,7 +32,7 @@ import Layout from '../components/Layout.astro';
             rel="noopener noreferrer"
             class="mt-6 inline-flex w-fit items-center justify-center rounded-md bg-accent-tech-dark px-5 py-3 font-semibold text-text-primary shadow-resting transition-all duration-200 hover:bg-accent-tech-deep hover:-translate-y-px hover:shadow-lifted"
           >
-            Message me on LinkedIn
+            Message me<span class="sr-only"> on LinkedIn</span>
             <span class="sr-only"> (opens in a new tab)</span>
           </a>
         </article>
@@ -51,6 +51,24 @@ import Layout from '../components/Layout.astro';
             class="mt-6 inline-flex w-fit items-center justify-center rounded-md border border-accent-tech px-5 py-3 font-semibold text-accent-tech-light transition-colors duration-200 hover:text-accent-tech-pale hover:bg-bg-surface-light hover:border-accent-tech-light"
           >
             View my GitHub profile
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </article>
+
+        <article class="flex flex-col rounded-lg border border-white/5 bg-bg-surface p-8 shadow-resting">
+          <p class="text-sm font-semibold uppercase tracking-wider text-text-muted">Writing</p>
+          <h3 class="mt-3 text-2xl font-bold text-text-primary">Medium</h3>
+          <p class="mt-3 flex-1 leading-relaxed text-text-secondary">
+            The posts from this blog are mirrored to Medium. Follow along there, or leave a
+            response on an article if you want to react to something specific.
+          </p>
+          <a
+            href="https://medium.com/@chrisschulz133"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-6 inline-flex w-fit items-center justify-center rounded-md border border-accent-tech px-5 py-3 font-semibold text-accent-tech-light transition-colors duration-200 hover:text-accent-tech-pale hover:bg-bg-surface-light hover:border-accent-tech-light"
+          >
+            Read me on Medium
             <span class="sr-only"> (opens in a new tab)</span>
           </a>
         </article>
