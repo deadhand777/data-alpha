@@ -62,7 +62,8 @@ const aboutCollection = defineCollection({
     }),
     cvUrl: z.string().url(),
     githubUrl: z.string().url(),
-    linkedinUrl: z.string().url()
+    linkedinUrl: z.string().url(),
+    mediumUrl: z.string().url()
   })
 });
 

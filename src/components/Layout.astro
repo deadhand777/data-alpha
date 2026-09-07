@@ -34,7 +34,15 @@ const SITE = import.meta.env.SITE.replace(/\/$/, '');
 const canonical = `${SITE}${path}`;
 const imageUrl = `${SITE}${image}`;
 
-const author = { name: 'Chris Schulz', url: 'https://github.com/deadhand777' };
+const author = {
+  name: 'Chris Schulz',
+  url: 'https://github.com/deadhand777',
+  sameAs: [
+    'https://github.com/deadhand777',
+    'https://www.linkedin.com/in/chris-schulz-ai-first/',
+    'https://medium.com/@chrisschulz133'
+  ]
+};
 
 const schema = article
   ? {
@@ -48,8 +56,8 @@ const schema = article
       datePublished: article.datePublished.toISOString(),
       ...(article.dateModified && { dateModified: article.dateModified.toISOString() }),
       ...(article.tags?.length && { keywords: article.tags.join(', ') }),
-      author: { '@type': 'Person', name: author.name, url: author.url },
-      publisher: { '@type': 'Person', name: author.name, url: author.url }
+      author: { '@type': 'Person', name: author.name, url: author.url, sameAs: author.sameAs },
+      publisher: { '@type': 'Person', name: author.name, url: author.url, sameAs: author.sameAs }
     }
   : {
       '@context': 'https://schema.org',
@@ -58,7 +66,7 @@ const schema = article
       name: 'Data Alpha',
       description,
       url: `${SITE}/`,
-      author: { '@type': 'Person', name: author.name, url: author.url }
+      author: { '@type': 'Person', name: author.name, url: author.url, sameAs: author.sameAs }
     };
 ---
 
