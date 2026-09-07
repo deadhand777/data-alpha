@@ -17,10 +17,10 @@ const sortedBlogPosts = (await getLatestPosts(3)).map((post) => ({
   slug: post.id
 }));
 
-// Latest three projects, newest first; copy before sorting to leave the collection array alone.
-const sortedProjects = [...projects]
+// Latest two projects, newest first; copy before sorting to leave the collection array alone.
+const latestProjects = [...projects]
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+  .slice(0, 2);
 ---
 
 <Layout
@@ -30,26 +30,32 @@ const sortedProjects = [...projects]
 >
   <HeroSection />
 
-  <div class="mt-16">
+  <div class="mt-8">
     <BlogPreview posts={sortedBlogPosts} />
   </div>
 
-  <section class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl font-bold text-text-primary">Featured Projects</h2>
-    <ul class="mt-6 grid list-none gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {sortedProjects.map((project) => (
-        <li class="h-full">
-          <ProjectCard project={project} headingLevel="h3" />
-        </li>
-      ))}
-    </ul>
-    <div class="mt-8 text-center">
-      <a
-        href={`${import.meta.env.BASE_URL}projects`}
-        class="font-medium text-accent-tech-light underline decoration-accent-tech/40 underline-offset-4 transition-colors hover:decoration-accent-tech-light"
-      >
-        All projects &rarr;
-      </a>
+  <section class="mt-20 border-t border-white/5 pt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,2fr)] lg:gap-12">
+      <div class="max-w-md">
+        <h2 class="text-3xl font-bold text-text-primary">Latest Projects</h2>
+        <p class="mt-4 leading-relaxed text-text-secondary">
+          Production systems spanning agent platforms, data foundations, and applied machine
+          learning in regulated financial services.
+        </p>
+        <a
+          href={`${import.meta.env.BASE_URL}projects`}
+          class="mt-6 inline-flex font-medium text-accent-tech-light underline decoration-accent-tech/40 underline-offset-4 transition-colors hover:decoration-accent-tech-light"
+        >
+          All projects &rarr;
+        </a>
+      </div>
+      <ul class="grid list-none gap-6 sm:grid-cols-2">
+        {latestProjects.map((project) => (
+          <li class="h-full">
+            <ProjectCard project={project} headingLevel="h3" />
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 </Layout>
