@@ -1,14 +1,4 @@
-export type ProjectDateStyle = 'short' | 'long';
-
-export function formatProjectDate(
-  pubDate: Date,
-  period?: string,
-  style: ProjectDateStyle = 'short'
-): string {
-  if (period) {
-    return period;
-  }
-
+export function formatProjectDate(pubDate: Date, style: 'short' | 'long' = 'short'): string {
   return pubDate.toLocaleDateString('en-US', {
     year: 'numeric',
     month: style,

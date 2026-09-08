@@ -29,7 +29,7 @@ const related = ordered
 const { Content } = await render(project);
 const base = import.meta.env.BASE_URL;
 
-const { title, description, tags, techStack, demoUrl, sourceUrl, pubDate, updatedDate, period } =
+const { title, description, tags, techStack, demoUrl, sourceUrl, pubDate, updatedDate } =
   project.data;
 
 // `updatedDate` only earns a line when it actually differs from publication.
@@ -62,16 +62,12 @@ const showUpdated = updatedDate && updatedDate.valueOf() !== pubDate.valueOf();
       <p class="mt-5 text-lg leading-relaxed text-text-secondary text-pretty">{description}</p>
 
       <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-text-muted">
-        {period ? (
-          <span>{period}</span>
-        ) : (
-          <time datetime={pubDate.toISOString()}>{formatProjectDate(pubDate, undefined, 'long')}</time>
-        )}
+        <time datetime={pubDate.toISOString()}>{formatProjectDate(pubDate, 'long')}</time>
         {showUpdated && (
           <>
             <span aria-hidden="true" class="text-bg-surface-light">/</span>
             <span class="text-accent-success-light">
-              Updated {formatProjectDate(updatedDate, undefined, 'long')}
+              Updated {formatProjectDate(updatedDate, 'long')}
             </span>
           </>
         )}

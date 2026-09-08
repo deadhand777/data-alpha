@@ -17,13 +17,10 @@ const links = [
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-20 items-center justify-between ">
     {/* Brand Logo with Data Accent */}
     <a href={base} class="flex items-center space-x-3">
-      <span class="text-2xl font-semibold text-text-primary tracking-tighter">
+      <span class="text-2xl font-semibold text-text-primary tracking-tight">
         Data Alpha
       </span>
       <span class="text-accent-tech-light">Portfolio</span>
-      <span class="flex h-4 w-4 items-center justify-center">
-        <div class="w-1.5 h-1.5 bg-accent-success rounded-full"></div>
-      </span>
     </a>
 
     {/* Desktop Navigation */}
@@ -47,16 +44,20 @@ const links = [
     <button id="mobile-menu-button"
             class="md:hidden p-2 rounded-md text-text-secondary hover:text-accent-tech-light hover:bg-accent-tech/10 focus:outline-none focus:ring-2 focus:ring-accent-tech"
             aria-label="Open main menu"
+            aria-controls="mobile-menu"
             aria-expanded="false">
-      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg data-menu-icon class="h-6 w-6" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg data-close-icon class="hidden h-6 w-6" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" />
       </svg>
     </button>
   </div>
 </header>
 
 <!-- Mobile Menu (hidden by default) -->
-<div id="mobile-menu" class="md:hidden hidden border-b border-white/5 bg-bg-primary/95 backdrop-blur-sm">
+<nav id="mobile-menu" aria-label="Mobile navigation" class="md:hidden hidden border-b border-white/5 bg-bg-primary/95 backdrop-blur-sm">
   <div class="px-4 pt-2 pb-3 space-y-1">
     {links.map((link) => (
       <a
@@ -72,21 +73,38 @@ const links = [
       </a>
     ))}
   </div>
-</div>
+</nav>
 
 <script>
-  // Mobile menu toggle functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const button = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
+  const button = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
 
-    if (button && menu) {
-      button.addEventListener('click', () => {
-        menu.classList.toggle('hidden');
-        // Toggle aria-expanded attribute for accessibility
-        const isExpanded = button.getAttribute('aria-expanded') === 'true' || false;
-        button.setAttribute('aria-expanded', String(!isExpanded));
-      });
-    }
-  });
+  if (button && menu) {
+    const menuIcon = button.querySelector('[data-menu-icon]');
+    const closeIcon = button.querySelector('[data-close-icon]');
+
+    const setMenuOpen = (isOpen: boolean, restoreFocus = false) => {
+      menu.classList.toggle('hidden', !isOpen);
+      button.setAttribute('aria-expanded', String(isOpen));
+      button.setAttribute('aria-label', isOpen ? 'Close main menu' : 'Open main menu');
+      menuIcon?.classList.toggle('hidden', isOpen);
+      closeIcon?.classList.toggle('hidden', !isOpen);
+
+      if (restoreFocus) button.focus();
+    };
+
+    button.addEventListener('click', () => {
+      setMenuOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+        setMenuOpen(false, true);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) setMenuOpen(false);
+    });
+  }
 </script>

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with this Astro + React + Tailwind + MDX + TypeScript project.
+This file provides guidance to Claude Code (claude.ai/code) when working with this Astro + Tailwind + MDX + TypeScript project.
 
 ## Core Principles (Behavioral Guidelines)
 
@@ -16,7 +16,6 @@ Following these principles helps the assistant act effectively:
 Personal portfolio website for data/AI/finance blogging built with:
 
 - **Astro 7** - Static site builder
-- **React 19** - UI components
 - **Tailwind CSS 4** - Styling via @tailwindcss/vite
 - **MDX** - Markdown with JSX support via @astrojs/mdx
 - **TypeScript** - Type safety
@@ -26,26 +25,23 @@ Personal portfolio website for data/AI/finance blogging built with:
 
 ```bash
 /src
-  /components     # Astro + React components, incl. Layout.astro (base layout lives here, not /layouts)
+  /components     # Astro components, incl. Layout.astro (base layout lives here, not /layouts)
   /content        # Content collections (blog, projects, about)
   /content/blog   # Blog posts in MDX format
-  /layouts        # Empty currently
-  /lib            # Empty currently
+  /lib            # publication-catalog.ts, project-date.ts (+ vitest specs)
   /pages          # Pages (.astro files become routes)
-  /public         # Static assets (favicon, robots.txt, etc.)
-  /styles         # Global CSS (global.css — currently just Tailwind directives)
-  /utils          # Empty currently
+  /styles         # Global CSS (global.css — Tailwind import + prose/scrollbar theming)
+/public           # Static assets (robots.txt, images)
 /dist             # Built output (generated)
 astro.config.mjs  # Astro configuration
 tsconfig.json     # TypeScript configuration
 package.json      # Dependencies and scripts
-tailwind.config.cjs # Tailwind configuration
 ```
 
 ## Key Configuration Files
 
-- `astro.config.mjs` - Astro setup (integrations: react, tailwind, mdx; `base: '/data-alpha/'` for GitHub Pages)
-- `tailwind.config.cjs` - Tailwind configuration
+- `astro.config.mjs` - Astro setup (integrations: mdx, sitemap; tailwind via vite plugin; `base: '/data-alpha/'` for GitHub Pages)
+- `src/styles/global.css` - Tailwind entry: `@source` scanning, `@plugin` typography, `@theme` design tokens
 - `tsconfig.json` - TypeScript compiler options
 - `package.json` - Dependencies and npm scripts
 
@@ -73,26 +69,22 @@ npm run preview # Preview production build locally
 npx astro check  # Type-check TypeScript/Astro files
 ```
 
-No test runner, linter, or formatter configured yet (no vitest/eslint/prettier in package.json).
+### Tests
+```bash
+npm test  # vitest run (src/lib/*.test.ts, scripts/medium-status.test.mjs)
+```
+
+No linter or formatter configured (no eslint/prettier in package.json).
 
 ## Detailed Guidelines
-
-For domain-specific guidance, refer to the specialized CLAUDE.md files:
-- `@src/components/CLAUDE.md` - Component patterns, props, styling conventions
-- `@src/layouts/CLAUDE.md` - Layout structure (currently empty, see file)
-- `@src/lib/CLAUDE.md` - Shared domain code (currently empty, see file)
-- `@src/pages/CLAUDE.md` - Page structure, routing, data fetching patterns
-- `@src/styles/CLAUDE.md` - Styling methodology, tokens, responsive design
-- `@src/utils/CLAUDE.md` - Generic utility helpers (currently empty, see file)
 
 `docs/content-guidelines.md` referenced previously here does not exist — content collection schema lives in `src/content.config.ts`.
 
 ## Quick Reference
 
 - **Content Collection**: Uses Astro Content Collections with MDX support in `src/content/`
-- **Styling**: Tailwind CSS 4 with custom configuration in `tailwind.config.cjs`
-- **Components**: Located in `src/components/` following Atomic Design principles
-- **Layouts**: Found in `src/layouts/` with slot-based composition
+- **Styling**: Tailwind CSS 4, CSS-first — tokens live in `@theme` in `src/styles/global.css`, no JS config
+- **Components**: Flat `src/components/`, all `.astro`; `Layout.astro` is the base layout
 - **Routing**: File-based routing in `src/pages/` with support for dynamic routes
-- **Data Fetching**: Uses Astro's `getCollection` and `getEntry` for content, standard fetch for APIs
-- **State Management**: Primarily uses Astro's island architecture with `.client.*` files for interactive components
+- **Data Fetching**: `getCollection`/`getEntry`, wrapped in `src/lib/publication-catalog.ts`
+- **Client JS**: Inline `<script>` in the component that needs it (mobile menu, TOC rail) — no framework, no islands

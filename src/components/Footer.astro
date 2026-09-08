@@ -1,4 +1,5 @@
 ---
+const year = new Date().getFullYear();
 ---
 <footer class="border-t border-white/5 bg-bg-primary text-text-secondary py-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -28,13 +29,6 @@
     </div>
   </div>
   <div class="border-t border-white/5 mt-12 pt-8 text-center text-sm text-text-muted">
-    &copy; <span id="year"></span> Data Alpha Portfolio. All rights reserved.
+    &copy; {year} Data Alpha Portfolio. All rights reserved.
   </div>
 </footer>
-
-<script>
-  const year = document.getElementById('year');
-  if (year) {
-    year.textContent = new Date().getFullYear().toString();
-  }
-</script>

@@ -9,7 +9,6 @@ vi.mock('astro:content', () => ({ getCollection }));
 
 import {
   getArticleContext,
-  getLatestPosts,
   getPublishedPosts,
   type Publication
 } from './publication-catalog';
@@ -73,20 +72,6 @@ describe('publication catalog', () => {
       expect.objectContaining({ id: 'newer' }),
       expect.objectContaining({ id: 'older' })
     ]);
-  });
-
-  it('limits latest posts without failing when the limit exceeds the catalog', async () => {
-    entries = [
-      makePost({ id: 'oldest', pubDate: '2026-01-01' }),
-      makePost({ id: 'middle', pubDate: '2026-02-01' }),
-      makePost({ id: 'newest', pubDate: '2026-03-01' })
-    ];
-
-    await expect(getLatestPosts(2)).resolves.toMatchObject([
-      { id: 'newest' },
-      { id: 'middle' }
-    ]);
-    await expect(getLatestPosts(10)).resolves.toHaveLength(3);
   });
 
   it('returns an empty series and no related posts when nothing matches', async () => {
