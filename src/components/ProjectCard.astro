@@ -11,7 +11,7 @@ interface Props {
 const { project, headingLevel = 'h2' } = Astro.props;
 const Heading = headingLevel;
 const base = import.meta.env.BASE_URL;
-const { title, description, tags, techStack, demoUrl, sourceUrl, pubDate, period } = project.data;
+const { title, description, tags, techStack, demoUrl, sourceUrl, pubDate } = project.data;
 const hasLinks = Boolean(demoUrl || sourceUrl);
 
 // Four per group keeps each chip row inside working memory; the remainder is counted.
@@ -88,7 +88,7 @@ const hiddenTech = techStack.length - shownTech.length;
     )}
 
     <div class="flex items-center justify-between text-xs text-text-muted">
-      <span>{formatProjectDate(pubDate, period)}</span>
+      <span>{formatProjectDate(pubDate)}</span>
       <span class="font-medium text-accent-tech-light" aria-hidden="true">View project &rarr;</span>
     </div>
   </div>

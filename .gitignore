@@ -29,3 +29,6 @@ docs/superpowers/
 
 # Documentation site output
 /site/
+
+# Tool state
+/.impeccable/

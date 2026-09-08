@@ -208,7 +208,7 @@ src/
    - About: `src/content/about/index.mdx`
 
 3. **Styling**: Modify Tailwind configuration
-   - Edit `tailwind.config.cjs` if needed
+   - Edit the `@theme` block in `src/styles/global.css` if needed
    - Add custom styles to `src/styles/global.css`
 
 4. **Components**: Add/edit in `src/components/`

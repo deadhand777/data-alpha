@@ -76,38 +76,35 @@ const links = [
 </nav>
 
 <script>
-  // Mobile menu toggle functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const button = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
+  const button = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
 
-    if (button && menu) {
-      const menuIcon = button.querySelector('[data-menu-icon]');
-      const closeIcon = button.querySelector('[data-close-icon]');
+  if (button && menu) {
+    const menuIcon = button.querySelector('[data-menu-icon]');
+    const closeIcon = button.querySelector('[data-close-icon]');
 
-      const setMenuOpen = (isOpen: boolean, restoreFocus = false) => {
-        menu.classList.toggle('hidden', !isOpen);
-        button.setAttribute('aria-expanded', String(isOpen));
-        button.setAttribute('aria-label', isOpen ? 'Close main menu' : 'Open main menu');
-        menuIcon?.classList.toggle('hidden', isOpen);
-        closeIcon?.classList.toggle('hidden', !isOpen);
+    const setMenuOpen = (isOpen: boolean, restoreFocus = false) => {
+      menu.classList.toggle('hidden', !isOpen);
+      button.setAttribute('aria-expanded', String(isOpen));
+      button.setAttribute('aria-label', isOpen ? 'Close main menu' : 'Open main menu');
+      menuIcon?.classList.toggle('hidden', isOpen);
+      closeIcon?.classList.toggle('hidden', !isOpen);
 
-        if (restoreFocus) button.focus();
-      };
+      if (restoreFocus) button.focus();
+    };
 
-      button.addEventListener('click', () => {
-        setMenuOpen(button.getAttribute('aria-expanded') !== 'true');
-      });
+    button.addEventListener('click', () => {
+      setMenuOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
 
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
-          setMenuOpen(false, true);
-        }
-      });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+        setMenuOpen(false, true);
+      }
+    });
 
-      window.addEventListener('resize', () => {
-        if (window.innerWidth >= 768) setMenuOpen(false);
-      });
-    }
-  });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) setMenuOpen(false);
+    });
+  }
 </script>

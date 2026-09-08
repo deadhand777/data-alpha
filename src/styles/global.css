@@ -1,5 +1,33 @@
 @import "tailwindcss";
-@config "../../tailwind.config.cjs";
+@source "../**/*.{astro,js,jsx,ts,tsx,mdx}";
+@plugin "@tailwindcss/typography";
+
+/* The Instrument Panel — see DESIGN.md */
+@theme {
+  --color-bg-primary: #0F172A; /* Ink Slate: the chassis */
+  --color-bg-surface: #1E293B; /* Panel Slate: raised surfaces */
+  --color-text-primary: #F8FAFC; /* Signal White: headings */
+  --color-accent-success: #10B981; /* Live Emerald: state only */
+  --color-accent-tech: #3B82F6; /* Instrument Blue: navigable */
+
+  --color-bg-primary-light: #1E293B;
+  --color-bg-surface-light: #334155; /* Panel Slate Raised: chips, second lift */
+  --color-text-secondary: #E2E8F0; /* Readout Grey: body copy */
+  --color-text-muted: #94A3B8; /* Metadata and dates on the chassis */
+
+  --color-accent-success-light: #34D399; /* emerald as text on dark */
+  --color-accent-success-dark: #059669;
+
+  --color-accent-tech-light: #60A5FA; /* blue as text on chassis/panel */
+  --color-accent-tech-pale: #93C5FD; /* blue as text on the raised panel tone */
+  --color-accent-tech-dark: #2563EB; /* primary action fill */
+  --color-accent-tech-deep: #1D4ED8; /* primary action pressed/hover */
+
+  /* Always paired with a hairline border — The Border-and-Shadow Rule */
+  --shadow-resting: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-lifted: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  --shadow-overlay: 0 20px 40px -10px rgba(0, 0, 0, 0.65);
+}
 
 /* Browser surfaces themed from the palette — see DESIGN.md */
 :root {

@@ -258,7 +258,7 @@ The wordmark is text, not an image: "Data Alpha" in Signal White at 600 weight w
 - **Do** step the accent up as the surface lightens: #60A5FA on chassis and panel, #93C5FD on the raised tone. Base #3B82F6 is structure only.
 - **Do** fill primary actions with #2563EB and press them to #1D4ED8; white on base blue is 3.52:1 and fails.
 - **Do** keep accent coverage under 10% of any screen.
-- **Do** define new colors as tokens in `tailwind.config.cjs` rather than reaching for a raw Tailwind palette class in a component.
+- **Do** define new colors as `--color-*` tokens in the `@theme` block in `src/styles/global.css` rather than reaching for a raw Tailwind palette class in a component.
 
 ### Don't:
 

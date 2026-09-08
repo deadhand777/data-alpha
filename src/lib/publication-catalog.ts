@@ -14,11 +14,6 @@ export async function getPublishedPosts(): Promise<Publication[]> {
   return posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 }
 
-export async function getLatestPosts(limit: number): Promise<Publication[]> {
-  const posts = await getPublishedPosts();
-  return posts.slice(0, limit);
-}
-
 export async function getArticleContext(
   post: Publication,
   relatedLimit: number
