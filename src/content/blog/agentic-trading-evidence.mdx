@@ -1,0 +1,190 @@
+---
+title: "What the Agentic Trading Evidence Actually Shows"
+description: "Under leakage control, nine of ten LLM trading agents show negative selection alpha. Why masking a ticker changes the result, and how to read any agentic trading claim."
+pubDate: 2026-09-18
+heroImage: "/images/blog/agentic-trading-evidence.jpg"
+tags: ["Agentic-Trading", "LLM-Agents", "Data-Leakage", "Backtesting", "Critical-Analysis"]
+series: "Agentic Trading in Production"
+seriesOrder: 2
+draft: false
+---
+
+Take ten frontier LLMs, let each run a trading agent over CSI300 for 548 trading days, and one of them returns 85.29% against a buy-and-hold benchmark of 36.92%. Then hide the ticker symbols and the calendar dates, and decompose the returns against a factor model. Nine of the ten turn out to have negative stock-selection alpha. The returns were market exposure and style tilt.
+
+That result comes from [KTD-Fin](https://arxiv.org/abs/2605.28359), a benchmark published in May 2026. It raises an obvious question: why would masking a ticker symbol change anything?
+
+[Part 1](../agentic-trading-is-algorithmic-trading/) covered what agentic trading is and which obligations attach to it. This part asks whether it works. The short answer is that the field's own evidence map cannot yet tell you, and the reason is a form of data leakage with no analogue in classical backtesting.
+
+## The Field Cannot Currently Answer the Question
+
+The most recent systematic review of the area screened 77 studies and admitted 19 to its primary subset, those with both an action output and a closed evaluation loop ([arXiv 2605.19337](https://arxiv.org/abs/2605.19337), May 2026). Its conclusion concerns evaluation method.
+
+Within those 19 studies:
+
+- 2 of 19 report an extractable, time-consistent split protocol.
+- 1 of 19 reports an explicit transaction-cost model.
+- 1 of 19 documents universe construction or survivorship handling.
+- The majority sit at the lowest reproducibility tier, and none reaches the highest.
+
+The authors call this *protocol incomparability*. Their summary: "architectural experimentation is expanding rapidly, while comparable evaluation protocols, execution semantics, and reproducible artifacts remain the field's immediate bottlenecks."
+
+Most published agentic trading numbers are therefore not comparable with each other, let alone with a production profit-and-loss statement.
+
+## What Has Been Built, and What Has Been Deployed
+
+The systems below cover the research output this series draws on.
+
+<div className="overflow-x-auto">
+
+| System | Shape | Market and window | What it demonstrates |
+| --- | --- | --- | --- |
+| [TradingAgents](https://arxiv.org/abs/2412.20138) | Role-play multi-agent: analysts, bull and bear researchers, risk team, trader | US equities | The architecture pattern most later work copies |
+| [ContestTrade](https://arxiv.org/abs/2508.00554) | Two teams with continuous internal ranking; only top agents' outputs adopted | A-shares, Jan to Jun 2025, 0.1% cost | The cleanest ablation evidence that structure carries the result |
+| [AlphaCrafter](https://arxiv.org/abs/2605.05580) | Miner generates factors, Screener filters, Trader codes a strategy | CSI300 and S&P 500, backtest plus a live window | Harness-driven determinism around an LLM, with declared costs |
+| [Agentic nowcasting](https://arxiv.org/abs/2601.11958) | Single agent, autonomous web search, daily ranking | Russell 1000, forward-collected from Apr 2025 | The only leakage-free-by-construction positive result |
+| [KTD-Fin](https://arxiv.org/abs/2605.28359) | Benchmark: masks identifiers and calendar, attributes returns | CSI300, Jan 2024 to Apr 2026 | That most agent "alpha" is beta and style |
+| [TradeTrap](https://arxiv.org/abs/2512.02261) | Stress-test harness over four agent components | NASDAQ-100, one month | That the action surface is the attack surface |
+
+</div>
+
+Deployment is a different picture. ESMA surveyed 395 EU firms in summer 2025, collecting 847 AI use cases ([TRV Risk Analysis, 20 February 2026](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA50-481369926-30599_TRV_Risk_Analysis_AI_adoption_and_trends_in_securities_markets.pdf)). The top applications are back-office: drafting and summarising (239 use cases, 29%), internal assistant or copilot (227), code generation (109), data quality (105), translation (95).
+
+Core investment activities are marginal:
+
+- portfolio risk management: 20
+- portfolio optimisation: 19
+- algorithmic trading: 10
+- high-frequency trading: 3
+- robo-advising: 2
+
+ESMA notes these remain "relatively rare, with most still in development or experimental stages". Eighty-seven percent of use cases are internal-only; 3% involve the provision of investment services. Seventy-seven percent operate with low or no autonomy, meaning human approval is required or the system only makes suggestions. Agentic AI, defined as planning plus external tools, appears in 141 use cases (17% of the total), but 68% of *those* are also low or no autonomy.
+
+A parallel AFM survey of 323 Dutch entities found 24 firms using or planning to use AI "to improve trade strategies" and 7 "to automate trading".
+
+The one documented live deployment of autonomous order entry is retail, and it is built as a blast radius. Robinhood [opened third-party agents to trading](https://robinhood.com/us/en/newsroom/robinhood-is-now-open-to-agents/) on 27 May 2026 through MCP servers, into a dedicated account "separate from the rest of your portfolio, meaning your agent only has access to the funds you deposit into that account", with real-time activity feeds, push notifications and instant disconnection. The disclosure is equally direct: "Robinhood does not control, supervise, monitor, recommend, or audit these AI agents."
+
+Read as architecture, that is a containment pattern: isolate the funds, notify every action, make disconnection one click.
+
+## The Leakage Channel With No Classical Analogue
+
+Classical look-ahead bias is a pipeline defect. Future information enters the feature set, as a restated fundamental, an adjusted price series, or a revised macro print, and the fix is point-in-time data with as-of timestamps. You audit the pipeline, you find the leak.
+
+An LLM agent has a second channel. The model's weights may already encode how a stock moved during your evaluation window, because that period was in its pretraining corpus. The pipeline can be spotless and the leak still present. As one formal treatment puts it, an agent "can leak the future through its pretraining corpus even when its code is fed only contemporaneous inputs, so that inspecting the pipeline is not even sufficient to rule leakage out" ([arXiv 2607.04958](https://arxiv.org/pdf/2607.04958), ACM TOSEM, July 2026).
+
+<div className="overflow-x-auto">
+
+| | Classical look-ahead | Parametric look-ahead |
+| --- | --- | --- |
+| **Where it lives** | The data pipeline | The model weights |
+| **How it enters** | Restated, adjusted or revised inputs | Pretraining corpus overlapping the test window |
+| **How you detect it** | Audit the pipeline and the joins | You cannot, by inspection alone |
+| **How you defend** | Point-in-time store, as-of reads, embargo | Post-cutoff windows, identifier masking, decoding-time suppression |
+
+</div>
+
+One paper measures the magnitude. FinCAD, an inference-time adaptation of context-aware decoding, suppresses memorised outcomes during generation ([arXiv 2605.24564](https://arxiv.org/abs/2605.24564)). Applied to Qwen2.5-14B over an in-sample window of 2010 to 2020, it produces a mean relative drop of 45.4% of baseline return and 25.6% of baseline Sharpe across mega-caps, reaching 78.2% on a single name. On post-cutoff 2025 data the same suppression barely fires: three of five tickers come back byte-identical.
+
+Nearly half the in-sample performance was memory. Out of sample there was nothing to suppress.
+
+A companion benchmark standardises the measurement as alpha decay and reports "significant lookahead bias in standard LLMs" that is absent in point-in-time models ([Look-Ahead-Bench, arXiv 2601.13770](https://arxiv.org/abs/2601.13770)).
+
+## Under Leakage Control, the Returns Look Like Beta
+
+KTD-Fin attacks the problem from the data side: anonymise the stock identifiers and the calendar information, then decompose realised returns Barra-style into market, style and selection components. Ten frontier models, CSI300, 1 January 2024 to 10 April 2026.
+
+The decomposition:
+
+- Selection alpha: nine of ten negative, ranging from +0.2% for the single near-zero case down to −77.8%.
+- Market exposure: +29.5% to +42.5% across agents.
+- Style exposure: +11.8% to +29.2%. Every agent, including the worst performers, harvests a double-digit contribution from systematic factor tilts.
+
+The paper's own conclusion is that agent cumulative returns under leakage-controlled evaluation "are largely explained by passive market and style exposure, with limited evidence of persistent stock-selection alpha."
+
+Masking also changed the reasoning. With real tickers visible, the models argued from brand identity and sector taxonomy: a liquor market leader, a defensive utility, a semiconductor manufacturer. Blinded, the same model receiving identical numbers produced rationales that "reduce to pure factor ranks", such as a 20-day return, a volatility figure, a drawdown. The narrative layer disappeared; the factor layer survived.
+
+A large part of what reads as investment reasoning in an unmasked agent transcript is recall dressed as analysis.
+
+## The One Result That Survives, and How Narrow It Is
+
+One design in the current evidence produces alpha that leakage cannot explain, and it does so by construction rather than by control.
+
+A single agent with autonomous web search ranks Russell 1000 stocks daily, with predictions collected forward from April 2025, at the current edge of time, never replayed against history ([arXiv 2601.11958](https://arxiv.org/abs/2601.11958)). On the top-20 long basket it reports a daily six-factor alpha of 18.4 basis points and an annualised Sharpe of 2.43, with transaction costs under 10% of gross alpha.
+
+Two caveats travel with it and should never be dropped. First, predictability is highly concentrated: beyond the top tier the alpha dilutes rapidly, and bottom-ranked names are statistically indistinguishable from the market. This is a top-of-book signal, not a strategy. Second, the design is irreproducible by construction, because the agent searched a web that no longer exists in that state. That is simultaneously its strength as evidence and its weakness as a benchmark.
+
+## How to Read Any Agentic Trading Result
+
+Six questions, in order, for reading any result in this field.
+
+1. When was the evaluation window relative to the model's cutoff? If it overlaps, discount to zero until a masking or suppression control is shown.
+2. Are identifiers visible? KTD-Fin shows the reasoning itself changes when they are not.
+3. What costs were charged? One study in nineteen charges any.
+4. How long is the window? One month, six months, seventy days. None spans a regime cycle.
+5. Is the alpha attributable? Demand a factor decomposition, not a return.
+6. Is it reproducible? None of the nineteen reaches the top tier. Expect to reproduce nothing.
+
+Applied to the studies above, the ranking changes completely. Sort by leakage control rather than by return:
+
+<div className="overflow-x-auto">
+
+| Study | Leakage control | Costs charged | Headline result |
+| --- | --- | --- | --- |
+| Agentic nowcasting | Forward-collected at the edge of time | Stated under 10% of gross alpha | 18.4 bp daily alpha, Sharpe 2.43, top-20 longs only |
+| KTD-Fin | Identifier and calendar masking, factor attribution | Not stated | 9 of 10 agents negative selection alpha |
+| FinCAD | Decoding-time suppression of memorised outcomes | Not applicable | −45.4% mean in-sample return, out-of-sample barely affected |
+| AlphaCrafter | Windows after all backbone cutoffs, plus a live window 2 March to 12 June 2026 | 0.02% CSI300 / 0.01% S&P 500 | Live: 10.70% annualised, Sharpe 1.19 (CSI300); 16.26%, Sharpe 1.60 (S&P 500) |
+| ContestTrade | Test window after model cutoff | 0.1% per trade | 52.80% cumulative, Sharpe 3.12 over six months |
+| DRL vs mean-variance | Expanding-window standardisation, 10 rolling backtests | **Not charged** | Sharpe 1.1662 vs 0.6776, before costs, and reinforcement learning rather than an LLM |
+| TradingAgents | Not extractable | Not stated | Architectural reference, not performance evidence |
+
+</div>
+
+ContestTrade's 52.80% is a six-month single-market window. AlphaCrafter's live figures are the most honest combination available, with declared costs and a window after the backbones' cutoffs, and they are 10.70% and 16.26% annualised over 69 and 73 trading days respectively. The J.P. Morgan portfolio-allocation comparison reports a large Sharpe advantage over mean-variance optimisation, but its environment does not charge transaction costs and the method is reinforcement learning, not an LLM agent.
+
+## The Question Nobody Has Answered
+
+Most engineering effort in this field currently goes into multi-agent structure, and the evidence for it is one ablation.
+
+ContestTrade's ablation is the cleanest internal evidence that multi-agent structure, rather than the underlying model, carries the result. Over A-shares, January to June 2025, at 0.1% cost per trade:
+
+<div className="overflow-x-auto">
+
+| Configuration | Cumulative return | Sharpe | Max drawdown |
+| --- | --- | --- | --- |
+| Full system | 52.80% | 3.12 | 12.41% |
+| Without the LLM judge | 50.55% | 2.57 | 13.48% |
+| Without the researcher contest | 32.83% | 1.78 | 16.70% |
+| Without the data-analyst contest | 42.85% | 2.01 | 13.47% |
+| Without deep research | 43.75% | 2.08 | 20.55% |
+| Without all components | **3.01%** | **0.07** | 26.63% |
+
+</div>
+
+Removing everything collapses the result. That looks conclusive until you notice what the ablation actually removes: capability, not architecture. The stripped configuration also does less work, makes fewer tool calls and spends fewer tokens. No trading study found holds token budget, tool-call count and model constant while varying single-agent versus multi-agent topology.
+
+Until compute is equalised, "multi-agent wins" is confounded with "more compute wins". The defensible reading is narrower than the headline: structured decomposition with an explicit ranking or selection mechanism appears to help; more agents debating is unproven.
+
+## What This Leaves You With
+
+No retrieved study reports a live, cost-charged, capital-at-risk track record for an agentic trading system at institutional scale. Every number in this article is a backtest or a sub-year live prototype window.
+
+So be precise about what you are claiming, and rank your own results by leakage control before anyone else does it for you. If your internal programme meets the six questions above, it is already ahead of the published literature.
+
+[Part 3](../agentic-trading-action-surface/), *The Action Surface Is the Attack Surface*, turns to the failure mode that the performance literature mostly ignores. Agentic trading systems do not lose money because their forecasts degrade. They lose money because someone reached their tools.
+
+## Sources and Further Reading
+
+- [*Agentic Trading: When LLM Agents Meet Financial Markets* (arXiv 2605.19337)](https://arxiv.org/abs/2605.19337)
+- [*From Knowing to Doing: A Memory-Controlled Benchmark for LLM Trading Agents* (KTD-Fin, arXiv 2605.28359)](https://arxiv.org/abs/2605.28359)
+- [*Autonomous Market Intelligence: Agentic AI Nowcasting Predicts Stock Returns* (arXiv 2601.11958)](https://arxiv.org/abs/2601.11958)
+- [*Summoning the Oracle to Slay It* (FinCAD, arXiv 2605.24564)](https://arxiv.org/abs/2605.24564)
+- [*Look-Ahead-Bench* (arXiv 2601.13770)](https://arxiv.org/abs/2601.13770)
+- [*Look-Ahead-Freedom as Temporal Non-Interference* (arXiv 2607.04958)](https://arxiv.org/abs/2607.04958)
+- [*ContestTrade* (arXiv 2508.00554)](https://arxiv.org/abs/2508.00554)
+- [*AlphaCrafter* (arXiv 2605.05580)](https://arxiv.org/abs/2605.05580)
+- [*TradingAgents* (arXiv 2412.20138)](https://arxiv.org/abs/2412.20138)
+- [*Deep Reinforcement Learning for Optimal Portfolio Allocation* (arXiv 2602.17098)](https://arxiv.org/abs/2602.17098)
+- [ESMA TRV Risk Analysis: AI adoption and trends in securities markets (20 February 2026)](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA50-481369926-30599_TRV_Risk_Analysis_AI_adoption_and_trends_in_securities_markets.pdf)
+- [Robinhood is now open to agents (27 May 2026)](https://robinhood.com/us/en/newsroom/robinhood-is-now-open-to-agents/)
+
+*Every figure quoted was checked against its primary source on 20 September 2026. Performance numbers are research results, not production track records, and are reported here with the leakage control and cost model that produced them. This is a personal technical article, not investment advice, and it represents my own views rather than those of my employer.*

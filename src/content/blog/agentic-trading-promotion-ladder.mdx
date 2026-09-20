@@ -1,0 +1,174 @@
+---
+title: "From Research Assistant to Constrained Autonomy"
+description: "How to evaluate an agentic trading system, which promotion gate is load-bearing, and exactly where the evidence stops supporting the roadmap."
+pubDate: 2026-09-20
+heroImage: "/images/blog/agentic-trading-promotion-ladder.jpg"
+tags: ["Agentic-Trading", "LLM-Agents", "Evaluation", "Production", "Risk-Management"]
+series: "Agentic Trading in Production"
+seriesOrder: 4
+draft: false
+---
+
+On the evidence in this series, an institution can defensibly run agents today for research, filing and document synthesis, hypothesis generation, monitoring triage and post-trade explanation. That is work where an error costs an analyst an hour.
+
+Nothing found supports autonomous trade decisioning. And, as [Part 1](../agentic-trading-is-algorithmic-trading/) established, in the EU the research agent becomes a regulated algorithmic-trading component the moment its output influences order parameters.
+
+The question is what the path between those two states looks like, and which gate on that path is load-bearing.
+
+## Where Agents Earn Their Place
+
+One pattern runs through everything in [Part 2](../agentic-trading-evidence/): agent value rises where the output is text about evidence, and falls where the output is a number that must be right.
+
+<div className="overflow-x-auto">
+
+| Capability | Where the decision sits | Why |
+| --- | --- | --- |
+| Market and fundamental research | Agent, human reviews | The dominant deployed use case; an error costs an analyst hour |
+| Signal and factor proposal | Agent proposes, classical model validates | Factor candidates need information-coefficient validation before use |
+| Portfolio construction | Agent translates constraints, optimiser decides | Agent selection alpha is near zero or negative once masked |
+| Risk assessment and limits | Deterministic code, agent explains | Must be computable and reproducible by an independent party |
+| Trade decision | Pre-authorised envelope only | No evidence supports full delegation |
+| Order generation and execution | Deterministic algorithms | The reinforcement-learning premium is here; language models are not |
+| Position monitoring | Agent for triage, thresholds for detection | Cheap to verify, high recall value |
+| Performance attribution | Deterministic maths, agent narrates | Numbers must reconcile; the story can be generated |
+| Post-trade analysis | Agent, human reviews | The best agent fit after research |
+
+</div>
+
+That boundary, propose versus decide, is the design decision. Framework choice matters far less.
+
+## Two Evaluation Planes, Both Must Pass
+
+A system that makes money while violating its policy envelope has failed. So has a compliant system with no edge. Both planes are gates.
+
+Plane one is financial, with two additions specific to agents.
+
+Factor attribution is mandatory. Report market, style and selection components alongside every headline return. A result with a positive return and a negative selection alpha is a beta product and should be priced as one.
+
+Use a deflated Sharpe ratio, and log your trial count honestly. An agent can generate thousands of candidate strategies cheaply, so multiple-testing inflation is structural. The number of agent-generated candidates *is* the trial count. Most programmes do not record it, which means their significance thresholds are wrong by an unknown factor.
+
+Plane two is behavioural, and it is the one that usually does not exist.
+
+<div className="overflow-x-auto">
+
+| Metric | How to measure | Target shape |
+| --- | --- | --- |
+| Tool-call accuracy | Schema-valid, semantically correct calls over total | ≥99%, every failure logged |
+| Citation-support rate | Claims traceable to a retrieved source with an as-of time | ≥99% for research outputs |
+| Decision reproducibility | Identical inputs produce identical actions under a pinned model and seed | Must be demonstrable for audit |
+| Reasoning consistency | Variance of the decision across seeds on identical state | Report the distribution, not one run |
+| Policy-violation rate | Actions refused by the policy engine | Trending to zero; spikes are incidents |
+| Risk-limit violation rate | Refusals by the limit engine | Zero *after* the gateway, by construction |
+| Intervention rate | Human overrides of an agent decision | A falling rate is the strongest autonomy argument available |
+| Injection resilience | Pass rate on a red-team corpus | Regression-tested per release |
+| Cost per decision | Tokens, tool calls, latency | Budgeted, and compared against a single-agent control |
+
+</div>
+
+Decision reproducibility deserves a note, because it is the one an examiner will eventually ask about. A sampled model is not reproducible by default. Pinning the model version, the seed and the sampling parameters makes it reproducible in principle, until the provider updates the model underneath you. No retrieved regulatory or vendor source specifies how a silent version change should be treated under change-management duties. It is an open question with a compliance deadline attached.
+
+## The Bias Catalogue Needs an Agent Column
+
+Every classical bias survives into agentic systems and acquires a new entry point.
+
+<div className="overflow-x-auto">
+
+| Bias | Classical defence | Agent-specific addition |
+| --- | --- | --- |
+| Look-ahead | Point-in-time data, chronological splits | Parametric look-ahead: windows after every backbone's cutoff, identifier masking, or decoding-time suppression |
+| News-timestamp leakage | Ingestion-lag modelling | News timestamps record *publication*, not availability to your pipeline. Model the lag explicitly |
+| Survivorship | Point-in-time universes with delistings | An agent retrieves *today's* web, so the retrieval corpus is itself survivorship-biased |
+| Selection and regime | Pre-register windows, report all regimes | Agent runs are cheap: publish the full run set, not the best run |
+| Backtest overfitting | Walk-forward, embargo, deflated Sharpe | Log the number of agent-generated candidates as the trial count |
+| Leakage in generated code | Code review | Automated leakage checker in the sandbox; treat a leak as a build failure |
+| Unrealistic costs | Charge commissions, spread, impact, borrow | Charge the *same* model in research and production |
+
+</div>
+
+The last row on leakage checking is more tractable than it sounds. Look-ahead freedom can be formalised as temporal non-interference over a time-indexed information lattice. In general the property is undecidable, but on the value-independent fragment, covering windowing, resampling, joins, point-in-time and vintage reads, and agentic retrieval, a type-and-effect system decides it in linear time, and the authors report catching every planted leak that differential and tiling detectors miss ([arXiv 2607.04958](https://arxiv.org/abs/2607.04958), ACM TOSEM).
+
+Build the research environment inside that fragment and the field's most common evaluation failure becomes a compile-time error rather than a peer-review argument.
+
+## The Promotion Ladder
+
+Seven stages, each answering one question.
+
+<div className="overflow-x-auto">
+
+| Stage | Question it answers | Exit criteria |
+| --- | --- | --- |
+| Research | Is there a mechanism? | Pre-registered hypothesis; leakage checker green; cost model specified |
+| Backtest | Does it survive history with costs? | Positive out-of-sample selection alpha after costs; deflated Sharpe positive; full run set reported |
+| Walk-forward | Does it survive time? | Stable across ≥3 non-overlapping windows spanning ≥2 regimes, with no refit outside protocol |
+| Paper trading | Does the plumbing lie? | ≥1 quarter; zero risk-gateway refusals; tool-call accuracy ≥99%; reproducibility demonstrated |
+| Shadow | Does it agree with reality when it cannot act? | Divergence from the incumbent process explained; simulated P&L within modelled cost bands; injection corpus passed |
+| Limited production | Does it behave with real money in a small box? | Hard notional cap; every order through the gateway; zero policy violations; intervention rate falling |
+| Scaled production | Does it stay in bounds under size? | Impact-aware cost analysis within model; kill switch exercised in production; self-assessment updated |
+
+</div>
+
+Two transitions carry the weight: paper to shadow, and shadow to limited production.
+
+*Paper to shadow* asks whether the plumbing lies: whether fills that the simulator grants would actually have happened, whether the feed staleness you never modelled matters, whether the as-of discipline held under live data.
+
+*Shadow to limited production* asks whether behaviour changes when actions bite. This is the gate most programmes get wrong, because they gate it on simulated profit and loss.
+
+Every catastrophic failure in [Part 3](../agentic-trading-action-surface/) was a behaviour failure, not a forecast failure. So the gate between shadow and production should be behavioural: injection corpus passed, refusal count explained, action distribution within bounds, kill switch drilled. Financial criteria alone will happily pass a system that is about to concentrate 100% of a portfolio into one name.
+
+## Five Phases, and Exactly Where the Evidence Stops
+
+Mapped onto a programme, the ladder gives five phases, and the evidence in this series runs out between the third and the fourth.
+
+<div className="overflow-x-auto">
+
+| Phase | Autonomy | What it delivers | Evidence status |
+| --- | --- | --- | --- |
+| 1. Research assistant | A0 to A1 | Filings, news and macro synthesis; contradiction surfacing; drafting | Supported |
+| 2. Decision support | A1 | Ranked machine-readable ideas; factor proposals with generated test code | Supported, and already inside the EU algorithmic-trading perimeter if the output influences order parameters |
+| 3. Shadow trading | A1, no execution | Full decision pipeline against live data, producing simulated orders through the production gateway in report-only mode | Supported |
+| *Evidence stops here* | | | |
+| 4. Constrained autonomy | A2 | Execution inside a hard envelope: named universe, capped notional, capped turnover, one strategy | Engineering and governance proposition, not an evidence-backed one |
+| 5. Production at scale | A2 | Multiple strategies within envelopes; continuous monitoring | Should not be planned in detail before phase 4 produces its own evidence |
+
+</div>
+
+The line is where it is for a specific reason: no retrieved study demonstrates durable, cost-adjusted, leakage-controlled selection alpha from an agentic system. Phase 4 may still be the right thing to build, since the containment architecture is sound and the regulatory obligations are known, but it must be built as an experiment with its own readout, not as the payoff for phases 1 to 3.
+
+Phase 2 carries the regulatory surprise. A team that believes it is in "decision support, not trading" is, in the EU, running an algorithmic-trading component with change-control obligations attached. ESMA warns firms to manage the risk that small recalibrations "accumulate over time, when uncontrolled or unchecked, into a material change in the model output without it being tested", and lists "Retraining or modifying machine learning components" as a change requiring control ([supervisory briefing](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf), paras 47 and 31). A prompt edit is a change of that kind.
+
+## The Experiments Nobody Has Run
+
+If you are going to build phase 4 as an experiment, these are the readouts worth designing for. Each runs on the same point-in-time data, the same cost model, the same universe and the same window, and reports the full run set rather than the best run.
+
+- Single-agent versus multi-agent at equal token and tool-call budget. The question the literature has not answered, because every published comparison varies capability and compute together.
+- Adversarial robustness, measured against the published stress-test magnitudes: injection, fake news, memory poisoning, state tampering.
+- Leakage ablation: the same model and window, identifiers masked versus unmasked. How much of the result was memory?
+- Agent plus deterministic gateway versus gateway in report-only mode. Refusal count, tail-loss reduction, turnover control.
+
+And one benchmark almost nobody declares: a random-action agent with identical plumbing. It isolates how much of a result comes from the harness, meaning the universe, the sizing rules, the cost model and the rebalancing schedule, rather than from the reasoning. If your agent does not beat it convincingly, you have built a portfolio construction system with an expensive random number generator attached.
+
+## One Paragraph on Frameworks
+
+Pick the durability engine first and the agent library second: a checkpoint is not durable execution, and in trading an undetected crashed run is an unmanaged position. Do not let the framework own risk or money. Keep tool governance, limits and the kill switch in the deterministic layers, and any framework can then be swapped without touching the control surface. Multi-agent topologies are a cost decision as much as a design one, since they consume several times the tokens of a single-agent run for benefits that remain unproven in trading. And where the agent may only propose, the orchestration surface is genuinely small, covering plan, call a fixed tool set, emit a typed proposal and log everything, which makes custom orchestration a legitimate answer. No retrieved source evaluates any agent framework against regulatory auditability requirements for trading; framework marketing on "governance" addresses enterprise policy, not record keeping under RTS 6.
+
+## Where This Series Lands
+
+Agentic trading is a control-loop property, and in the EU a signal-generating agent is already inside the algorithmic-trading perimeter whether or not a human clicks approve. The performance evidence cannot currently show that these systems select assets better than beta and style, because a leakage channel lives in the model weights where no pipeline audit reaches. What the evidence does show, with measured magnitudes, is that these systems fail through their tools, memory and state, which is why the controls belong in code that never reads the agent's output as instruction.
+
+A related finding from a different model class is worth closing on. A review of 167 reinforcement-learning studies in finance from 2017 to 2025 found the performance premium concentrated in market making, a negligible relationship between training length and performance (slope 0.023, p = 0.591), and concluded that organisations "should focus less on algorithm sophistication and more on market microstructure, regulatory constraints, and risk management" ([arXiv 2512.10913](https://arxiv.org/abs/2512.10913)).
+
+That was written about reinforcement learning. It transfers without modification.
+
+The questions I would still want answered, and cannot: can parametric look-ahead be eliminated rather than partially suppressed, for frontier models served through an API where the weights cannot be touched? At what level of assets under management does a top-tier-only edge disappear into market impact? And how is an agentic decision reconstructed for an examiner five years later, when that model version no longer exists?
+
+## Sources and Further Reading
+
+- [*Agentic Trading: When LLM Agents Meet Financial Markets* (arXiv 2605.19337)](https://arxiv.org/abs/2605.19337)
+- [*Look-Ahead-Freedom as Temporal Non-Interference* (arXiv 2607.04958)](https://arxiv.org/abs/2607.04958)
+- [*From Knowing to Doing* (KTD-Fin, arXiv 2605.28359)](https://arxiv.org/abs/2605.28359)
+- [*Reinforcement Learning in Financial Decision Making: A Systematic Review* (arXiv 2512.10913)](https://arxiv.org/abs/2512.10913)
+- [*BacktestBench* (arXiv 2605.17937)](https://arxiv.org/abs/2605.17937)
+- [ESMA Supervisory Briefing on Algorithmic Trading in the EU (26 February 2026)](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)
+- [Commission Delegated Regulation (EU) 2017/589 (RTS 6)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R0589)
+
+*Sources were checked on 20 September 2026. The capability matrix, promotion ladder and phase model are my own inferences from the evidence in this series, not observed industry practice; no agent framework was benchmarked for it. This is a personal technical article, not investment, legal or compliance advice, and it represents my own views rather than those of my employer.*
