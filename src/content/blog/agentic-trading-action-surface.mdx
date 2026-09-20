@@ -52,55 +52,41 @@ What follows is a design derived from the evidence rather than an observed produ
 
 The organising principle is a single sentence: **no LLM output reaches a venue without passing through code that would have rejected it regardless of how it was produced.**
 
-<div className="overflow-x-auto my-8">
-<svg viewBox="0 0 700 430" role="img" aria-labelledby="arch-title" className="w-full h-auto" fill="none" stroke="currentColor">
-  <title id="arch-title">Four-layer agentic trading architecture with one direction of trust</title>
-  <g fontSize="13" fontFamily="ui-sans-serif, system-ui, sans-serif">
-    <rect x="60" y="10" width="480" height="70" rx="8" strokeWidth="1.5" opacity="0.9" />
-    <text x="76" y="36" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">AI layer: non-deterministic, no authority</text>
-    <text x="76" y="60" fill="currentColor" stroke="none" opacity="0.75">Research agents · signal agents · monitoring · orchestrator · tool registry · memory</text>
+<figure className="not-prose my-10">
 
-    <rect x="60" y="120" width="480" height="70" rx="8" strokeWidth="1.5" opacity="0.9" />
-    <text x="76" y="146" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">Deterministic financial layer: the source of truth</text>
-    <text x="76" y="170" fill="currentColor" stroke="none" opacity="0.75">Point-in-time store · feature store · optimiser · position and P&amp;L engine · cost model</text>
-
-    <rect x="60" y="230" width="480" height="70" rx="8" strokeWidth="2.5" />
-    <text x="76" y="256" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">Risk-control layer: authorises or refuses, no LLM in the path</text>
-    <text x="76" y="280" fill="currentColor" stroke="none" opacity="0.75">Pre-trade controls · limits · policy engine · kill switch · immutable audit log</text>
-
-    <rect x="60" y="340" width="480" height="70" rx="8" strokeWidth="1.5" opacity="0.9" />
-    <text x="76" y="366" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">Execution layer: deterministic</text>
-    <text x="76" y="390" fill="currentColor" stroke="none" opacity="0.75">Order generation and slicing · routing · broker and venue connectivity</text>
-
-    <g strokeWidth="1.5" opacity="0.8">
-      <path d="M300 80 L300 118" />
-      <path d="M294 110 L300 120 L306 110" />
-      <path d="M300 190 L300 228" />
-      <path d="M294 220 L300 230 L306 220" />
-      <path d="M300 300 L300 338" />
-      <path d="M294 330 L300 340 L306 330" />
-    </g>
-
-    <text x="312" y="105" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">typed proposal</text>
-    <text x="312" y="215" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">target weights + constraints</text>
-    <text x="312" y="325" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">authorised orders only</text>
-
-    <g strokeWidth="1.5" opacity="0.8">
-      <path d="M580 20 L580 400" strokeDasharray="4 4" />
-      <path d="M574 390 L580 405 L586 390" />
-    </g>
-    <text x="596" y="200" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">authority</text>
-    <text x="596" y="216" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">increases</text>
-
-    <g strokeWidth="1.5" opacity="0.8">
-      <path d="M30 400 L30 20" strokeDasharray="4 4" />
-      <path d="M24 30 L30 15 L36 30" />
-    </g>
-    <text x="8" y="200" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">trust</text>
-    <text x="8" y="216" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">decreases</text>
-  </g>
-</svg>
+<div className="rounded-lg border border-white/5 bg-bg-surface p-4 shadow-resting sm:p-5">
+  <p className="text-sm font-semibold text-text-primary sm:text-base">AI layer</p>
+  <p className="mt-0.5 text-sm text-text-secondary">Non-deterministic, no authority</p>
+  <p className="mt-2 text-xs leading-relaxed text-text-muted">Research agents · signal agents · monitoring · orchestrator · tool registry · memory</p>
 </div>
+
+<div className="my-2 flex items-center gap-2 pl-4 text-xs text-text-muted sm:pl-6"><span aria-hidden="true" className="text-accent-tech-light">↓</span> <span>emits a typed proposal</span></div>
+
+<div className="rounded-lg border border-white/5 bg-bg-surface p-4 shadow-resting sm:p-5">
+  <p className="text-sm font-semibold text-text-primary sm:text-base">Deterministic financial layer</p>
+  <p className="mt-0.5 text-sm text-text-secondary">The source of truth for every number</p>
+  <p className="mt-2 text-xs leading-relaxed text-text-muted">Point-in-time store · feature store · optimiser · position and P&amp;L engine · cost model</p>
+</div>
+
+<div className="my-2 flex items-center gap-2 pl-4 text-xs text-text-muted sm:pl-6"><span aria-hidden="true" className="text-accent-tech-light">↓</span> <span>passes target weights and constraints</span></div>
+
+<div className="rounded-lg border border-accent-tech/40 bg-bg-surface p-4 shadow-lifted ring-1 ring-accent-tech/20 sm:p-5">
+  <p className="text-sm font-semibold text-text-primary sm:text-base">Risk-control layer</p>
+  <p className="mt-0.5 text-sm text-text-secondary">Authorises or refuses, with no language model in the path</p>
+  <p className="mt-2 text-xs leading-relaxed text-text-muted">Pre-trade controls · limits · policy engine · kill switch · immutable audit log</p>
+</div>
+
+<div className="my-2 flex items-center gap-2 pl-4 text-xs text-text-muted sm:pl-6"><span aria-hidden="true" className="text-accent-tech-light">↓</span> <span>releases authorised orders only</span></div>
+
+<div className="rounded-lg border border-white/5 bg-bg-surface p-4 shadow-resting sm:p-5">
+  <p className="text-sm font-semibold text-text-primary sm:text-base">Execution layer</p>
+  <p className="mt-0.5 text-sm text-text-secondary">Deterministic</p>
+  <p className="mt-2 text-xs leading-relaxed text-text-muted">Order generation and slicing · routing · broker and venue connectivity</p>
+</div>
+
+<figcaption className="mt-4 text-xs leading-relaxed text-text-muted">Reading down the stack, authority increases and the risk-control layer is the last thing that can refuse. Reading up, trust decreases: the AI layer is the least trusted component in the system.</figcaption>
+
+</figure>
 
 The AI layer proposes. The deterministic financial layer computes every number that must be right: positions, profit and loss, risk figures, costs. The risk-control layer authorises or refuses, with no language model anywhere in that path. The execution layer translates authorised intent into orders.
 
