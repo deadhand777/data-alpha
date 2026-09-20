@@ -1,0 +1,219 @@
+---
+title: "The Action Surface Is the Attack Surface"
+description: "Trading agents fail through tools, memory and state, not through bad forecasts. The measured magnitudes, and the four-layer separation that answers them."
+pubDate: 2026-09-19
+heroImage: "/images/blog/agentic-trading-action-surface.jpg"
+tags: ["Agentic-Trading", "LLM-Agents", "Security", "Prompt-Injection", "Architecture"]
+series: "Agentic Trading in Production"
+seriesOrder: 3
+draft: false
+---
+
+A prompt injection took a trading agent from 7.81% return to 0.89% over a single month. Its Sharpe ratio fell from 5.72 to 0.29. Its trade count rose from 47 to 391, and its largest single position went from 39% of the portfolio to 99.98%.
+
+A separate attack, falsified position and cash feedback, took a different agent from 0.91% to −61.02%, with a 91.97% maximum drawdown, 100% position concentration, and realised volatility of 890%. A $5,000 account finished at roughly $1,929.
+
+None of these is a forecasting failure.
+
+[Part 2](../agentic-trading-evidence/) showed that the performance evidence for agentic trading is thin and mostly contaminated. This part covers the failure mode the performance literature largely ignores, and the architecture that follows from it.
+
+## Four Measured Failures
+
+The numbers above come from [TradeTrap](https://arxiv.org/abs/2512.02261), a stress-test harness that decomposes a trading agent into four components (market intelligence, strategy formulation, portfolio and ledger handling, and trade execution) then perturbs each in turn. Setup: NASDAQ-100, 1 to 31 October 2025, $5,000 starting capital, no fees or slippage modelled. Two agent architectures, labelled adaptive and procedural.
+
+<div className="overflow-x-auto">
+
+| Attack | Agent | Effect |
+| --- | --- | --- |
+| Fake news / data fabrication | Adaptive | Return 7.81% → 5.26%; Sharpe 5.72 → 3.20; max position concentration 39.17% → 77.13% |
+| Prompt injection (reversed signals) | Adaptive | Return 7.81% → 0.89%; Sharpe 5.72 → 0.29; trades 47 → 391; concentration → 99.98% |
+| Memory poisoning | Procedural | Annualised 12.70% → −2.01%; Sharpe 1.92 → −0.24 |
+| State tampering (falsified holdings and cash) | Procedural | Return 0.91% → −61.02%; max drawdown 91.97%; concentration 100%; volatility 9.29% → 889.61% |
+
+</div>
+
+Two caveats before using these figures for anything. The window is one month, so the paper's annualised numbers, such as 149.64% for the clean adaptive agent, are noise multiplied by twelve. And no transaction costs are charged, which flatters every configuration equally. What survives those caveats is the *shape* of the degradation: not a few percentage points off a Sharpe ratio, but position concentration going to 100% and drawdowns approaching total loss.
+
+Three of the four attacks enter through channels an agent framework treats as plumbing: tool responses, memory files, and state feedback. Only the first is about the market at all.
+
+A broader systematisation of transacting agents reaches the same place from a different angle, deriving twelve cross-layer attack vectors and locating the authorisation gap in the agent-payment and trade-protocol layer rather than in the model ([arXiv 2604.15367](https://arxiv.org/abs/2604.15367)).
+
+## Why That Changes the Design
+
+The instinct when reading those numbers is to harden the agent: better system prompts, injection-detection instructions, a rule that says never exceed 20% in one position.
+
+That instinct is wrong, and the reason is structural rather than empirical. A control that sits inside the agent's context can be argued away by the same text that compromises it. The injected instruction and the guardrail are both tokens in the same window, competing for the same attention, evaluated by the same sampled model. A control in a separate layer, executed by code that never reads the agent's output as instruction, cannot be argued with at all.
+
+So guardrails written into a system prompt are not risk controls. They are a usability feature.
+
+## Four Layers, One Direction of Trust
+
+What follows is a design derived from the evidence rather than an observed production system. No institution's agentic trading architecture is published in a form that can be inspected, so treat this as an inference grounded in the measured failures above and in the regulatory requirements from [Part 1](../agentic-trading-is-algorithmic-trading/).
+
+The organising principle is a single sentence: **no LLM output reaches a venue without passing through code that would have rejected it regardless of how it was produced.**
+
+<div className="overflow-x-auto my-8">
+<svg viewBox="0 0 700 430" role="img" aria-labelledby="arch-title" className="w-full h-auto" fill="none" stroke="currentColor">
+  <title id="arch-title">Four-layer agentic trading architecture with one direction of trust</title>
+  <g fontSize="13" fontFamily="ui-sans-serif, system-ui, sans-serif">
+    <rect x="60" y="10" width="480" height="70" rx="8" strokeWidth="1.5" opacity="0.9" />
+    <text x="76" y="36" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">AI layer: non-deterministic, no authority</text>
+    <text x="76" y="60" fill="currentColor" stroke="none" opacity="0.75">Research agents · signal agents · monitoring · orchestrator · tool registry · memory</text>
+
+    <rect x="60" y="120" width="480" height="70" rx="8" strokeWidth="1.5" opacity="0.9" />
+    <text x="76" y="146" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">Deterministic financial layer: the source of truth</text>
+    <text x="76" y="170" fill="currentColor" stroke="none" opacity="0.75">Point-in-time store · feature store · optimiser · position and P&amp;L engine · cost model</text>
+
+    <rect x="60" y="230" width="480" height="70" rx="8" strokeWidth="2.5" />
+    <text x="76" y="256" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">Risk-control layer: authorises or refuses, no LLM in the path</text>
+    <text x="76" y="280" fill="currentColor" stroke="none" opacity="0.75">Pre-trade controls · limits · policy engine · kill switch · immutable audit log</text>
+
+    <rect x="60" y="340" width="480" height="70" rx="8" strokeWidth="1.5" opacity="0.9" />
+    <text x="76" y="366" fill="currentColor" stroke="none" fontSize="14" fontWeight="600">Execution layer: deterministic</text>
+    <text x="76" y="390" fill="currentColor" stroke="none" opacity="0.75">Order generation and slicing · routing · broker and venue connectivity</text>
+
+    <g strokeWidth="1.5" opacity="0.8">
+      <path d="M300 80 L300 118" />
+      <path d="M294 110 L300 120 L306 110" />
+      <path d="M300 190 L300 228" />
+      <path d="M294 220 L300 230 L306 220" />
+      <path d="M300 300 L300 338" />
+      <path d="M294 330 L300 340 L306 330" />
+    </g>
+
+    <text x="312" y="105" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">typed proposal</text>
+    <text x="312" y="215" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">target weights + constraints</text>
+    <text x="312" y="325" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">authorised orders only</text>
+
+    <g strokeWidth="1.5" opacity="0.8">
+      <path d="M580 20 L580 400" strokeDasharray="4 4" />
+      <path d="M574 390 L580 405 L586 390" />
+    </g>
+    <text x="596" y="200" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">authority</text>
+    <text x="596" y="216" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">increases</text>
+
+    <g strokeWidth="1.5" opacity="0.8">
+      <path d="M30 400 L30 20" strokeDasharray="4 4" />
+      <path d="M24 30 L30 15 L36 30" />
+    </g>
+    <text x="8" y="200" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">trust</text>
+    <text x="8" y="216" fill="currentColor" stroke="none" fontSize="11" opacity="0.7">decreases</text>
+  </g>
+</svg>
+</div>
+
+The AI layer proposes. The deterministic financial layer computes every number that must be right: positions, profit and loss, risk figures, costs. The risk-control layer authorises or refuses, with no language model anywhere in that path. The execution layer translates authorised intent into orders.
+
+Regulation pushes in the same direction. ESMA states that pre-trade controls apply to all orders sent to a trading venue "independently of other elements such as the size of the order, the magnitude and frequency of the firm's trading activity", that firms "should not solely rely on the PTCs set by trading venues", and that those controls "should be set and reviewed in collaboration between trading, risk management and compliance functions, with the support of the IT function" ([ESMA supervisory briefing](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf), paras 57 and 59).
+
+A control set jointly by trading, risk and compliance cannot live in a prompt.
+
+## The Interfaces That Make It Real
+
+The diagram is only useful if the boundaries are enforced by types and signatures rather than by convention.
+
+The agent emits intent, never an order. The type system should make the distinction impossible to blur, which is also the failure mode the field's own survey singles out: "a critical failure mode in agent design is the ambiguity between target weights (portfolio intent) and executable orders (market instructions)."
+
+```python
+from decimal import Decimal
+from pydantic import BaseModel, Field
+
+class Proposal(BaseModel):
+    """What an agent may emit. Carries no venue, no order type, no quantity."""
+    instrument_id: str
+    target_weight: Decimal = Field(ge=-1, le=1)
+    rationale: str
+    evidence_refs: list[str] = Field(min_length=1)  # no claim without a source
+    as_of: str                                      # the data vintage reasoned over
+
+class AuthorisedOrder(BaseModel):
+    """What the execution layer accepts. Only the risk layer can construct one."""
+    instrument_id: str
+    side: str
+    quantity: int
+    venue: str
+    authorisation_id: str  # links to the audit record that permitted this order
+```
+
+There is no code path from `Proposal` to `AuthorisedOrder` that does not pass through the risk layer, because the risk layer is the only thing that can produce an `authorisation_id`.
+
+Every read carries an as-of timestamp. Point-in-time correctness has to be infrastructure, not discipline, so make the unsafe call impossible to write:
+
+```python
+def read_features(instrument_id: str, *, as_of: datetime) -> FeatureVector:
+    """Serve what was known at `as_of`. There is no default and no overload
+    without it: a caller that does not know its vintage cannot read."""
+    if as_of.tzinfo is None:
+        raise ValueError("as_of must be timezone-aware; the store is UTC-only")
+    return _store.query(instrument_id, knowledge_time=as_of)
+```
+
+The rest of the boundary contracts follow the same pattern. Agents read the position engine and never write to it. Memory writes carry signed provenance. Broker credentials live in the execution service, and agents hold scoped, revocable tool tokens, so the kill switch can revoke an agent's ability to act without touching the agent itself.
+
+## Security Boundaries
+
+Everything arriving from the untrusted zone is *data*, never instruction: news, social media, web retrieval, third-party tool responses, external MCP servers. This is where the fake-news and injection attacks enter.
+
+The semi-trusted zone is the agent's own plans and rationales. These may influence proposals. They may not influence authorisation, and nothing in the risk layer should ever parse them.
+
+The trusted zone is the deterministic engines, the risk layer, the execution layer, and the audit log.
+
+Two boundaries cut across all three. No agent holds a broker credential, ever. And model providers are ICT third parties under DORA, so a frontier model's silent version change is a change event, not a background upgrade.
+
+Failure handling follows one design rule: an agent may *explain* an incident; it may not *resolve* one.
+
+<div className="overflow-x-auto">
+
+| Failure | Detection | Response |
+| --- | --- | --- |
+| Model or provider outage, latency spike | Health checks, p99 latency objective | Fail closed: accept no new intent; deterministic logic manages existing orders |
+| Malformed tool output | Schema validation at the boundary | Reject, retry within a bound, escalate. Never best-effort parse |
+| Suspected prompt injection | Anomaly in the action distribution, such as a trade-count spike | Quarantine the run, freeze the agent's tools, human review |
+| Memory or state corruption | Reconciliation against the position engine | Rebuild memory from trusted state; treat as an incident |
+| Limit breach | Risk-layer refusal | Refuse, alert, record. Repeated refusals trip the circuit breaker |
+| Runaway turnover | Turnover budget counter | Circuit breaker halts; kill switch revokes tool tokens |
+
+</div>
+
+In the injection attack, turnover moved from 47 trades to 391, an eightfold jump that a counter detects immediately and a human reading rationales would not. Monitor the action distribution, not the reasoning.
+
+## Agents Discover Abuse Without Being Asked
+
+One finding sits badly with the idea that policy compliance can be delegated to a well-instructed model.
+
+A model-free deep deterministic policy gradient agent, operating in an Almgren-Chriss market with non-linear permanent impact, "successfully discovers profitable manipulative strategies without explicit knowledge of the underlying model", and "consistently outperforms the model-based approach when parameter estimates are affected by sampling error, despite the latter benefiting from the correct model specification" ([arXiv 2607.06121](https://arxiv.org/abs/2607.06121)).
+
+The same pattern appears in a different market. LLM pricing agents in an oligopoly setting "quickly and autonomously reach supracompetitive prices and profits", and "variation in seemingly innocuous phrases in LLM instructions ('prompts') substantially influence the degree of supracompetitive pricing" ([arXiv 2404.00806](https://arxiv.org/abs/2404.00806), EC 2026).
+
+Neither system had a manipulation objective. Both found the behaviour because it paid.
+
+Under the Market Abuse Regulation, exposure is behavioural. It does not require intent in the model; it requires only the behaviour. A firm that can demonstrate its objective function never mentioned manipulation has demonstrated nothing about what the agent actually did.
+
+The consequence for design is specific. Pattern-level policy enforcement, covering spoofing, layering, wash trades, marking the close, turnover and holding-period rules, must be a gate that evaluates the action, never a report that reads the agent's stated reason. An agent that explains why its trades were legitimate is producing exactly the artefact you cannot rely on.
+
+Two honest limits on this evidence. The manipulation result is single-agent in a stylised impact model, and the authors name limit-order-book and multi-agent extensions as future work. And no primary source was found on live agentic execution quality, fill rates or latency, so the execution layer in this architecture is reasoned, not measured.
+
+## What This Leaves You With
+
+The separation is the design: a layer boundary that code enforces and text cannot cross. Hardening the prompt does not substitute for it.
+
+Three things follow immediately for anything already running:
+
+1. Move every number out of the agent. If an LLM computes a position, a profit figure or a risk metric, that is a bug with a measured failure mode attached.
+2. Instrument the action distribution. Trade count, turnover, concentration and refusal rate detect compromise faster than any output review.
+3. Test the kill switch. One action that halts new orders, cancels working orders and revokes tool tokens. An untested kill switch is a design document.
+
+[Part 4](../agentic-trading-promotion-ladder/), *From Research Assistant to Constrained Autonomy*, covers how to evaluate a system built this way, and how far up the autonomy ladder the evidence actually reaches.
+
+## Sources and Further Reading
+
+- [*TradeTrap: Are LLM-based Trading Agents Truly Reliable and Faithful?* (arXiv 2512.02261)](https://arxiv.org/abs/2512.02261)
+- [*SoK: Security of Autonomous LLM Agents in Agentic Commerce* (arXiv 2604.15367)](https://arxiv.org/abs/2604.15367)
+- [*Can Reinforcement Learning Efficiently Discover Price Manipulation?* (arXiv 2607.06121)](https://arxiv.org/abs/2607.06121)
+- [*Algorithmic Collusion by Large Language Models* (arXiv 2404.00806)](https://arxiv.org/abs/2404.00806)
+- [*Agentic Trading: When LLM Agents Meet Financial Markets* (arXiv 2605.19337)](https://arxiv.org/abs/2605.19337)
+- [ESMA Supervisory Briefing on Algorithmic Trading in the EU (26 February 2026)](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)
+- [Regulation (EU) 596/2014 (MAR)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0596)
+- [Regulation (EU) 2022/2554 (DORA)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554)
+
+*Attack figures were checked against the TradeTrap paper on 20 September 2026 and are reported with its stated limitations: one month, NASDAQ-100, $5,000 starting capital, no fees or slippage. The four-layer architecture is my own inference from the measured failures and the regulatory requirements, not an observed production system. This is a personal technical article, not investment, legal or security advice, and it represents my own views rather than those of my employer.*

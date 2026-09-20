@@ -1,0 +1,164 @@
+---
+title: "Agentic Trading Is Already Algorithmic Trading"
+description: "Define agentic trading precisely, separate it from adjacent approaches, and see why an EU signal-generating agent sits inside the MiFID II algorithmic-trading perimeter."
+pubDate: 2026-09-17
+heroImage: "/images/blog/agentic-trading-is-algorithmic-trading.jpg"
+tags: ["Agentic-Trading", "LLM-Agents", "MiFID-II", "EU-Regulation", "Quantitative-Finance"]
+series: "Agentic Trading in Production"
+seriesOrder: 1
+draft: false
+---
+
+A team builds an LLM agent that reads filings, news, and macro releases, then produces a ranked list of trade ideas with a written rationale for each. A portfolio manager reads the list every morning and approves the ideas they like. Nothing reaches a venue without a human clicking a button.
+
+The team believes it has built a research tool. It deliberately stayed out of the trading system: no order router, no broker credentials, no execution logic. Under MiFID II, that separation does not do what the team thinks it does.
+
+This is the first of four articles on building agentic trading systems that survive contact with a regulated environment. It starts with definitions, because almost every downstream argument about controls, evaluation, and autonomy turns out to be a disagreement about what is in scope.
+
+## Agentic Trading Is a Control-Loop Property
+
+A useful definition has to exclude things. The one worth adopting comes from the field's own evidence map, which screened 77 studies and admitted 19 to its primary subset on a single boundary: action output plus closed-loop evaluation ([arXiv 2605.19337](https://arxiv.org/abs/2605.19337), May 2026).
+
+Applied as a definition, agentic trading is a system in which one or more LLM-centred agents:
+
+1. perceive market and non-market information;
+2. retrieve or construct context;
+3. reason over that context with planning and tool use;
+4. emit an action that is tradable, meaning a target weight, a signal consumed by an order generator, or an order itself; and
+5. adapt under market feedback across a closed loop.
+
+Steps 4 and 5 do the work. A financial chatbot satisfies the first three and fails the fourth, which is why counting one as a trading agent is the most common category error here.
+
+Two properties follow, and everything difficult about the rest of this series follows from them:
+
+- **Non-determinism in the decision path.** The mapping from inputs to action is produced by a sampled generative model, so the same market state can yield different actions.
+- **An open action surface.** The agent selects which tools to call and in what order, so the reachable set of actions is not enumerable in advance the way a coded strategy's is.
+
+## What Agentic Trading Is Not
+
+Most of the confusion is a conflation of LLM agents with quantitative trading systems. They differ on the decision rule and on the action surface.
+
+<div className="overflow-x-auto">
+
+| Approach | Decision rule | Action surface | Why it is not agentic trading |
+| --- | --- | --- | --- |
+| Traditional algorithmic trading | Coded rules determining order parameters | Enumerable | Deterministic and testable by replay |
+| Systematic trading | Rule-based portfolio process at any frequency | Enumerable | A governance category, not a technology one; agentic systems can be systematic |
+| Quantitative trading | Statistical or ML models estimating returns, risk, and costs | Enumerable | Numeric estimation with no open tool surface and no natural-language reasoning step |
+| Reinforcement-learning trading | A learned policy mapping state to action | Enumerable | The policy is fixed at inference and auditable as a function; failures are distributional, not semantic |
+| Robo-advisory | Client profile mapped to a model portfolio | Enumerable | Client-facing suitability obligations dominate; decisions are allocations, not market-timed actions |
+| LLM financial assistant | Text in, text out | None | No tradable action, so it fails criterion 4. The most frequent mislabelling |
+| Multi-agent trading system | Several specialised agents plus coordination | Open | A sub-class of agentic trading, not a separate category |
+
+</div>
+
+Autonomous and agentic are independent axes, and getting that wrong produces both overclaiming and under-scoping. A deterministic VWAP algorithm is fully autonomous and not agentic. An LLM research agent whose note a portfolio manager acts on is agentic and not autonomous.
+
+## The Autonomy Ladder
+
+Autonomy is a separate axis, so it needs its own scale. The rest of this series uses these five levels.
+
+<div className="overflow-x-auto">
+
+| Level | What the agent does | Who bears the decision |
+| --- | --- | --- |
+| **A0** | Produces analysis; a human forms the view | Human |
+| **A1** | Proposes a ranked, machine-readable recommendation; a human approves each one | Human |
+| **A2** | Decides within a pre-authorised envelope (instrument set, notional, risk budget) and every order passes a deterministic gateway | Shared |
+| **A3** | Decides, with the gateway enforcing only hard limits; humans supervise in aggregate | System |
+| **A4** | Modifies its own strategy, tools, or limits | Not deployable under current controls |
+
+</div>
+
+A2 is the highest level the current evidence supports as designable, and that claim is the subject of [Part 2](../agentic-trading-evidence/). The team in the opening scenario is at A1.
+
+## The Regulatory Definition Already Exists
+
+Under MiFID II Article 4(1)(39), algorithmic trading requires "limited or no human intervention". Firms have read that phrase as an exit: if a human approves every order, the system is out of scope. That reading is what breaks the opening scenario.
+
+ESMA's [Supervisory Briefing on Algorithmic Trading in the EU](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf) (ESMA74-1505669079-10311, 26 February 2026) closes it:
+
+> "a trader may be required to authorise single or multiple orders prior to submission to execution venues. Some firms may therefore argue they do not engage in algorithmic trading because the order would not be submitted without human intervention. However, such intervention does not negate the fact that a computer algorithm has determined individual parameters of the order(s)."
+>
+> ESMA supervisory briefing, para 13
+
+Only systems determining *no* trading parameter fall outside. ESMA names the exclusions explicitly: order routing to a venue, order processing without parameter determination, confirmations, and post-trade processing (para 14).
+
+The positive list is the part that catches the research tool. When automated, in-scope activities include generating orders or quotes based on market signals, portfolio strategies, or risk thresholds, and:
+
+> "Signal-based trading, quantitative models, or machine learning-driven strategies including where the activities are not involved in direct execution but influence algorithmic trade decision-making and parameter determination"
+>
+> ESMA supervisory briefing, para 11
+
+ESMA also defines the unit of control: an algorithm is "a computerised set of instructions or rules that autonomously determines one or more parameters of a trading order", context-specific to instruments, venues, or strategies, and "the algorithms must be testable and controllable" (paras 19 and 20).
+
+The practical consequence is specific. In the EU, a signal-generating agent that feeds a deterministic order generator is inside the algorithmic-trading perimeter. Its change management, testing, self-assessment, and record-keeping obligations do not begin at the FIX gateway.
+
+That reaches further than it first appears. ESMA's change-type table lists "Retraining or modifying machine learning components" as a change requiring control (para 31), and warns firms to manage the risk that a series of small recalibrations "accumulate over time, when uncontrolled or unchecked, into a material change in the model output without it being tested" (para 47). A prompt edit, a model-version bump, and a retrieval-corpus refresh are all changes of that kind.
+
+One question the briefing does not answer: how a frontier-model provider's silent version update should be treated. No retrieved supervisory or vendor source addresses it.
+
+## What Actually Binds in the EU
+
+A single EU agentic trading deployment sits under several instruments at once. Their legal status differs, and conflating binding law with supervisory guidance is how compliance work gets mis-sequenced.
+
+<div className="overflow-x-auto">
+
+| Instrument | Status | What attaches to an agentic trading system |
+| --- | --- | --- |
+| **MiFID II Art 17 and RTS 6** (Commission Delegated Regulation (EU) 2017/589) | Binding | The core regime: governance (Art 1), compliance-staff understanding and explainability (Art 2), annual self-assessment and validation report (Art 9), capacity stress testing (Art 10), pre-trade controls (Art 15) |
+| **MiFID II Art 4(1)(39)** | Binding | The definition itself; human authorisation of an order does not remove a system from scope |
+| **ESMA Supervisory Briefing** (Feb 2026) | Supervisory guidance: "non-binding and not subject to a 'comply or explain' mechanism" (para 3) | The authoritative reading of how the binding regime applies to AI |
+| **EU AI Act** (Regulation (EU) 2024/1689) | Binding, but scope-limited here | ESMA: "AI-based algorithmic trading is currently excluded from the scope as a high-risk use case under the AI Act", subject to annual review of that list; Art 50 transparency can apply where a system interacts directly with natural persons (para 46) |
+| **DORA** (Regulation (EU) 2022/2554) | Binding | The ICT risk-management framework. Model and cloud providers are ICT third parties |
+| **MAR** (Regulation (EU) 596/2014) | Binding | Market-abuse prohibitions are behavioural, which matters when an agent's action set is open. [Part 3](../agentic-trading-action-surface/) covers this |
+| **GDPR** | Binding | Engages when client data enters prompts or retrieval corpora |
+
+</div>
+
+The AI Act exclusion is not relief. Annex III contains no trading or investment-management item, so the high-risk regime is not the binding constraint today. RTS 6 is. A programme that builds its governance around the AI Act while neglecting the Article 9 self-assessment and the Article 15 pre-trade controls has sequenced its compliance work backwards. RTS 6 Article 2 already creates an explainability duty: systems "should be explainable and on the other hand, it is the investment firm's responsibility to ensure they can adequately explain how AI impacts their algorithms' decision-making" (para 50).
+
+Buying the agent does not move the obligation either. Where algorithms or execution tools are procured, "the investment firm remains fully and solely responsible for compliance with MiFID II and RTS 6" (para 34), and outsourcing arrangements must give the firm the "unconditional capacity to monitor, suspend, or terminate algorithmic trading where necessary, without dependence on the third-party provider's consent or intervention" (para 42). A closed third-party agentic trading service that cannot be inspected or halted independently is difficult to reconcile with that text.
+
+## Outside the EU
+
+This article is EU-first; the other jurisdictions are shorter to summarise.
+
+In the United Kingdom, the FCA has no AI-specific rules and supervises AI within the existing framework, alongside voluntary programmes under its [AI Lab](https://www.fca.org.uk/firms/innovation/ai-lab). The existing algorithmic-trading rules apply unchanged.
+
+In the United States, FINRA's [2026 Annual Regulatory Oversight Report](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report) (December 2025) gives the first supervisory framing of agentic AI. It defines AI agents as "systems or programs that are capable of autonomously performing and completing tasks on behalf of a user" and names seven risk areas: autonomy; scope and authority; auditability and transparency; data sensitivity; domain knowledge; rewards and reinforcement; and the generic GenAI risks of bias, hallucination, and privacy. Those seven map cleanly onto an internal risk register and onto an examiner's mental model. The CFTC's [2024 staff advisory](https://www.cftc.gov/PressRoom/PressReleases/9013-24) reminds registrants of existing obligations and creates no new ones.
+
+One correction worth recording, because the old link is still widely cited: SR 11-7, the standard US model-risk reference, was superseded on 17 April 2026 by [SR 26-2](https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm), with [OCC Bulletin 2026-13](https://www.occ.gov/news-issuances/bulletins/2026/bulletin-2026-13.html) alongside. The revised guidance is most relevant to banking organisations above $30 billion in total assets.
+
+In Germany, BaFin's [Guidance on ICT Risks in the Use of AI at Financial Entities](https://www.bafin.de/SharedDocs/Veroeffentlichungen/EN/Meldung/2025/meldung_2025_12_18_orientierungshilfe_ikt_risiken_en.html) (18 December 2025) is non-mandatory advice. It treats AI risk across the full lifecycle, from data acquisition through retirement, and embeds it in the existing DORA and ICT third-party frameworks.
+
+None of the three has written rules specific to agentic systems. All three apply the frameworks they already have.
+
+## What This Changes on Monday
+
+Go back to the opening scenario. The team's research agent is not outside the trading system. If its ranked ideas influence which instrument is traded, in what size, or at what limit, it determines order parameters, and the RTS 6 obligation set attaches to it.
+
+Knowing which obligations you took on matters before an examiner asks how you test a component that returns a different answer each time it runs.
+
+Three concrete consequences:
+
+1. Name your autonomy level. A1 is already inside the perimeter, and arguments about controls are unresolvable until everyone agrees on the level.
+2. Treat prompt, model, and corpus changes as controlled changes. ESMA already lists retraining, and the accumulation warning in para 47 is aimed squarely at systems that drift through many small edits.
+3. Check what your vendor contract lets you halt. The unconditional-suspension requirement is specific, and most AI service agreements were not written with it in mind.
+
+[Part 2](../agentic-trading-evidence/), *What the Agentic Trading Evidence Actually Shows*, asks the question this article deliberately skipped: leaving aside whether you are allowed to run one, do these systems work? The short version is that the field's own evidence map cannot yet answer that, and the reason is a form of data leakage with no analogue in classical backtesting.
+
+## Sources and Further Reading
+
+- [ESMA Supervisory Briefing on Algorithmic Trading in the EU (ESMA74-1505669079-10311, 26 February 2026)](https://www.esma.europa.eu/sites/default/files/2026-02/ESMA74-1505669079-10311_Supervisory_Briefing_on_Algorithmic_Trading_in_the_EU.pdf)
+- [Commission Delegated Regulation (EU) 2017/589 (RTS 6)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017R0589)
+- [Directive 2014/65/EU (MiFID II)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02014L0065-20240328)
+- [Regulation (EU) 2022/2554 (DORA)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554)
+- [Regulation (EU) 596/2014 (MAR)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0596)
+- [*Agentic Trading: When LLM Agents Meet Financial Markets* (arXiv 2605.19337)](https://arxiv.org/abs/2605.19337)
+- [FINRA 2026 Annual Regulatory Oversight Report](https://www.finra.org/rules-guidance/guidance/reports/2026-finra-annual-regulatory-oversight-report)
+- [Federal Reserve SR 26-2, Revised Guidance on Model Risk Management](https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm)
+- [BaFin Guidance on ICT Risks in the Use of AI at Financial Entities](https://www.bafin.de/SharedDocs/Veroeffentlichungen/EN/Meldung/2025/meldung_2025_12_18_orientierungshilfe_ikt_risiken_en.html)
+- [FCA AI Lab](https://www.fca.org.uk/firms/innovation/ai-lab)
+
+*Sources were verified on 20 September 2026. The ESMA supervisory briefing is non-binding guidance on a binding regime; quoted paragraph numbers refer to that document. This is a personal technical article, not investment, legal, or compliance advice, and it represents my own views rather than those of my employer.*
